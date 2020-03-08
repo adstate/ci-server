@@ -16,8 +16,8 @@
 
 .footer__links {
     display: flex;
-    font-size: var(--font-size-s);
-    line-height: var(--line-height-s);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-xs);
 }
 
 .footer__links a {
@@ -29,8 +29,8 @@
 }
 
 .footer__copyright {
-    font-size: var(--font-size-s);
-    line-height: var(--line-height-s);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-xs);
 }
 
 @media screen and (max-width: 480px) {

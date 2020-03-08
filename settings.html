@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI Server - settings</title>
+
+    <link rel="stylesheet" href="./src/styles/styles.css">
+</head>
+<body>
+    <div class="page page_view_all-screen theme theme_view_default theme_size_default theme_gap_small">    
+        <div class="header">
+            <div class="header__content">
+                <h1 class="header__title text text_link">School CI Server</h1>
+            </div>
+        </div>
+
+        <div class="layout layout_type_grow layout_space-h_small">
+            <div class="section">
+                <div class="layout__container">
+                    <form class="setting-form form">
+                        <div class="form__header">
+                            <div class="form__title">Settings</div>
+                            <div class="form__subtitle">Configure repository connection and synchronization settings.</div>
+                        </div>
+
+                        <div class="form__item form__item_indent-t_xl form__control form__control_required">
+                            <div class="form__label">GitHub repository</div>
+                            <div class="form-field">
+                                <input type="text" class="form-field__input" placeholder="user-name/repo-name">
+                                <div class="icon icon_size_s icon_type_clear form-field__icon_type_clear"></div>
+                            </div>
+                        </div>
+
+                        <div class="form__item form__item_indent-t_xl form__control">
+                            <div class="form__label">Build command</div>
+                            <div class="form-field">
+                                <input type="text" class="form-field__input" placeholder="user-name/repo-name" value="npm ci && npm run build">
+                                <div class="icon icon_size_s icon_type_clear form-field__icon form-field__icon_type_clear"></div>
+                            </div>
+                        </div>
+
+                        <div class="form__item form__item_indent-t_xl form__control">
+                            <div class="form__label">Main branch</div>
+                            <div class="form-field">
+                                <input type="text" class="form-field__input" placeholder="user-name/repo-name" value="master |">
+                                <div class="icon icon_size_s icon_type_clear form-field__icon form-field__icon_type_clear"></div>
+                            </div>
+                        </div>
+
+                        <div class="form__item form__item_indent-t_xl form__item_direction_left form__control">
+                            <div class="form__label">Synchronize every</div>
+                            <div class="form-field form-field_size_s">
+                                <input type="text" class="form-field__input form-field__input_type_number" placeholder="user-name/repo-name" value="10">
+                            </div>
+                            <div class="form__control-postfix">minutes</div>
+                        </div>
+
+                        <div class="setting-form__footer form__footer form__item form__item_direction_left form__item_indent-t_xxl">
+                            <button class="button button_action button_size_m setting-form__button setting-form__submit">Save</button>
+                            <button type="reset" class="button button_default button_size_m setting-form__button">Candel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer__content">
+                <div class="footer__links">
+                    <a href="#" class="link">Support</a>
+                    <a href="#" class="link">Learning</a>
+                </div>
+                <div class="footer__copyright text text_link">© 2020 Your Name</div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

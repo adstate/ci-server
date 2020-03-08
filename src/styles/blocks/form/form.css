@@ -1,0 +1,44 @@
+@import url('./form__label.css');
+@import url('./form__item.css');
+
+.form {
+
+}
+
+.form__header {
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-xxs);
+}
+
+.form__title {
+    font-size: var(--font-size-m);
+    line-height: var(--line-height-m);
+    margin-bottom: var(--space-xs);
+    font-weight: bold;
+}
+
+.form__subtitle {
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-s);
+    color: var(--color-text-second);
+}
+
+.form__footer {
+
+}
+
+.form__control {
+
+}
+
+.form__control-postfix {
+    margin-left: var(--space-xs);
+    color: #434445;
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-s);
+}
+
+.form__control_required .form__label:after {
+    content: ' *';
+    color: red;
+}

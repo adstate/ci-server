@@ -32,11 +32,17 @@
 }
 
 .theme_size_default {
-    --font-size-s: 13px;
-    --line-height-s: 16px;
+    --font-size-xs: 13px;
+    --line-height-xs: 16px;
 
-    --font-size-m: 18px;
-    --line-height-m: 22px;
+    --font-size-s: 13px;
+    --line-height-s: 18px;
+
+    --font-size-m: 16px;
+    --line-height-m: 20px;
+
+    --font-size-l: 18px;
+    --line-height-l: 22px;
 
     --font-size-l: 24px;
     --line-height-l: 28px;

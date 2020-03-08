@@ -1,0 +1,27 @@
+.form__item {
+
+}
+
+.form__item_direction_column {
+    display: flex;
+    flex-direction: column;
+}
+
+.form__item_direction_left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.form__item_direction_left .form__label {
+    margin-right: var(--space-xs);
+    margin-bottom: 0;
+}
+
+.form__item_indent-t_xl {
+    margin-top: var(--space-xl);
+}
+
+.form__item_indent-t_xxl {
+    margin-top: var(--space-xxl);
+}
