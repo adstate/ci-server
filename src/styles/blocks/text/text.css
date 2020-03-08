@@ -1,0 +1,15 @@
+.text {
+
+}
+
+.text_primary {
+    color: var(--color-text);
+}
+
+.text_secondary {
+    color: var(--color-text-second);
+}
+
+.text_link {
+    color: var(--color-text-link);
+}

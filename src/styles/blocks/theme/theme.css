@@ -1,0 +1,77 @@
+.theme, .theme * {
+    box-sizing: border-box;
+    font-family: 'YS Text';
+    font-style: normal;
+}
+
+.theme a {
+    text-decoration: none;
+}
+
+.theme_view_default {
+    --color-bg-action: #FFCC00;
+    --color-bg-action-hovered: #F2C200;
+    --color-border-action-focused: #B38F00;
+
+    --color-bg-light: #fff;
+    --color-bg-heavy: #F0F2F3;
+
+    --color-bg-control: #E6E6E6;
+    --color-bg-control-hovered: #DBDBDB;
+    --color-border: #d9d9d9;
+    --color-border-focused: #b3b3b3;
+    --color-border-hovered: #cecece;
+
+    --color-text: #000;
+    --color-text-second: #b3b3b3;
+    --color-text-link: #7F8285;
+    --color-text-link-hovered: #E00000;
+    --color-text-disabled: #b9b9b9;
+    
+    --color-bg-disabled: #f2f2f2;
+}
+
+.theme_size_default {
+    --font-size-s: 13px;
+    --line-height-s: 16px;
+
+    --font-size-m: 18px;
+    --line-height-m: 22px;
+
+    --font-size-l: 24px;
+    --line-height-l: 28px;
+
+    --font-size-button-m: 13px;
+    --line-height-button-m: 16px;
+
+    --font-size-button-s: 13px;
+    --line-height-button-s: 16px;
+
+    --space-xxxs: 4px;
+    --space-xxs: 6px;
+    --space-xs: 8px;
+    --space-s: 10px;
+    --space-m: 12px;
+    --space-l: 16px;
+    --space-xl: 18px;
+    --space-xxl: 24px;
+    --space-xxxl: 32px;
+    --space-xxxxl: 48px;
+    --space-xxxxxl: 100px;
+}
+
+.theme_gap_small {
+    --gap: var(--space-xxxxxl);
+}
+
+@media screen and (max-width: 768px) {
+    .theme_gap_small {
+        --gap: var(--space-xxxxl);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .theme_gap_small {
+        --gap: var(--space-l);
+    }
+}

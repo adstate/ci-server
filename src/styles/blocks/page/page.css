@@ -1,0 +1,9 @@
+.page {
+    min-width: 280px;
+}
+
+.page_view_all-screen {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}

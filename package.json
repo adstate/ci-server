@@ -1,0 +1,23 @@
+{
+  "name": "ci-server",
+  "version": "1.0.0",
+  "description": "school ci server",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adstate/ci-server.git"
+  },
+  "author": "felix.khodakovsky",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adstate/ci-server/issues"
+  },
+  "homepage": "https://github.com/adstate/ci-server#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.0.2"
+  }
+}

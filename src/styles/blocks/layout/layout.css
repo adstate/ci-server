@@ -1,0 +1,13 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+}
+
+.layout_type_grow {
+    flex-grow: 1;
+}
+
+.layout_align_center {
+    align-items: center;
+    justify-content: center;
+}
