@@ -1,4 +1,7 @@
 .configure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     max-width: 264px;
     text-align: center;
 }
