@@ -27,8 +27,14 @@
     --color-text-link: #7F8285;
     --color-text-link-hovered: #E00000;
     --color-text-disabled: #b9b9b9;
+    --color-text-pseudo: #595959;
+    --color-text-pseudo-second: #939393;
     
     --color-bg-disabled: #f2f2f2;
+
+    --color-success: #00B341;
+    --color-warning: #FF9A00;
+    --color-error: #FF3333;
 }
 
 .theme_size_default {
@@ -44,8 +50,8 @@
     --font-size-l: 18px;
     --line-height-l: 22px;
 
-    --font-size-l: 24px;
-    --line-height-l: 28px;
+    --font-size-xl: 24px;
+    --line-height-xl: 28px;
 
     --font-size-button-m: 13px;
     --line-height-button-m: 16px;

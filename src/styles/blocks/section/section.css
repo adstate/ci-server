@@ -2,8 +2,26 @@
 
 }
 
-.section_view_full-screen {
+.section_indent-t-xs {
+    margin-top: var(--space-xs);
+}
+
+.section__footer {
+    margin-bottom: calc(var(--space-xxl) - 4px);
+}
+
+.section__footer_align_left {
     display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+}
+
+.section__button {
+
+}
+
+@media screen and (max-width: 480px) {
+    .section__button {
+        width: 100%;
+        padding-top: var(--space-xs);
+        padding-bottom: var(--space-xs);
+    }
 }

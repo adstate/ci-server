@@ -1,4 +1,7 @@
 .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 2px solid transparent;
     border-radius: 4px;
 }
@@ -59,7 +62,11 @@
 }
 
 .button_type_icon {
-    padding: var(--space-xs);
+    padding: var(--space-xxxs);
+}
+
+.button_type_icon .button__icon {
+    margin: 0;
 }
 
 .button_type_icon-text {
@@ -68,11 +75,11 @@
 }
 
 .button__icon {
-
+    margin-right: var(--space-xxs);
 }
 
 .button__text {
-
+    white-space: nowrap;
 }
 
 @media screen and (max-width: 480px) {
@@ -85,8 +92,6 @@
     }
 
     .button_type_icon-text {
-        padding-top: var(--space-xxs);
-        padding-bottom: var(--space-xxs);
-        padding-right: var(--space-xxs);
+        padding: var(--space-xxxs);
     }
 }

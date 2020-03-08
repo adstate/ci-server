@@ -10,6 +10,14 @@
     color: var(--color-text-second);
 }
 
+.text_pseudo {
+    color: var(--color-text-pseudo);
+}
+
+.text_pseudo-second {
+    color: var(--color-text-pseudo-second);
+}
+
 .text_link {
     color: var(--color-text-link);
 }
