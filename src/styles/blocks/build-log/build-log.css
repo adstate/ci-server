@@ -1,0 +1,40 @@
+.build-log {
+    background-color: var(--color-bg-disabled);
+    overflow-x: auto;
+    font-size: var(--font-size-xxs);
+    line-height: var(--line-height-m);
+    padding: var(--space-xs) var(--space-m);
+    border-radius: 6px;
+    margin-bottom: calc(var(--space-s) * 2);
+}
+
+.build-log::-webkit-scrollbar {
+    height: 4px;
+}
+  
+.build-log::-webkit-scrollbar-track {
+    background-color: var(--color-bg-disabled);
+    border-radius: 10px;
+}
+
+.build-log::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgba(0, 0 ,0, 0.3);
+}
+
+.build-log::-webkit-scrollbar-thumb:hover {
+    border-radius: 10px;
+    background-color: rgba(0, 0 ,0, 0.4);
+}
+
+.build-log::-webkit-scrollbar-corner {
+    border-radius: 4px;
+}
+
+@media screen and (max-width: 480px) {
+    .build-log {
+        padding-top: var(--space-xxxs);
+        padding-bottom: var(--space-xxxs);
+        margin-bottom: var(--space-l);
+    }
+}

@@ -38,6 +38,8 @@
 }
 
 .theme_size_default {
+    --font-size-xxs: 10px;
+
     --font-size-xs: 13px;
     --line-height-xs: 16px;
 
