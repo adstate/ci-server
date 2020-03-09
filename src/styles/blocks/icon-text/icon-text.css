@@ -26,19 +26,3 @@
 .icon-text__text_nowrap {
     white-space: nowrap;
 }
-
-/* .icon-text__text_size_m {
-    max-width: 85px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;  
-}
-
-@media screen and (max-width: 480px) {
-    .icon-text__text_size_m {
-        max-width: 100%;
-        white-space: normal;
-        overflow: unset;
-        text-overflow: unset;
-    }
-} */

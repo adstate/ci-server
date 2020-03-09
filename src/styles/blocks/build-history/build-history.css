@@ -1,6 +1,16 @@
+@import url('./build-history__header.css');
+@import url('./build-history__title.css');
+@import url('./build-history__number.css');
+@import url('./build-history__detail.css');
+@import url('./build-history__commit.css');
+
 .build-history {
     display: flex;
     margin-bottom: var(--space-xs);
+}
+
+.build-history:hover {
+    cursor: pointer;
 }
 
 .build-history_view_details .build-history__detail {
@@ -29,36 +39,6 @@
     color: var(--color-text);
 }
 
-.build-history:hover {
-    cursor: pointer;
-}
-
-.build-history__header {
-    display: flex;
-    flex-direction: row;
-    font-size: calc(var(--font-size-m) - 1px);
-    line-height: var(--line-height-m);
-    margin-bottom: var(--space-xs);
-}
-
-.build-history__number {
-    margin: 0 var(--space-xxxs) 0 0;
-    font-weight: bold;
-    font-size: var(--font-size-l);
-    line-height: var(--line-height-m);
-}
-
-.build-history__title {
-
-}
-
-.build-history__detail {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-grow: 1;
-}
-
 .build-history_status_success .build-history__number {
     color: var(--color-success);
 }
@@ -73,115 +53,4 @@
 
 .build-history__status {
     margin-right: var(--space-xs);
-}
-
-.build-history__branch-info {
-
-}
-
-.build-history__commit {
-    display: flex;
-    align-items: center;
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-xs);
-}
-
-.build-history__branch {
-    display: flex;
-    align-items: center;
-    margin-right: var(--space-s);
-}
-
-.build-history__branch-item {
-    margin-right: 4px;
-}
-
-.build-history__branch-item:last-of-type {
-    margin-right: 0;
-}
-
-.build-history__author {
-    display: flex;
-    align-items: center;
-    margin: 0;
-}
-
-.build-history__time {
-    display: flex;
-    flex-direction: column;
-}
-
-.build-history__datetime {
-    display: flex;
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-xs);
-    margin-bottom: var(--space-m);
-}
-
-.build-history__timer {
-    display: flex;
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-xs);
-}
-
-@media screen and (max-width: 860px) {
-    .build-history__title {
-        max-width: 210px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .build-history__title {
-        max-width: 150px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .build-history__detail {
-        flex-direction: column;
-        justify-content: flex-start;
-    }
-
-    .build-history__header {
-        flex-direction: column;
-    }
-
-    .build-history__commit {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .build-history__time {
-        flex-direction: row;
-        justify-content: flex-start;
-    }
-
-    .build-history__datetime {
-        margin-right: var(--space-s);
-        margin-bottom: 0;
-    }
-
-    .build-history__number {
-        margin-bottom: var(--space-xs);
-    }
-
-    .build-history__commit {
-        padding-bottom: var(--space-xs);
-        margin-bottom: var(--space-xs);
-        border-bottom: 1px solid var(--color-bg-heavy);
-    }
-
-    .build-history__branch {
-        margin-bottom: var(--space-xs);
-    }
-
-    .build-history__title {
-        max-width: 100%;
-        white-space: normal;
-        overflow: unset;
-        text-overflow: unset;
-    }
 }

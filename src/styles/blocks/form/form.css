@@ -1,5 +1,6 @@
 @import url('./form__label.css');
 @import url('./form__item.css');
+@import url('./form__control.css');
 
 .form {
 
@@ -25,20 +26,4 @@
 
 .form__footer {
 
-}
-
-.form__control {
-
-}
-
-.form__control-postfix {
-    margin-left: var(--space-xs);
-    color: #434445;
-    font-size: var(--font-size-s);
-    line-height: var(--line-height-s);
-}
-
-.form__control_required .form__label:after {
-    content: ' *';
-    color: red;
 }

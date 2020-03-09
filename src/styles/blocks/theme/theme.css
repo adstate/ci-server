@@ -1,6 +1,6 @@
 .theme, .theme * {
     box-sizing: border-box;
-    font-family: 'YS Text';
+    font-family: 'YS Text', 'Arial';
     font-style: normal;
 }
 

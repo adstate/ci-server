@@ -1,0 +1,13 @@
+.build-history__detail {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+@media screen and (max-width: 480px) {
+    .build-history__detail {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+}

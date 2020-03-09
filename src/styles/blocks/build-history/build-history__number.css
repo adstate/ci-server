@@ -1,0 +1,6 @@
+.build-history__number {
+    margin: 0 var(--space-xxxs) 0 0;
+    font-weight: bold;
+    font-size: var(--font-size-l);
+    line-height: var(--line-height-m);
+}

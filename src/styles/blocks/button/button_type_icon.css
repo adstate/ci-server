@@ -1,0 +1,7 @@
+.button.button_type_icon {
+    padding: var(--space-xxxs);
+}
+
+.button_type_icon .button__icon {
+    margin: 0;
+}

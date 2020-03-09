@@ -1,3 +1,8 @@
+@import url('./button_action.css');
+@import url('./button_default.css');
+@import url('./button_type_icon.css');
+@import url('./button_type_icon-text.css');
+
 .button {
     display: flex;
     justify-content: center;
@@ -19,30 +24,6 @@
     background-color: var(--color-bg-disabled);
 }
 
-.button_action {
-    background-color: var(--color-bg-action);
-}
-
-.button_action:hover {
-    background-color: var(--color-bg-action-hovered);
-}
-
-.button_action:focus {
-    border: 2px solid var(--color-border-action-focused);
-}
-
-.button_default {
-    background-color: var(--color-bg-control);   
-}
-
-.button_default:hover {
-    background-color: var(--color-bg-control-hovered);
-}
-
-.button_default:focus {
-    border: 2px solid var(--color-border-focused);
-}
-
 .button_size_s {
     font-size: var(--font-size-button-s);
     line-height: var(--line-height-button-s);
@@ -59,39 +40,4 @@
     padding-bottom: var(--space-xs);
     padding-left: var(--space-xl);
     padding-right: var(--space-xl);
-}
-
-.button_type_icon {
-    padding: var(--space-xxxs);
-}
-
-.button_type_icon .button__icon {
-    margin: 0;
-}
-
-.button_type_icon-text {
-    padding-left: var(--space-xxs);
-    padding-right: var(--space-m);
-}
-
-.button__icon {
-    margin-right: var(--space-xxs);
-}
-
-.button__text {
-    white-space: nowrap;
-}
-
-@media screen and (max-width: 480px) {
-    .button_type_icon-text .button__text {
-        display: none;
-    }
-
-    .button_type_icon-text .button__icon {
-        margin: 0;
-    }
-
-    .button_type_icon-text {
-        padding: var(--space-xxxs);
-    }
 }

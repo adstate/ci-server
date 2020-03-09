@@ -1,0 +1,11 @@
+.button_action {
+    background-color: var(--color-bg-action);
+}
+
+.button_action:hover {
+    background-color: var(--color-bg-action-hovered);
+}
+
+.button_action:focus {
+    border: 2px solid var(--color-border-action-focused);
+}
