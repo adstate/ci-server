@@ -5,4 +5,5 @@
 .form-field__icon_type_clear {
     display: block;
     cursor: pointer;
+    width: 18px;
 }
