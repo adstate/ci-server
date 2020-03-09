@@ -491,7 +491,7 @@ template {
 }
 
 .button.button_type_icon {
-    padding: var(--space-xxxs);
+    padding: var(--space-xxs);
 }
 
 .button_type_icon .button__icon {
@@ -504,6 +504,8 @@ template {
 }
 
 .button__icon {
+    width: 12px;
+    height: 12px;
     margin-right: var(--space-xxs);
 }
 
@@ -521,7 +523,7 @@ template {
     }
 
     .button.button_type_icon-text {
-        padding: var(--space-xxxs);
+        padding: var(--space-xxs);
     }
 }
 
@@ -622,6 +624,7 @@ template {
     display: inline-block;
     background-position: center;
     background-repeat: no-repeat;
+    background-size: contain;
 }
 
 .icon_pseudo {
@@ -1226,6 +1229,13 @@ template {
     line-height: var(--line-height-m);
 }
 
+@media screen and (max-width: 480px) {
+    .build-history__number {
+        font-size: var(--font-size-m);
+        line-height: var(--line-height-xs);
+    }
+}
+
 .build-history__detail {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1367,6 +1377,17 @@ template {
     }
 }
 
+.build-history__status {
+    margin-right: var(--space-xs);
+}
+
+@media screen and (max-width: 480px) {
+    .build-history__status-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
 .build-history {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1424,10 +1445,6 @@ template {
 
 .build-history_status_error .build-history__number {
     color: var(--color-error);
-}
-
-.build-history__status {
-    margin-right: var(--space-xs);
 }
 
 .build-log {

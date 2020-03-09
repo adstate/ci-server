@@ -4,6 +4,8 @@
 }
 
 .button__icon {
+    width: 12px;
+    height: 12px;
     margin-right: var(--space-xxs);
 }
 
@@ -21,6 +23,6 @@
     }
 
     .button.button_type_icon-text {
-        padding: var(--space-xxxs);
+        padding: var(--space-xxs);
     }
 }

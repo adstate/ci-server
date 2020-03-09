@@ -3,6 +3,7 @@
 @import url('./build-history__number.css');
 @import url('./build-history__detail.css');
 @import url('./build-history__commit.css');
+@import url('./build-history__status.css');
 
 .build-history {
     display: flex;
@@ -49,8 +50,4 @@
 
 .build-history_status_error .build-history__number {
     color: var(--color-error);
-}
-
-.build-history__status {
-    margin-right: var(--space-xs);
 }
