@@ -31,6 +31,7 @@
 .footer__copyright {
     font-size: var(--font-size-xs);
     line-height: var(--line-height-xs);
+    margin: 0;
 }
 
 @media screen and (max-width: 480px) {
