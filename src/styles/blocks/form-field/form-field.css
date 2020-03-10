@@ -6,13 +6,16 @@
     align-items: center;
     font-size: var(--font-size-xs);
     line-height: var(--line-height-xs);
-
     border: 2px solid var(--color-border);
     border-radius: 4px;
     padding-top: calc(var(--space-xs) + 1px);
     padding-bottom: var(--space-xs);
     padding-left: var(--space-m);
     padding-right: var(--space-m);
+}
+
+.form-field:focus-within {
+    border: 2px solid var(--color-border-focused);
 }
 
 .form-field_size_s {
