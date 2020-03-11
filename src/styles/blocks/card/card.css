@@ -35,3 +35,9 @@
 .card_info {
 
 }
+
+@media screen and (max-width: 480px) {
+    .card {
+        padding: var(--space-l) var(--space-m);
+    }
+}
