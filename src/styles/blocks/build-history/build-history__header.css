@@ -1,6 +1,6 @@
 .build-history__header {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: min-content auto;
     font-size: calc(var(--font-size-m) - 1px);
     line-height: var(--line-height-m);
     margin-bottom: var(--space-xs);
@@ -8,6 +8,6 @@
 
 @media screen and (max-width: 480px) {
     .build-history__header {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 }

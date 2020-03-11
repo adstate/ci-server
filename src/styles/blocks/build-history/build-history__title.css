@@ -1,26 +1,8 @@
 .build-history__title {
-
-}
-
-@media screen and (max-width: 860px) {
-    .build-history__title {
-        max-width: 210px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .build-history__title {
-        max-width: 150px;
-    }
-}
-
-@media screen and (max-width: 520px) {
-    .build-history__title {
-        max-width: 100px;
-    }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: var(--space-xxxs);
 }
 
 @media screen and (max-width: 480px) {
@@ -29,5 +11,7 @@
         white-space: normal;
         overflow: unset;
         text-overflow: unset;
+        padding-right: 0;
+        word-break: break-all;
     }
 }
