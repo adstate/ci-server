@@ -1,3 +1,4 @@
+const fs = require('fs');
 const ciApi = require('../core/ci-api');
 const ServerError = require('../errors/server-error');
 
@@ -59,24 +60,32 @@ async function getBuild(req, res) {
 
 async function getBuildLog(req, res) {
     let apiResponse;
+    let logs;
 
     try {
         apiResponse = await ciApi.get('/build/log', {
-            params: { buildId: req.params.buildId },
+            responseType: 'stream',
+            params: { buildId: req.params.buildId }
         });
+    
+        apiResponse.data.on('data', (chunk) => {
+            logs += chunk;
+        });
+    
+        apiResponse.data.on('end', () => {
+            return res.json({
+                status: 'success',
+                data: logs
+            })
+        });        
     } catch (e) {
         throw new ServerError(500);
     }
-
-    return res.json({
-        status: 'success',
-        data: apiResponse.data.data,
-    });
 }
 
 module.exports = {
     getBuilds,
     addBuild,
     getBuild,
-    getBuildLog,
+    getBuildLog
 };

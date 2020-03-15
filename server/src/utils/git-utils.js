@@ -73,7 +73,7 @@ module.exports = class GitUtils {
         let result = '';
 
         const spawnOpts = {cwd: gitDir};
-        const git = spawn('git', ['log', '-1', '--format="%H;%cn;%s;%D'], spawnOpts);
+        const git = spawn('git', ['log', '-1', '--format="%h;%cn;%s'], spawnOpts);
         
         git.stderr.on('data', err => {
           console.log(err.toString('UTF-8'));

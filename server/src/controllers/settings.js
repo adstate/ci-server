@@ -15,20 +15,27 @@ async function saveSettings(req, res) {
     const gitUtils = new GitUtils(repoName);
 
     try {
+        //make clone and add last commit to queue only if repository was changed and wasn't cloned before
         if (!gitUtils.contains()) {
             await gitUtils.clean(); //clean folder var/repo before clone new repository
             await gitUtils.clone();
+
+            apiResponse = await ciApi.post('/conf', {
+                repoName,
+                buildCommand,
+                mainBranch,
+                period
+            });
+
+            const lastCommit = await gitUtils.getLastCommit();
+
+            apiResponse = await ciApi.post('/build/request', {
+                commitMessage: lastCommit.message,
+                commitHash: lastCommit.hash,
+                branchName: mainBranch,
+                authorName: lastCommit.author,
+            });
         }
-
-        const lastCommit = await gitUtils.getLastCommit();
-        console.log(lastCommit);
-
-        apiResponse = await ciApi.post('/conf', {
-            repoName,
-            buildCommand,
-            mainBranch,
-            period
-        });
     } catch (e) {
         throw new ServerError(500, e.message);
     }
@@ -46,6 +53,8 @@ async function getSettings(req, res) {
     } catch (e) {
         throw new ServerError(500);
     }
+
+    console.log(buildConfigaration.mainBranch);
 
     return res.json({
         status: 'success',
