@@ -1,6 +1,7 @@
 const fs = require('fs');
 const ciApi = require('../core/ci-api');
 const ServerError = require('../errors/server-error');
+const logCache = require('../core/log-cache');
 
 async function getBuilds(req, res) {
     const offset = req.query.offset || 0;
@@ -62,10 +63,25 @@ async function getBuildLog(req, res) {
     let apiResponse;
     let logs;
 
+    const buildId = req.params.buildId;
+
+    const cachedLog = logCache.getValidItem(buildId);
+
+    console.log('cachedLog', cachedLog);
+
+    if (cachedLog) {
+        return res.json({
+            status: 'success',
+            data: cachedLog
+        })
+    }
+
+    console.log('go to api');
+
     try {
         apiResponse = await ciApi.get('/build/log', {
             responseType: 'stream',
-            params: { buildId: req.params.buildId }
+            params: { buildId }
         });
     
         apiResponse.data.on('data', (chunk) => {
@@ -73,6 +89,8 @@ async function getBuildLog(req, res) {
         });
     
         apiResponse.data.on('end', () => {
+            logCache.addItem(buildId, logs);
+
             return res.json({
                 status: 'success',
                 data: logs

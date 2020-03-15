@@ -55,11 +55,26 @@ async function saveSettings(req, res) {
 async function getSettings(req, res) {
     let apiResponse;
 
+    if (buildConfig.id) {
+        return res.json({
+            status: 'success',
+            data: {
+                id: buildConfig.id,
+                repoName: buildConfig.repoName,
+                buildCommand: buildConfig.buildCommand,
+                mainBranch: buildConfig.mainBranch,
+                period: buildConfig.period
+            },
+        })
+    }
+
     try {
         apiResponse = await ciApi.get('/conf');
     } catch (e) {
         throw new ServerError(500);
     }
+
+    buildConfig.set(Object.assign(apiResponse.data.data, {repoStatus: buildConfig.repoStatus}));
 
     return res.json({
         status: 'success',

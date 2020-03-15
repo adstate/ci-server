@@ -1,5 +1,0 @@
-class Cache {
-    constructor(opts) {
-
-    }
-}

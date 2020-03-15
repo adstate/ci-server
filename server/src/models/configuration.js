@@ -1,6 +1,9 @@
 const repoStatus = require('./repo-status');
 
 class Configuration {
+    // по хорошему надо бы на случай рестарта сервера, перезапрашивать конфиг и проверять склонирован ли репозиторий
+    // пока не хватает времени на реализацию
+
     constructor(opts) {
         opts = opts || {};
 
