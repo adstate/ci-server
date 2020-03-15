@@ -1,12 +1,15 @@
-module.exports = class Configuration {
+const repoStatus = require('./repo-status');
+
+class Configuration {
     constructor(opts) {
-        if (opts) {
-            this.id = opts.id || null;
-            this.repoName = opts.repoName;
-            this.buildCommand = opts.buildCommand;
-            this.mainBranch = opts.mainBranch;
-            this.period = opts.period;
-        }
+        opts = opts || {};
+
+        this.id = opts.id || null;
+        this.repoName = opts.repoName;
+        this.buildCommand = opts.buildCommand;
+        this.mainBranch = opts.mainBranch;
+        this.period = opts.period;
+        this.repoStatus = opts.repoStatus || repoStatus.Empty;
     }
 
     set(opts) {
@@ -15,5 +18,8 @@ module.exports = class Configuration {
         this.buildCommand = opts.buildCommand;
         this.mainBranch = opts.mainBranch;
         this.period = opts.period;
+        this.repoStatus = opts.setRepoStatus || repoStatus.Empty;
     }
 }
+
+module.exports = new Configuration();

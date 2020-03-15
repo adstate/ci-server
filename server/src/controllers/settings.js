@@ -1,6 +1,8 @@
 const ciApi = require('../core/ci-api');
 const ServerError = require('../errors/server-error');
 const GitUtils = require('../utils/git-utils');
+const buildConfig = require('../models/configuration');
+const repoStatus = require('../models/repo-status');
 
 async function saveSettings(req, res) {
     let apiResponse;
@@ -18,22 +20,27 @@ async function saveSettings(req, res) {
         //make clone and add last commit to queue only if repository was changed and wasn't cloned before
         if (!gitUtils.contains()) {
             await gitUtils.clean(); //clean folder var/repo before clone new repository
-            await gitUtils.clone();
+            
+            buildConfig.repoStatus = repoStatus.Cloning;
 
-            apiResponse = await ciApi.post('/conf', {
-                repoName,
-                buildCommand,
-                mainBranch,
-                period
-            });
+            gitUtils.clone().then(async () => {
+                buildConfig.repoStatus = repoStatus.Cloned;
 
-            const lastCommit = await gitUtils.getLastCommit();
-
-            apiResponse = await ciApi.post('/build/request', {
-                commitMessage: lastCommit.message,
-                commitHash: lastCommit.hash,
-                branchName: mainBranch,
-                authorName: lastCommit.author,
+                apiResponse = await ciApi.post('/conf', {
+                    repoName,
+                    buildCommand,
+                    mainBranch,
+                    period
+                });
+    
+                const lastCommit = await gitUtils.getLastCommit();
+    
+                apiResponse = await ciApi.post('/build/request', {
+                    commitMessage: lastCommit.message,
+                    commitHash: lastCommit.hash,
+                    branchName: mainBranch,
+                    authorName: lastCommit.author,
+                });
             });
         }
     } catch (e) {
@@ -53,8 +60,6 @@ async function getSettings(req, res) {
     } catch (e) {
         throw new ServerError(500);
     }
-
-    console.log(buildConfigaration.mainBranch);
 
     return res.json({
         status: 'success',

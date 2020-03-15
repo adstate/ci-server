@@ -7,6 +7,7 @@ require('express-async-errors');
 const config = require('./config');
 
 const errorHandler = require('./middlewares/error-handler');
+const checkRepoStateHandler = require('./middlewares/check-repo-state');
 const settingRouter = require('./routes/settings');
 const buildRouter = require('./routes/builds');
 
@@ -18,6 +19,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.resolve(__dirname, 'static')));
+
+app.use('/api', checkRepoStateHandler);
 
 app.use('/api', settingRouter);
 app.use('/api', buildRouter);
