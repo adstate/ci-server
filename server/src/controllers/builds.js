@@ -64,10 +64,7 @@ async function getBuildLog(req, res) {
     let logs;
 
     const buildId = req.params.buildId;
-
     const cachedLog = logCache.getValidItem(buildId);
-
-    console.log('cachedLog', cachedLog);
 
     if (cachedLog) {
         return res.json({
@@ -75,8 +72,6 @@ async function getBuildLog(req, res) {
             data: cachedLog
         })
     }
-
-    console.log('go to api');
 
     try {
         apiResponse = await ciApi.get('/build/log', {
