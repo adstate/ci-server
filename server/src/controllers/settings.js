@@ -42,6 +42,10 @@ async function saveSettings(req, res) {
                     authorName: lastCommit.author,
                 });
             });
+        } else {
+            if (buildConfig.mainBranch != mainBranch) {
+                await gitUtils.checkout(mainBranch);
+            }
         }
     } catch (e) {
         throw new ServerError(500, e.message);

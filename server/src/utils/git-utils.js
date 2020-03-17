@@ -8,7 +8,8 @@ module.exports = class GitUtils {
         this.shortRepoName = repoName.split('/')[1];
 
         this.repoUrl = `https://github.com/${repoName}`;
-        this.repoInternalPath = `var/repo/${this.shortRepoName}`;
+        this.repoDir = './var/repo';
+        this.repoInternalPath = path.join(this.repoDir, this.shortRepoName);
 
         this.codes = {
           'SUCCESS': 0,
@@ -39,6 +40,29 @@ module.exports = class GitUtils {
         })
     }
 
+    checkout(branchName) {
+      return new Promise((resolve, reject) => {
+        const appDir = path.dirname(require.main.filename)
+        const gitDir = path.join(appDir, '../', this.repoInternalPath);
+
+        const git = spawn('git', [`checkout`, branchName], {cwd: gitDir});
+
+        git.stderr.on('data', err => {
+          console.log(err.toString('UTF-8'));
+        });
+      
+        git.on('close', code => {
+          if (code === this.codes.SUCCESS) {
+            resolve();
+          } else {
+            reject({ message: 'Branch does not exists' });
+          }
+
+          console.log('git checkout close', code);
+        });
+    })
+    }
+
     contains() {
       if (fs.existsSync(this.repoInternalPath)) {
         return true
@@ -49,7 +73,7 @@ module.exports = class GitUtils {
 
     clean() {
       return new Promise((resolve, reject) => {
-        const rm = spawn("rm", ["-rf", `./var/repo`]);
+        const rm = spawn('rm', ['-rf', this.repoDir]);
 
         rm.stderr.on('data', err => {
           console.log(err.toString('UTF-8'));
