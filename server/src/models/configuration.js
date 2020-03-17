@@ -13,6 +13,7 @@ class Configuration {
         this.mainBranch = opts.mainBranch;
         this.period = opts.period;
         this.repoStatus = opts.repoStatus || repoStatus.Empty;
+        this.actual = opts.id ? true : false;
     }
 
     set(opts) {
@@ -22,6 +23,10 @@ class Configuration {
         this.mainBranch = opts.mainBranch;
         this.period = opts.period;
         this.repoStatus = opts.setRepoStatus || repoStatus.Empty;
+    }
+
+    update(opts) {
+        this.set(Object.assign({}, opts, {repoStatus: this.repoStatus}));
     }
 }
 

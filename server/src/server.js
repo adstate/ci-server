@@ -5,9 +5,9 @@ const express = require('express');
 require('express-async-errors');
 
 const config = require('./config');
+const conf = require('./utils/conf');
 
 const errorHandler = require('./middlewares/error-handler');
-const checkRepoStateHandler = require('./middlewares/check-repo-state');
 const settingRouter = require('./routes/settings');
 const buildRouter = require('./routes/builds');
 
@@ -20,11 +20,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.resolve(__dirname, 'static')));
 
-app.use('/api', checkRepoStateHandler);
-
 app.use('/api', settingRouter);
 app.use('/api', buildRouter);
 
 app.use(errorHandler);
 
-app.listen(3000);
+app.listen(3000, async () => {
+    try {
+        await conf.load();
+    } catch (e) {
+        console.error('Configuration is not loaded');
+    }
+});

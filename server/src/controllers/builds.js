@@ -1,7 +1,10 @@
 const fs = require('fs');
 const ciApi = require('../core/ci-api');
+const RepoStatusError = require('../errors/repo-status-error');
 const ServerError = require('../errors/server-error');
 const logCache = require('../core/log-cache');
+const repoStatus = require('../models/repo-status');
+const buildConfig = require('../models/configuration');
 
 async function getBuilds(req, res) {
     const offset = req.query.offset || 0;
@@ -25,6 +28,10 @@ async function getBuilds(req, res) {
 
 async function addBuild(req, res) {
     let apiResponse;
+
+    if (buildConfig.repoStatus === repoStatus.Cloning) {
+        throw new RepoStatusError(200);
+    }
 
     try {
         apiResponse = await ciApi.post('/build/request', {

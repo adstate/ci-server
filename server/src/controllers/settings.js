@@ -17,6 +17,15 @@ async function saveSettings(req, res) {
     const gitUtils = new GitUtils(repoName);
 
     try {
+        apiResponse = await ciApi.post('/conf', {
+            repoName,
+            buildCommand,
+            mainBranch,
+            period
+        });
+
+        buildConfig.actual = false;
+
         //make clone and add last commit to queue only if repository was changed and wasn't cloned before
         if (!gitUtils.contains()) {
             await gitUtils.clean(); //clean folder var/repo before clone new repository
@@ -25,13 +34,6 @@ async function saveSettings(req, res) {
 
             gitUtils.clone().then(async () => {
                 buildConfig.repoStatus = repoStatus.Cloned;
-
-                apiResponse = await ciApi.post('/conf', {
-                    repoName,
-                    buildCommand,
-                    mainBranch,
-                    period
-                });
     
                 const lastCommit = await gitUtils.getLastCommit();
     
@@ -59,7 +61,7 @@ async function saveSettings(req, res) {
 async function getSettings(req, res) {
     let apiResponse;
 
-    if (buildConfig.id) {
+    if (buildConfig.id && !buildConfig.actual) {
         return res.json({
             status: 'success',
             data: {
@@ -78,11 +80,11 @@ async function getSettings(req, res) {
         throw new ServerError(500);
     }
 
-    buildConfig.set(Object.assign(apiResponse.data.data, {repoStatus: buildConfig.repoStatus}));
-
+    buildConfig.update(apiResponse.data.data || apiResponse.data);
+    
     return res.json({
         status: 'success',
-        data: apiResponse.data.data,
+        data: apiResponse.data.data || apiResponse.data,
     });
 }
 
