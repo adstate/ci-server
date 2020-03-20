@@ -68,7 +68,6 @@ async function getBuild(req, res) {
 
 async function getBuildLog(req, res) {
     let apiResponse;
-    let logs;
 
     const buildId = req.params.buildId;
     const cachedLog = logCache.getValidItem(buildId);
@@ -87,16 +86,13 @@ async function getBuildLog(req, res) {
         });
     
         apiResponse.data.on('data', (chunk) => {
-            logs += chunk;
+            res.statusCode = 200;
+            res.write(chunk);
         });
     
         apiResponse.data.on('end', () => {
-            logCache.addItem(buildId, logs);
-
-            return res.json({
-                status: 'success',
-                data: logs
-            })
+            res.statusCode = 200;
+            res.end();
         });        
     } catch (e) {
         throw new ServerError(500);
