@@ -68,32 +68,48 @@ async function getBuild(req, res) {
 
 async function getBuildLog(req, res) {
     let apiResponse;
+    let logCacheWriteStream;
 
     const buildId = req.params.buildId;
     const cachedLog = logCache.getValidItem(buildId);
 
-    if (cachedLog) {
-        return res.json({
-            status: 'success',
-            data: cachedLog
-        })
-    }
-
     try {
-        apiResponse = await ciApi.get('/build/log', {
-            responseType: 'stream',
-            params: { buildId }
-        });
-    
-        apiResponse.data.on('data', (chunk) => {
-            res.statusCode = 200;
-            res.write(chunk);
-        });
-    
-        apiResponse.data.on('end', () => {
-            res.statusCode = 200;
-            res.end();
-        });        
+        if (cachedLog) {
+            cachedLog.on('data', (chunk) => {
+                res.statusCode = 200;
+                res.write(chunk);
+            });
+
+            cachedLog.on('close', () => {
+                res.statusCode = 200;
+                res.end();
+            });
+        } else {
+            logCacheWriteStream = logCache.addItem(buildId);
+
+            apiResponse = await ciApi.get('/build/log', {
+                responseType: 'stream',
+                params: { buildId }
+            });
+        
+            apiResponse.data.on('data', (chunk) => {
+                if (logCacheWriteStream) {
+                    logCacheWriteStream.write(chunk);
+                }
+
+                res.statusCode = 200;
+                res.write(chunk);
+            });
+        
+            apiResponse.data.on('end', () => {
+                if (logCacheWriteStream) {
+                    logCacheWriteStream.end();
+                }
+
+                res.statusCode = 200;
+                res.end();
+            });
+        }
     } catch (e) {
         throw new ServerError(500);
     }

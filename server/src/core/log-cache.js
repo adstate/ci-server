@@ -1,73 +1,51 @@
-const crypto = require('crypto');
+const path = require('path');
+const fs = require('fs');
 
-// все кейсы не успел протестировать
 class LogCache {
-    constructor(opts) {
-        this.limit = 5;
-        this.duration = 5 * 60 * 1000;
-        this.stack = [];
-        this.items = {}; // key is buildId
-    }
+    constructor() {
+        this.duration = 10 * 60 * 1000;
+        this.dir = './var/cache';
 
-    addItem(buildId, log) {
-        if (this.getItem(buildId)) {
-            this.items[buildId] = this.createItem(log);
-        } else {
-            if (this.stack.length >= this.limit) {
-                this.deleteLastItem();
-            }
-
-            this.items[buildId] = this.createItem(log);
-            this.stack.push(buildId);
+        if (!fs.existsSync(this.dir)) {
+            fs.mkdir(this.dir, (err) => {
+                console.log('Error of creating cache folder', err);
+            });
         }
     }
 
-    deleteLastItem() {
-        const lastBuildId = this.stack.shift();
-        delete this.items[lastBuildId];
-    }
-
-    deleteItem(buildId) {
-        delete this.items[buildId];
-        this.stack.splice(this.stack.indexOf(buildId), 1);
-    }
-
-    createItem(log) {
-        let hash = crypto.createHash('md5').update(log).digest("hex");
-
-        return {
-            hash: hash,
-            log: log,
-            time: new Date(),
-            expired: false
-        }
-    }
-
-    getItem(buildId) {
-        return this.items[buildId];
+    addItem(buildId) {        
+        return fs.createWriteStream(this.getItemPath(buildId));
     }
 
     getValidItem(buildId) {
-        const item = this.getItem(buildId);
-
-        if (!item) {
+        if (!fs.existsSync(this.getItemPath(buildId))) {
             return null;
         }
 
-        if (this.validateItem(item)) {
-            return item;
+        console.log('item is not exist');
+
+        if (this.validateItem(buildId)) {
+            return fs.createReadStream(this.getItemPath(buildId));
         } else {
             this.deleteItem(buildId);
-
             return null;
         }
     }
 
-    validateItem(item) {
+    validateItem(buildId) {
+        const stat = fs.statSync(this.getItemPath(buildId));
         const currentDate = new Date();
-        const duration = currentDate - item.time;
+        const duration = currentDate - stat.ctime;
 
         return (duration < this.duration);
+    }
+
+    deleteItem(buildId) {
+        fs.unlinkSync(this.getItemPath(buildId));
+    }
+
+    getItemPath(buildId) {
+        return path.join(this.dir, `${buildId}.log`)
     }
 
 }
