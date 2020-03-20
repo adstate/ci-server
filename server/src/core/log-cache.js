@@ -1,15 +1,28 @@
 const path = require('path');
 const fs = require('fs');
+const { emptyDir } = require('fs-extra');
 
 class LogCache {
-    constructor() {
-        this.duration = 10 * 60 * 1000;
-        this.dir = './var/cache';
+    constructor(opts) {
+        opts = opts || {};
+
+        this.duration = opts.duration || 10 * 60 * 1000;
+        this.dir = opts.dir || './var/cache';
 
         if (!fs.existsSync(this.dir)) {
-            fs.mkdir(this.dir, (err) => {
-                console.log('Error of creating cache folder', err);
+            fs.mkdir(this.dir, err => {
+                if (err) {
+                    console.log('Error of creating cache folder', err);
+                }
             });
+        } else {
+            if (opts.clearCacheOnStart) {
+                emptyDir(this.dir, err => {
+                    if (err) {
+                        console.log('Error of clear cache', err);
+                    }
+                });
+            }
         }
     }
 
@@ -47,7 +60,8 @@ class LogCache {
     getItemPath(buildId) {
         return path.join(this.dir, `${buildId}.log`)
     }
-
 }
 
-module.exports = new LogCache();
+module.exports = new LogCache({
+    clearCacheOnStart: true
+});
