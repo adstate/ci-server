@@ -3,7 +3,7 @@ const buildStatus = {
     InProgress: 'InProgress',
     Success: 'Success',
     Fail: 'Fail',
-    Canceled: 'Canceled'
+    Canceled: 'Canceled',
 };
 
 module.exports = buildStatus;

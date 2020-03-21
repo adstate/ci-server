@@ -11,7 +11,7 @@ async function saveSettings(req, res) {
         repoName,
         buildCommand,
         mainBranch,
-        period
+        period,
     } = req.body;
 
     const gitUtils = new GitUtils(repoName);
@@ -21,22 +21,22 @@ async function saveSettings(req, res) {
             repoName,
             buildCommand,
             mainBranch,
-            period
+            period,
         });
 
         buildConfig.actual = false;
 
-        //make clone and add last commit to queue only if repository was changed and wasn't cloned before
+        // make clone and add last commit to queue only if repository was changed and wasn't cloned before
         if (!gitUtils.contains()) {
-            await gitUtils.clean(); //clean folder var/repo before clone new repository
-            
+            await gitUtils.clean(); // clean folder var/repo before clone new repository
+
             buildConfig.repoStatus = repoStatus.Cloning;
 
             gitUtils.clone().then(async () => {
                 buildConfig.repoStatus = repoStatus.Cloned;
-    
+
                 const lastCommit = await gitUtils.getLastCommit();
-    
+
                 apiResponse = await ciApi.post('/build/request', {
                     commitMessage: lastCommit.message,
                     commitHash: lastCommit.hash,
@@ -44,10 +44,8 @@ async function saveSettings(req, res) {
                     authorName: lastCommit.author,
                 });
             });
-        } else {
-            if (buildConfig.mainBranch != mainBranch) {
-                await gitUtils.checkout(mainBranch);
-            }
+        } else if (buildConfig.mainBranch != mainBranch) {
+            await gitUtils.checkout(mainBranch);
         }
     } catch (e) {
         throw new ServerError(500, e.message);
@@ -69,9 +67,9 @@ async function getSettings(req, res) {
                 repoName: buildConfig.repoName,
                 buildCommand: buildConfig.buildCommand,
                 mainBranch: buildConfig.mainBranch,
-                period: buildConfig.period
+                period: buildConfig.period,
             },
-        })
+        });
     }
 
     try {
@@ -81,7 +79,7 @@ async function getSettings(req, res) {
     }
 
     buildConfig.update(apiResponse.data.data || apiResponse.data);
-    
+
     return res.json({
         status: 'success',
         data: apiResponse.data.data || apiResponse.data,
@@ -90,5 +88,5 @@ async function getSettings(req, res) {
 
 module.exports = {
     saveSettings,
-    getSettings
+    getSettings,
 };

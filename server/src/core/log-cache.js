@@ -10,23 +10,21 @@ class LogCache {
         this.dir = opts.dir || './var/cache';
 
         if (!fs.existsSync(this.dir)) {
-            fs.mkdir(this.dir, err => {
+            fs.mkdir(this.dir, (err) => {
                 if (err) {
                     console.log('Error of creating cache folder', err);
                 }
             });
-        } else {
-            if (opts.clearCacheOnStart) {
-                emptyDir(this.dir, err => {
-                    if (err) {
-                        console.log('Error of clear cache', err);
-                    }
-                });
-            }
+        } else if (opts.clearCacheOnStart) {
+            emptyDir(this.dir, (err) => {
+                if (err) {
+                    console.log('Error of clear cache', err);
+                }
+            });
         }
     }
 
-    addItem(buildId) {        
+    addItem(buildId) {
         return fs.createWriteStream(this.getItemPath(buildId));
     }
 
@@ -35,14 +33,11 @@ class LogCache {
             return null;
         }
 
-        console.log('item is not exist');
-
         if (this.validateItem(buildId)) {
             return fs.createReadStream(this.getItemPath(buildId));
-        } else {
-            this.deleteItem(buildId);
-            return null;
         }
+        this.deleteItem(buildId);
+        return null;
     }
 
     validateItem(buildId) {
@@ -58,10 +53,10 @@ class LogCache {
     }
 
     getItemPath(buildId) {
-        return path.join(this.dir, `${buildId}.log`)
+        return path.join(this.dir, `${buildId}.log`);
     }
 }
 
 module.exports = new LogCache({
-    clearCacheOnStart: true
+    clearCacheOnStart: true,
 });

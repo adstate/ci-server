@@ -1,4 +1,3 @@
-const fs = require('fs');
 const ciApi = require('../core/ci-api');
 const RepoStatusError = require('../errors/repo-status-error');
 const ServerError = require('../errors/server-error');
@@ -70,7 +69,7 @@ async function getBuildLog(req, res) {
     let apiResponse;
     let logCacheWriteStream;
 
-    const buildId = req.params.buildId;
+    const { buildId } = req.params;
     const cachedLog = logCache.getValidItem(buildId);
 
     try {
@@ -89,9 +88,9 @@ async function getBuildLog(req, res) {
 
             apiResponse = await ciApi.get('/build/log', {
                 responseType: 'stream',
-                params: { buildId }
+                params: { buildId },
             });
-        
+
             apiResponse.data.on('data', (chunk) => {
                 if (logCacheWriteStream) {
                     logCacheWriteStream.write(chunk);
@@ -100,7 +99,7 @@ async function getBuildLog(req, res) {
                 res.statusCode = 200;
                 res.write(chunk);
             });
-        
+
             apiResponse.data.on('end', () => {
                 if (logCacheWriteStream) {
                     logCacheWriteStream.end();
@@ -119,5 +118,5 @@ module.exports = {
     getBuilds,
     addBuild,
     getBuild,
-    getBuildLog
+    getBuildLog,
 };

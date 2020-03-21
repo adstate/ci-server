@@ -1,7 +1,7 @@
 const repoStatus = {
     Empty: 'Empty',
     Cloning: 'Cloning',
-    Cloned: 'Cloned'
+    Cloned: 'Cloned',
 };
 
 module.exports = repoStatus;

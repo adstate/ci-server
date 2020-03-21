@@ -7,5 +7,5 @@ async function load() {
 }
 
 module.exports = {
-    load
-}
+    load,
+};

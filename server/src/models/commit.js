@@ -4,4 +4,4 @@ module.exports = class Commit {
         this.author = opts.author;
         this.message = opts.message;
     }
-}
+};
