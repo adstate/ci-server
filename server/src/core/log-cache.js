@@ -1,27 +1,31 @@
 const path = require('path');
 const fs = require('fs');
-const { emptyDir } = require('fs-extra');
+const fsExtra = require('fs-extra');
+const util = require('util');
+const config = require('../config');
+
+const emptyDir = util.promisify(fsExtra.emptyDir);
+const mkdir = util.promisify(fs.mkdir);
+const unlink = util.promisify(fs.unlink);
+const readdir = util.promisify(fs.readdir);
+const stat = util.promisify(fs.stat);
 
 class LogCache {
     constructor(opts) {
         opts = opts || {};
 
-        this.duration = opts.duration || 10 * 60 * 1000;
+        this.duration = opts.duration || 20 * 60 * 1000;
         this.dir = opts.dir || './var/cache';
 
         if (!fs.existsSync(this.dir)) {
-            fs.mkdir(this.dir, (err) => {
-                if (err) {
-                    console.log('Error of creating cache folder', err);
-                }
+            mkdir(this.dir).catch((err) => {
+                console.log('CACHE:Error of creating cache folder', err);
             });
         } else if (opts.clearCacheOnStart) {
-            emptyDir(this.dir, (err) => {
-                if (err) {
-                    console.log('Error of clear cache', err);
-                }
-            });
+            this.clear();
         }
+
+        setInterval(this.clearExpired.bind(this), this.duration);
     }
 
     addItem(buildId) {
@@ -36,27 +40,53 @@ class LogCache {
         if (this.validateItem(buildId)) {
             return fs.createReadStream(this.getItemPath(buildId));
         }
-        this.deleteItem(buildId);
+        this.deleteItem(`${buildId}.log`);
         return null;
     }
 
     validateItem(buildId) {
         const stat = fs.statSync(this.getItemPath(buildId));
         const currentDate = new Date();
-        const duration = currentDate - stat.ctime;
 
-        return (duration < this.duration);
+        return (currentDate - stat.ctime < this.duration);
     }
 
-    deleteItem(buildId) {
-        fs.unlinkSync(this.getItemPath(buildId));
+    deleteItem(fileName) {
+        unlink(path.join(this.dir, fileName)).catch((err) => {
+            console.log('CACHE:Error of deleting cache item');
+        });
     }
 
     getItemPath(buildId) {
         return path.join(this.dir, `${buildId}.log`);
     }
+
+    clear() {
+        emptyDir(this.dir).catch((err) => {
+            console.log('CACHE:Error of clear cache', err);
+        });
+    }
+
+    clearExpired() {
+        readdir(this.dir)
+            .then((files) => {
+                const currentDate = new Date();
+
+                files.forEach((file) => {                   
+                    stat(path.join(this.dir, file)).then((stats) => {
+                        if (currentDate - stats.ctime > this.duration) {
+                            this.deleteItem(file);
+                        }
+                    });
+                });
+            })
+            .catch((err) => {
+                console.log('CACHE:clearExpired - Can not read cache log directory');
+            });
+    }
 }
 
 module.exports = new LogCache({
     clearCacheOnStart: true,
+    duration: config.CACHE_LIFESPAN
 });
