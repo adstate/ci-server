@@ -15,39 +15,78 @@ async function saveSettings(req, res) {
     } = req.body;
 
     const gitUtils = new GitUtils(repoName);
+    const isNewRepo = buildConfig.repoName != repoName;
+
+    if (isNewRepo) {
+        try {
+            apiResponse = await ciApi.deleteSettings();
+        } catch(e) {
+            throw new ServerError(500, e);
+        }
+    }
 
     try {
-        apiResponse = await ciApi.post('/conf', {
+        const currentBranch = buildConfig.mainBranch;
+
+        apiResponse = await ciApi.saveSettings({
             repoName,
             buildCommand,
             mainBranch,
             period,
         });
 
+        buildConfig.update({
+            repoName,
+            buildCommand,
+            mainBranch,
+            period, 
+        });
         buildConfig.actual = false;
 
         // make clone and add last commit to queue only if repository was changed and wasn't cloned before
-        if (!gitUtils.contains()) {
+        if (isNewRepo) {
             await gitUtils.clean(); // clean folder var/repo before clone new repository
 
             buildConfig.repoStatus = repoStatus.Cloning;
 
-            gitUtils.clone().then(async () => {
-                buildConfig.repoStatus = repoStatus.Cloned;
+            gitUtils.clone()
+                .then(async () => {
+                    await gitUtils.checkout(mainBranch);
+
+                    buildConfig.repoStatus = repoStatus.Cloned;
+
+                    const lastCommit = await gitUtils.getLastCommit();
+
+                    apiResponse = await ciApi.addBuild({
+                        commitMessage: lastCommit.message,
+                        commitHash: lastCommit.hash,
+                        branchName: mainBranch,
+                        authorName: lastCommit.author,
+                    });
+
+                    buildConfig.lastBuildedCommit = lastCommit;
+                })
+                .catch(err => {
+                    console.log('ERROR:repository not found', err);
+                })
+
+        } else if (currentBranch != mainBranch) {
+            gitUtils.pull().then(async () => {
+                await gitUtils.checkout(mainBranch);
 
                 const lastCommit = await gitUtils.getLastCommit();
-
-                apiResponse = await ciApi.post('/build/request', {
-                    commitMessage: lastCommit.message,
-                    commitHash: lastCommit.hash,
-                    branchName: mainBranch,
-                    authorName: lastCommit.author,
-                });
-
-                buildConfig.lastBuildedCommit = lastCommit;
+    
+                if (lastCommit.hash !== buildConfig.lastBuildedCommit.hash) {
+                    apiResponse = await ciApi.addBuild({
+                        commitMessage: lastCommit.message,
+                        commitHash: lastCommit.hash,
+                        branchName: mainBranch,
+                        authorName: lastCommit.author,
+                    });
+    
+                    buildConfig.lastBuildedCommit = lastCommit;
+                }
             });
-        } else if (buildConfig.mainBranch != mainBranch) {
-            await gitUtils.checkout(mainBranch);
         }
     } catch (e) {
         throw new ServerError(500, e.message);
@@ -75,7 +114,7 @@ async function getSettings(req, res) {
     }
 
     try {
-        apiResponse = await ciApi.get('/conf');
+        apiResponse = await ciApi.getSettings();
     } catch (e) {
         throw new ServerError(500);
     }

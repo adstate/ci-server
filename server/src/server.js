@@ -28,6 +28,7 @@ app.use(errorHandler);
 app.listen(3000, async () => {
     try {
         await conf.load();
+        //require('./core/git-service');
     } catch (e) {
         console.error('ERROR:Configuration is not loaded.', e.message);
     }

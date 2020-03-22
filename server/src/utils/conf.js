@@ -4,15 +4,13 @@ const GitUtils = require('../utils/git-utils');
 const repoStatus = require('../models/repo-status');
 
 async function load() {
-    const config = await ciApi.get('/conf');
+    const config = await ciApi.getSettings();
     
     let lastBuildData;
     let lastBuild;
 
     try {
-        lastBuildData = await ciApi.get('/build/list', {
-            params: { offset: 0, limit: 1}
-        });
+        lastBuildData = await ciApi.getBuilds({ offset: 0, limit: 1});
 
         [ lastBuild ] = lastBuildData.data.data;
     } catch(e) {

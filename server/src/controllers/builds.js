@@ -12,9 +12,7 @@ async function getBuilds(req, res) {
     let apiResponse;
 
     try {
-        apiResponse = await ciApi.get('/build/list', {
-            params: { offset, limit },
-        });
+        apiResponse = await ciApi.getBuilds({ offset, limit });
     } catch (e) {
         throw new ServerError(500);
     }
@@ -33,7 +31,7 @@ async function addBuild(req, res) {
     }
 
     try {
-        apiResponse = await ciApi.post('/build/request', {
+        apiResponse = await ciApi.addBuild({
             commitMessage: req.body.commitMessage,
             commitHash: req.body.commitHash,
             branchName: req.body.branchName,
@@ -52,9 +50,7 @@ async function getBuild(req, res) {
     let apiResponse;
 
     try {
-        apiResponse = await ciApi.get('/build/details', {
-            params: { buildId: req.params.buildId },
-        });
+        apiResponse = await ciApi.getBuild(req.params.buildId);
     } catch (e) {
         throw new ServerError(500);
     }
@@ -86,10 +82,7 @@ async function getBuildLog(req, res) {
         } else {
             logCacheWriteStream = logCache.addItem(buildId);
 
-            apiResponse = await ciApi.get('/build/log', {
-                responseType: 'stream',
-                params: { buildId },
-            });
+            apiResponse = await ciApi.getBuildLog('/build/log', buildId);
 
             apiResponse.data.on('data', (chunk) => {
                 if (logCacheWriteStream) {
