@@ -1,25 +1,24 @@
 const path = require('path');
 const GitUtils = require('../utils/git-utils');
-const buildConfig = require('../core/buildConf');
+const buildConfig = require('./buildConf');
 const ciApi = require('./ci-api');
 const repoStatus = require('../models/repo-status');
 
 class GitService {
-    constructor(buildConfig, gitUtils) {
+    constructor(config, gitUtils) {
         this.repoDir = './var/repo';
         this.repoUrl = null;
         this.repoInternalPath = null;
         this.shortRepoName = null;
 
-        this.buildConfig = buildConfig;
+        this.buildConfig = config;
         this.gitUtils = gitUtils;
 
-        buildConfig.on('init', () => {
+        this.buildConfig.on('init', () => {
             setInterval(this.checkNewCommits.bind(this), this.buildConfig.period * 60 * 1000);
         });
 
-        buildConfig.on('change', () => {
-            console.log('onConfigChange');
+        this.buildConfig.on('change', () => {
             this.update();
         });
     }
@@ -61,7 +60,7 @@ class GitService {
     async checkNewCommits() {
         if (this.buildConfig.lastBuildedCommit && this.buildConfig.repoStatus == repoStatus.Cloned) {
             const lastCommitHash = this.buildConfig.lastBuildedCommit.hash;
-            const mainBranch = this.buildConfig.mainBranch;
+            const { mainBranch } = this.buildConfig;
 
             await this.pull();
             const commits = await this.gitUtils.getNewCommits(lastCommitHash, this.repoInternalPath);
@@ -78,13 +77,12 @@ class GitService {
                     await ciApi.addBuild(buildData);
 
                     this.buildConfig.lastBuildedCommit = commit;
-                } catch(e) {
-                   console.log(e.stack);
+                } catch (e) {
+                    console.error(e.stack);
                 }
             });
         }
     }
-
 }
 
 module.exports = new GitService(buildConfig, new GitUtils());

@@ -14,12 +14,12 @@ async function saveSettings(req, res) {
         period,
     } = req.body;
 
-    const isNewRepo = buildConfig.repoName != repoName;
+    const isNewRepo = buildConfig.repoName !== repoName;
 
     if (isNewRepo) {
         try {
             apiResponse = await ciApi.deleteSettings();
-        } catch(e) {
+        } catch (e) {
             throw new ServerError(500, e);
         }
     }
@@ -38,7 +38,7 @@ async function saveSettings(req, res) {
             repoName,
             buildCommand,
             mainBranch,
-            period, 
+            period,
         });
         buildConfig.actual = false;
 
@@ -65,16 +65,15 @@ async function saveSettings(req, res) {
 
                     buildConfig.lastBuildedCommit = lastCommit;
                 })
-                .catch(err => {
-                    console.log('ERROR:repository not found', err);
-                })
-
-        } else if (currentBranch != mainBranch) {
+                .catch((err) => {
+                    console.error('ERROR:repository not found', err);
+                });
+        } else if (currentBranch !== mainBranch) {
             gitService.pull().then(async () => {
                 await gitService.checkout(mainBranch);
 
                 const lastCommit = await gitService.getLastCommit();
-    
+
                 if (lastCommit.hash !== buildConfig.lastBuildedCommit.hash) {
                     apiResponse = await ciApi.addBuild({
                         commitMessage: lastCommit.message,
@@ -82,7 +81,7 @@ async function saveSettings(req, res) {
                         branchName: mainBranch,
                         authorName: lastCommit.author,
                     });
-    
+
                     buildConfig.lastBuildedCommit = lastCommit;
                 }
             });

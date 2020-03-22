@@ -16,7 +16,7 @@ module.exports = class GitUtils {
 
             git.stderr.on('data', (err) => {
                 const error = err.toString('UTF-8');
-                console.log('git clone error', error);
+                console.error('git clone error', error);
             });
 
             git.on('close', (code) => {
@@ -28,7 +28,7 @@ module.exports = class GitUtils {
                     reject({ message: 'Error of clone repository' });
                 }
 
-                console.log('git clone close', code);
+                console.error('git clone close', code);
             });
         });
     }
@@ -41,7 +41,7 @@ module.exports = class GitUtils {
             const git = spawn('git', ['pull'], { cwd: gitDir });
 
             git.stderr.on('data', (err) => {
-                console.log(err.toString('UTF-8'));
+                console.error(err.toString('UTF-8'));
             });
 
             git.on('close', (code) => {
@@ -51,7 +51,7 @@ module.exports = class GitUtils {
                     reject({ message: 'Error of pull repository' });
                 }
 
-                console.log('git pull close', code);
+                console.error('git pull close', code);
             });
         });
     }
@@ -64,7 +64,7 @@ module.exports = class GitUtils {
             const git = spawn('git', ['checkout', branchName], { cwd: gitDir });
 
             git.stderr.on('data', (err) => {
-                console.log(err.toString('UTF-8'));
+                console.error(err.toString('UTF-8'));
             });
 
             git.on('close', (code) => {
@@ -74,7 +74,7 @@ module.exports = class GitUtils {
                     reject({ message: 'Branch does not exists' });
                 }
 
-                console.log('git checkout close', code);
+                console.error('git checkout close', code);
             });
         });
     }
@@ -92,7 +92,7 @@ module.exports = class GitUtils {
             const rm = spawn('rm', ['-rf', repoDir]);
 
             rm.stderr.on('data', (err) => {
-                console.log(err.toString('UTF-8'));
+                console.error(err.toString('UTF-8'));
             });
 
             rm.on('close', (code) => {
@@ -116,7 +116,7 @@ module.exports = class GitUtils {
             const git = spawn('git', ['log', '-1', '--format=%h;%cn;%s'], spawnOpts);
 
             git.stderr.on('data', (err) => {
-                console.log(err.toString('UTF-8'));
+                console.error(err.toString('UTF-8'));
             });
 
             git.stdout.on('data', (data) => {
@@ -143,7 +143,7 @@ module.exports = class GitUtils {
             const git = spawn('git', ['log', '--format=%h;%cn;%s', `${commitHash}..HEAD`], { cwd: gitDir });
 
             git.stderr.on('data', (err) => {
-                console.log(err.toString('UTF-8'));
+                console.error(err.toString('UTF-8'));
             });
 
             git.stdout.on('data', (data) => {
@@ -164,12 +164,12 @@ module.exports = class GitUtils {
     }
 
     parseCommitInfo(commitStr) {
-        const [ hash, author, message ] = commitStr.trim().split(';');
+        const [hash, author, message] = commitStr.trim().split(';');
 
         return {
             hash,
             author,
-            message
+            message,
         };
     }
 };

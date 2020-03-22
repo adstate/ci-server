@@ -5,15 +5,15 @@ const repoStatus = require('../models/repo-status');
 
 async function load() {
     const config = await ciApi.getSettings();
-    
+
     let lastBuildData;
     let lastBuild;
 
     try {
-        lastBuildData = await ciApi.getBuilds({ offset: 0, limit: 1});
+        lastBuildData = await ciApi.getBuilds({ offset: 0, limit: 1 });
 
-        [ lastBuild ] = lastBuildData.data.data;
-    } catch(e) {
+        [lastBuild] = lastBuildData.data.data;
+    } catch (e) {
         lastBuildData = null;
         lastBuild = null;
     }
@@ -23,7 +23,7 @@ async function load() {
     buildConfig.lastBuildedCommit = (lastBuild) ? {
         hash: lastBuild.commitHash,
         message: lastBuild.commitMessage,
-        author: lastBuild.authorName
+        author: lastBuild.authorName,
     } : null;
 
     await checkRepo();

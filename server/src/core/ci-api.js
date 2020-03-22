@@ -21,23 +21,23 @@ async function getSettings() {
 }
 
 async function deleteSettings() {
-    return instance.delete('/conf')
+    return instance.delete('/conf');
 }
 
 async function addBuild(buildData) {
-    return instance.post('/build/request', buildData)
+    return instance.post('/build/request', buildData);
 }
 
 async function getBuilds(opts) {
     return instance.get('/build/list', {
-        params: opts
-    })
+        params: opts,
+    });
 }
 
 async function getBuild(buildId) {
     return instance.get('/build/details', {
-        params: { buildId }
-    })
+        params: { buildId },
+    });
 }
 
 async function getBuildLog(buildId) {
@@ -55,5 +55,5 @@ module.exports = {
     addBuild,
     getBuilds,
     getBuild,
-    getBuildLog
-}
+    getBuildLog,
+};

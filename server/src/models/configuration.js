@@ -1,4 +1,4 @@
-const Emitter = require("events");
+const Emitter = require('events');
 const repoStatus = require('./repo-status');
 
 module.exports = class Configuration extends Emitter {
@@ -8,8 +8,8 @@ module.exports = class Configuration extends Emitter {
     }
 
     init(opts) {
-       this.update(opts);
-       this.emit('init');
+        this.update(opts);
+        this.emit('init');
     }
 
     set(opts, event) {
@@ -43,5 +43,4 @@ module.exports = class Configuration extends Emitter {
 
         this.emit('change');
     }
-}
-
+};

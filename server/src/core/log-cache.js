@@ -19,7 +19,7 @@ class LogCache {
 
         if (!fs.existsSync(this.dir)) {
             mkdir(this.dir).catch((err) => {
-                console.log('CACHE:Error of creating cache folder', err);
+                console.error('CACHE:Error of creating cache folder', err);
             });
         } else if (opts.clearCacheOnStart) {
             this.clear();
@@ -45,15 +45,15 @@ class LogCache {
     }
 
     validateItem(buildId) {
-        const stat = fs.statSync(this.getItemPath(buildId));
+        const stats = fs.statSync(this.getItemPath(buildId));
         const currentDate = new Date();
 
-        return (currentDate - stat.ctime < this.duration);
+        return (currentDate - stats.ctime < this.duration);
     }
 
     deleteItem(fileName) {
         unlink(path.join(this.dir, fileName)).catch((err) => {
-            console.log('CACHE:Error of deleting cache item');
+            console.error('CACHE:Error of deleting cache item', err);
         });
     }
 
@@ -63,7 +63,7 @@ class LogCache {
 
     clear() {
         emptyDir(this.dir).catch((err) => {
-            console.log('CACHE:Error of clear cache', err);
+            console.error('CACHE:Error of clear cache', err);
         });
     }
 
@@ -72,7 +72,7 @@ class LogCache {
             .then((files) => {
                 const currentDate = new Date();
 
-                files.forEach((file) => {                   
+                files.forEach((file) => {
                     stat(path.join(this.dir, file)).then((stats) => {
                         if (currentDate - stats.ctime > this.duration) {
                             this.deleteItem(file);
@@ -81,12 +81,12 @@ class LogCache {
                 });
             })
             .catch((err) => {
-                console.log('CACHE:clearExpired - Can not read cache log directory');
+                console.error('CACHE:clearExpired - Can not read cache log directory');
             });
     }
 }
 
 module.exports = new LogCache({
     clearCacheOnStart: true,
-    duration: config.CACHE_LIFESPAN
+    duration: config.CACHE_LIFESPAN,
 });
