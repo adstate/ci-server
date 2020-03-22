@@ -3,23 +3,16 @@ const path = require('path');
 const fs = require('fs');
 
 module.exports = class GitUtils {
-    constructor(repoName) {
-        this.repoName = repoName;
-        this.shortRepoName = repoName.split('/')[1];
-
-        this.repoUrl = `https://github.com/${repoName}`;
-        this.repoDir = './var/repo';
-        this.repoInternalPath = path.join(this.repoDir, this.shortRepoName);
-
+    constructor() {
         this.codes = {
             SUCCESS: 0,
             NOTFOUND: 128,
         };
     }
 
-    clone() {
+    clone(url, internalPath) {
         return new Promise((resolve, reject) => {
-            const git = spawn('git', ['clone', this.repoUrl, this.repoInternalPath]);
+            const git = spawn('git', ['clone', url, internalPath]);
 
             git.stderr.on('data', (err) => {
                 const error = err.toString('UTF-8');
@@ -40,10 +33,10 @@ module.exports = class GitUtils {
         });
     }
 
-    pull() {
+    pull(repoInternalPath) {
         return new Promise((resolve, reject) => {
             const appDir = path.dirname(require.main.filename);
-            const gitDir = path.join(appDir, '../', this.repoInternalPath);
+            const gitDir = path.join(appDir, '../', repoInternalPath);
 
             const git = spawn('git', ['pull'], { cwd: gitDir });
 
@@ -63,10 +56,10 @@ module.exports = class GitUtils {
         });
     }
 
-    checkout(branchName) {
+    checkout(branchName, repoInternalPath) {
         return new Promise((resolve, reject) => {
             const appDir = path.dirname(require.main.filename);
-            const gitDir = path.join(appDir, '../', this.repoInternalPath);
+            const gitDir = path.join(appDir, '../', repoInternalPath);
 
             const git = spawn('git', ['checkout', branchName], { cwd: gitDir });
 
@@ -86,17 +79,17 @@ module.exports = class GitUtils {
         });
     }
 
-    contains() {
-        if (fs.existsSync(this.repoInternalPath)) {
+    contains(repoInternalPath) {
+        if (fs.existsSync(repoInternalPath)) {
             return true;
         }
 
         return false;
     }
 
-    clean() {
+    clean(repoDir) {
         return new Promise((resolve, reject) => {
-            const rm = spawn('rm', ['-rf', this.repoDir]);
+            const rm = spawn('rm', ['-rf', repoDir]);
 
             rm.stderr.on('data', (err) => {
                 console.log(err.toString('UTF-8'));
@@ -112,10 +105,10 @@ module.exports = class GitUtils {
         });
     }
 
-    getLastCommit() {
+    getLastCommit(repoInternalPath) {
         return new Promise((resolve, reject) => {
             const appDir = path.dirname(require.main.filename);
-            const gitDir = path.join(appDir, '../', this.repoInternalPath);
+            const gitDir = path.join(appDir, '../', repoInternalPath);
 
             let result = '';
 
@@ -140,14 +133,14 @@ module.exports = class GitUtils {
         });
     }
 
-    getNewCommits(commit) {
+    getNewCommits(commitHash, repoInternalPath) {
         return new Promise((resolve, reject) => {
             const appDir = path.dirname(require.main.filename);
-            const gitDir = path.join(appDir, '../', this.repoInternalPath);
+            const gitDir = path.join(appDir, '../', repoInternalPath);
 
             let result = '';
 
-            const git = spawn('git', ['log', '--format=%h;%cn;%s', `${commit.hash}..HEAD`], { cwd: gitDir });
+            const git = spawn('git', ['log', '--format=%h;%cn;%s', `${commitHash}..HEAD`], { cwd: gitDir });
 
             git.stderr.on('data', (err) => {
                 console.log(err.toString('UTF-8'));
@@ -159,7 +152,9 @@ module.exports = class GitUtils {
 
             git.on('close', (code) => {
                 if (code === this.codes.SUCCESS) {
-                    console.log('NEW COMMITES', result);
+                    result = result.trim();
+                    result = result ? result.split('\n').map((str) => this.parseCommitInfo(str)) : [];
+
                     resolve(result);
                 } else {
                     reject();
@@ -169,7 +164,7 @@ module.exports = class GitUtils {
     }
 
     parseCommitInfo(commitStr) {
-        const [ hash, author, message ] = commitStr.split(';');
+        const [ hash, author, message ] = commitStr.trim().split(';');
 
         return {
             hash,

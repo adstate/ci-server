@@ -4,7 +4,10 @@ const bodyParser = require('body-parser');
 const express = require('express');
 require('express-async-errors');
 
-const config = require('./config');
+require('./config');
+require('./core/buildConf');
+require('./core/git-service');
+
 const conf = require('./utils/conf');
 
 const errorHandler = require('./middlewares/error-handler');
@@ -28,7 +31,6 @@ app.use(errorHandler);
 app.listen(3000, async () => {
     try {
         await conf.load();
-        //require('./core/git-service');
     } catch (e) {
         console.error('ERROR:Configuration is not loaded.', e.message);
     }

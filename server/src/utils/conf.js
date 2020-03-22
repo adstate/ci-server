@@ -1,6 +1,6 @@
 const buildConfig = require('../core/buildConf');
 const ciApi = require('../core/ci-api');
-const GitUtils = require('../utils/git-utils');
+const gitService = require('../core/git-service');
 const repoStatus = require('../models/repo-status');
 
 async function load() {
@@ -18,7 +18,7 @@ async function load() {
         lastBuild = null;
     }
 
-    buildConfig.update(config.data.data || config.data);
+    buildConfig.init(config.data.data || config.data);
 
     buildConfig.lastBuildedCommit = (lastBuild) ? {
         hash: lastBuild.commitHash,
@@ -34,13 +34,13 @@ async function checkRepo() {
         return;
     }
 
-    const gitUtils = new GitUtils(buildConfig.repoName);
-
-    if (!gitUtils.contains()) {
-        await gitUtils.clean();
+    if (!gitService.contains()) {
+        await gitService.clean();
         buildConfig.repoStatus = repoStatus.Cloning;
 
-        await gitUtils.clone();
+        await gitService.clone();
+        buildConfig.repoStatus = repoStatus.Cloned;
+    } else {
         buildConfig.repoStatus = repoStatus.Cloned;
     }
 }

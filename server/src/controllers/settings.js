@@ -1,6 +1,6 @@
 const ciApi = require('../core/ci-api');
 const ServerError = require('../errors/server-error');
-const GitUtils = require('../utils/git-utils');
+const gitService = require('../core/git-service');
 const buildConfig = require('../core/buildConf');
 const repoStatus = require('../models/repo-status');
 
@@ -14,7 +14,6 @@ async function saveSettings(req, res) {
         period,
     } = req.body;
 
-    const gitUtils = new GitUtils(repoName);
     const isNewRepo = buildConfig.repoName != repoName;
 
     if (isNewRepo) {
@@ -45,17 +44,17 @@ async function saveSettings(req, res) {
 
         // make clone and add last commit to queue only if repository was changed and wasn't cloned before
         if (isNewRepo) {
-            await gitUtils.clean(); // clean folder var/repo before clone new repository
+            await gitService.clean(); // clean folder var/repo before clone new repository
 
             buildConfig.repoStatus = repoStatus.Cloning;
 
-            gitUtils.clone()
+            gitService.clone()
                 .then(async () => {
-                    await gitUtils.checkout(mainBranch);
+                    await gitService.checkout(mainBranch);
 
                     buildConfig.repoStatus = repoStatus.Cloned;
 
-                    const lastCommit = await gitUtils.getLastCommit();
+                    const lastCommit = await gitService.getLastCommit();
 
                     apiResponse = await ciApi.addBuild({
                         commitMessage: lastCommit.message,
@@ -71,10 +70,10 @@ async function saveSettings(req, res) {
                 })
 
         } else if (currentBranch != mainBranch) {
-            gitUtils.pull().then(async () => {
-                await gitUtils.checkout(mainBranch);
+            gitService.pull().then(async () => {
+                await gitService.checkout(mainBranch);
 
-                const lastCommit = await gitUtils.getLastCommit();
+                const lastCommit = await gitService.getLastCommit();
     
                 if (lastCommit.hash !== buildConfig.lastBuildedCommit.hash) {
                     apiResponse = await ciApi.addBuild({
@@ -89,7 +88,7 @@ async function saveSettings(req, res) {
             });
         }
     } catch (e) {
-        throw new ServerError(500, e.message);
+        throw new ServerError(500, e);
     }
 
     return res.json({
