@@ -117,13 +117,41 @@ module.exports = class GitUtils {
         });
     }
 
+    getNewCommits(commit) {
+        return new Promise((resolve, reject) => {
+            const appDir = path.dirname(require.main.filename);
+            const gitDir = path.join(appDir, '../', this.repoInternalPath);
+
+            let result = '';
+
+            const git = spawn('git', ['log', '-1', '--format="%h;%cn;%s', `${commit.hash}..HEAD`], { cwd: gitDir });
+
+            git.stderr.on('data', (err) => {
+                console.log(err.toString('UTF-8'));
+            });
+
+            git.stdout.on('data', (data) => {
+                result += data;
+            });
+
+            git.on('close', (code) => {
+                if (code === this.codes.SUCCESS) {
+                    console.log('NEW COMMITES', result);
+                    resolve(result);
+                } else {
+                    reject();
+                }
+            });
+        });
+    }
+
     parseCommitInfo(commitStr) {
-        const commitData = commitStr.split(';');
+        const [ hash, author, message ] = commitStr.split(';');
 
         return {
-            hash: commitData[0],
-            author: commitData[1],
-            message: commitData[2],
+            hash,
+            author,
+            message
         };
     }
 };

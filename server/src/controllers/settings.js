@@ -1,7 +1,7 @@
 const ciApi = require('../core/ci-api');
 const ServerError = require('../errors/server-error');
 const GitUtils = require('../utils/git-utils');
-const buildConfig = require('../models/configuration');
+const buildConfig = require('../core/buildConf');
 const repoStatus = require('../models/repo-status');
 
 async function saveSettings(req, res) {
@@ -43,6 +43,8 @@ async function saveSettings(req, res) {
                     branchName: mainBranch,
                     authorName: lastCommit.author,
                 });
+
+                buildConfig.lastBuildedCommit = lastCommit;
             });
         } else if (buildConfig.mainBranch != mainBranch) {
             await gitUtils.checkout(mainBranch);

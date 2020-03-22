@@ -29,6 +29,6 @@ app.listen(3000, async () => {
     try {
         await conf.load();
     } catch (e) {
-        console.error('Configuration is not loaded');
+        console.error('ERROR:Configuration is not loaded.', e.message);
     }
 });
