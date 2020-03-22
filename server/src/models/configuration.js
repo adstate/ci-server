@@ -1,11 +1,18 @@
+const Emitter = require("events");
 const repoStatus = require('./repo-status');
 
-module.exports = class Configuration {
+module.exports = class Configuration extends Emitter {
     constructor(opts) {
-        this.set(opts);
+        super();
+        this.set(opts, 'init');
     }
 
-    set(opts) {
+    init(opts) {
+       this.update(opts);
+       this.emit('init');
+    }
+
+    set(opts, event) {
         opts = opts || {};
 
         this.id = opts.id || null;
@@ -16,6 +23,10 @@ module.exports = class Configuration {
         this.repoStatus = opts.repoStatus || repoStatus.Empty;
         this.lastBuildedCommit = opts.lastBuildedCommit || null;
         this.actual = !!opts.id;
+
+        if (event !== 'init') {
+            this.emit('change');
+        }
     }
 
     update(opts) {
@@ -29,6 +40,8 @@ module.exports = class Configuration {
         this.repoStatus = opts.repoStatus || this.repoStatus;
         this.lastBuildedCommit = opts.lastBuildedCommit || this.lastBuildedCommit;
         this.actual = opts.actual || !!opts.id;
+
+        this.emit('change');
     }
 }
 
