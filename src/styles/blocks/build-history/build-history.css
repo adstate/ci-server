@@ -8,10 +8,17 @@
 .build-history {
     display: flex;
     margin-bottom: var(--space-xs);
+    border-radius: 6px;
+    box-shadow: 0px 1px 1px rgba(67, 68, 69, 0.3), 0px 0px 1px rgba(67, 68, 69, 0.3);
+    padding-top: var(--space-m);
+    padding-bottom: var(--space-m);
+    padding-left: var(--space-xxl);
+    padding-right: var(--space-xxl);
 }
 
 .build-history:hover {
     cursor: pointer;
+    box-shadow: 0px 2px 8px rgba(67, 68, 69, 0.3), 0px 0px 1px rgba(67, 68, 69, 0.3);
 }
 
 .build-history_view_details .build-history__detail {
@@ -24,7 +31,7 @@
     justify-content: flex-start;
 }
 
-.build-history_view_details .build-history__commit {
+.build-history_view_details .build-history__content {
     padding-bottom: var(--space-xs);
     margin-bottom: var(--space-xs);
     border-bottom: 1px solid var(--color-bg-heavy);
@@ -50,4 +57,20 @@
 
 .build-history_status_error .build-history__number {
     color: var(--color-error);
+}
+
+.build-history__content {
+    
+}
+
+@media screen and (max-width: 768px) {
+    .build-history {
+        padding: var(--space-l) var(--space-m);
+    }
+
+    .build-history__content {
+        padding-bottom: var(--space-xs);
+        margin-bottom: var(--space-xs);
+        border-bottom: 1px solid var(--color-bg-heavy);
+    }
 }

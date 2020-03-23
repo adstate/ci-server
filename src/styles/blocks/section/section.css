@@ -1,8 +1,4 @@
 .section {
-
-}
-
-.section_indent-t-xs {
     margin-top: var(--space-xs);
 }
 
@@ -18,7 +14,7 @@
 
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
     .section__button {
         width: 100%;
         padding-top: var(--space-xs);

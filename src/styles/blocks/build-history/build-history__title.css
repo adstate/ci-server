@@ -2,10 +2,13 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: 0;
+    font-size: calc(var(--font-size-m) - 1px);
+    line-height: var(--line-height-m);
     padding-right: var(--space-xxxs);
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
     .build-history__title {
         max-width: 100%;
         white-space: normal;

@@ -1,7 +1,10 @@
+:root {
+    --font: 'YS Text', 'Arial';
+}
+
 .theme, .theme * {
     box-sizing: border-box;
-    font-family: 'YS Text', 'Arial';
-    font-style: normal;
+    font-family: var(--font);
 }
 
 .theme a {
@@ -79,12 +82,6 @@
 }
 
 @media screen and (max-width: 768px) {
-    .theme_gap_small {
-        --gap: var(--space-xxxxl);
-    }
-}
-
-@media screen and (max-width: 480px) {
     .theme_gap_small {
         --gap: var(--space-l);
     }

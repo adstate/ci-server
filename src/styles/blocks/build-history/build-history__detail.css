@@ -5,7 +5,7 @@
     flex-grow: 1;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
     .build-history__detail {
         flex-direction: column;
         justify-content: flex-start;

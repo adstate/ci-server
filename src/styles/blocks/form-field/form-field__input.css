@@ -16,6 +16,6 @@
     color: #cccccc;
 }
 
-.form-field__input:placeholder-shown ~ .form-field__icon_type_clear {
+.form-field__input:placeholder-shown ~ .form-field__icon {
     display: none;
 }

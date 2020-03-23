@@ -13,7 +13,7 @@
     white-space: nowrap;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
     .button_type_icon-text .button__text {
         display: none;
     }

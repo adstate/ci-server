@@ -25,5 +25,5 @@
 }
 
 .form__footer {
-
+    margin-top: var(--space-xxl);
 }

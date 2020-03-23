@@ -2,7 +2,7 @@
     margin-right: var(--space-xs);
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
     .build-history__status-icon {
         width: 16px;
         height: 16px;

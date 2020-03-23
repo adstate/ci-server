@@ -1,9 +1,5 @@
 .form-field__icon {
-    
-}
-
-.form-field__icon_type_clear {
-    display: block;
+    width: 18px;
     cursor: pointer;
     width: 18px;
 }
