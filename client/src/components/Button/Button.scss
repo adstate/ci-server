@@ -1,0 +1,101 @@
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid transparent;
+    border-radius: 4px;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &_action {
+        background-color: var(--color-bg-action);
+
+        &:hover {
+            background-color: var(--color-bg-action-hovered);
+        }
+
+        &:focus {
+            border: 2px solid var(--color-border-action-focused);
+        }
+    }
+
+    &_default {
+        background-color: var(--color-bg-control);
+        
+        &:hover {
+            background-color: var(--color-bg-control-hovered);
+        }
+
+        &:focus {
+            border: 2px solid var(--color-border-focused);
+        }
+    }
+
+    &_state_disabled {
+        color: var(--color-text-disabled);
+        background-color: var(--color-bg-disabled);
+    }
+
+    &_size_s {
+        font-size: var(--font-size-button-s);
+        line-height: var(--line-height-button-s);
+        padding-top: var(--space-xxxs);
+        padding-bottom: var(--space-xxxs);
+        padding-left: var(--space-m);
+        padding-right: var(--space-m);
+    }
+
+    &_size_m {
+        font-size: var(--font-size-button-m);
+        line-height: var(--line-height-button-m);
+        padding-top: var(--space-xs);
+        padding-bottom: var(--space-xs);
+        padding-left: var(--space-xl);
+        padding-right: var(--space-xl);
+    }
+
+    &_type_icon-text {
+        padding-left: var(--space-xxs);
+        padding-right: var(--space-m);
+    }
+
+    &_type_icon {
+        padding: var(--space-xxs);
+
+        .button__icon {
+            margin: 0;
+        }
+    }
+}
+
+.button__icon {
+    width: 12px;
+    height: 12px;
+    margin-right: var(--space-xxs);
+}
+
+.button__text {
+    white-space: nowrap;
+}
+
+
+@media screen and (max-width: 768px) {
+    .button_type_icon-text .button__text {
+        display: none;
+    }
+
+    .button_type_icon-text .button__icon {
+        margin: 0;
+    }
+
+    .button.button_type_icon-text {
+        padding: var(--space-xxs);
+    }
+}

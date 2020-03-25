@@ -1,0 +1,28 @@
+.icon-text {
+    display: flex;
+    align-items: center;
+}
+
+.icon-text__icon {
+    &_indent-r_xs {
+        margin-right: var(--space-xxs);
+    }
+    
+    &_indent-r_s {
+        margin-right: var(--space-xs);
+    }
+
+    &_indent-r_m {
+        margin-right: var(--space-s);
+    }
+    
+    &_indent-l_l {
+        margin-left: var(--space-m);
+    }
+}
+
+.icon-text__text {
+    &_nowrap {
+        white-space: nowrap;
+    }
+}
