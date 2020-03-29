@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import './Configure.scss';
 
-import { Button, Icon } from '../../components';
+import { Button, Icon } from 'components';
 
 const Configure = () => {
     return (
@@ -11,9 +11,7 @@ const Configure = () => {
             <p className="configure__title text text_primary">
                 Configure repository connection and synchronization settings
             </p>
-            <Link to="/settings">
-                <Button variant="action" size="m">Open settings</Button>
-            </Link>
+            <Button variant="action" size="m" to="/settings">Open settings</Button>
         </div>
     )
 }

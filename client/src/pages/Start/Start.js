@@ -1,14 +1,28 @@
 import React from 'react';
-import { Layout, Configure } from 'components';
+import { connect, useSelector } from 'react-redux';
+import { Layout, Header, Loader } from 'components';
+import { BuildHistory, Configuration } from 'pages';
 
 
 const Start = () => {
+    const settings = useSelector(state => state.settings);
 
-    return (
-        <Layout align="center">
-            <Configure/>
-        </Layout>
-    );
+    if (settings.pending !== false) {
+        return (
+            <React.Fragment>
+                <Header title="School CI Server"></Header>
+                <Layout align="center">
+                    <Loader/>
+                </Layout>
+            </React.Fragment>
+        );
+    }
+    
+    if (settings.id) {
+        return <BuildHistory/>
+    }
+    
+    return <Configuration/>
 }
 
 export default Start;

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import './Icon.scss';
 
 
-const Icon = ({type, size, className}) => {
+const Icon = ({type, size, className, onClick}) => {
 
     const iconClass = classNames(
         'icon',
@@ -14,7 +14,7 @@ const Icon = ({type, size, className}) => {
     );
 
     return (
-        <span className={iconClass}></span>
+        <span className={iconClass} onClick={onClick}></span>
     )
 }
 

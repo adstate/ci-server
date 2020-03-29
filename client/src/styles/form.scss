@@ -16,49 +16,8 @@
         line-height: var(--line-height-s);
         color: var(--color-text-second);
     }
-
-    &__label {
-        font-size: var(--font-size-s);
-        line-height: var(--line-height-s);
-        margin-bottom: var(--space-xxs);
-    }
     
     &__footer {
         margin-top: var(--space-xxl);
     }
-}
-
-.form__item {
-    margin-top: var(--space-xl);
-
-    &_direction_column {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    &_direction_left {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-
-        .form__label {
-            margin-right: var(--space-xs);
-            margin-bottom: 0;
-        }
-    }
-}
-
-
-.form__control {
-    &_required .form__label:after {
-        content: ' *';
-        color: red;
-    }
-}
-
-.form__control-postfix {
-    margin-left: var(--space-xs);
-    color: #434445;
-    font-size: var(--font-size-s);
-    line-height: var(--line-height-s);
 }

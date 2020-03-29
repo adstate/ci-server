@@ -1,0 +1,31 @@
+.form-group {
+    margin-top: var(--space-xl);
+
+    &_direction_column {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    &_direction_row {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        .form-label {
+            margin-right: var(--space-xs);
+            margin-bottom: 0;
+        }
+    }
+
+    &_required .form-label:after {
+        content: ' *';
+        color: red;
+    }
+}
+
+.form__control-postfix {
+    margin-left: var(--space-xs);
+    color: #434445;
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-s);
+}

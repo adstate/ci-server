@@ -1,5 +1,6 @@
 const path = require('path');
 const helmet = require('helmet');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const express = require('express');
 require('express-async-errors');
@@ -18,6 +19,7 @@ const buildRouter = require('./routes/builds');
 const app = express();
 
 app.use(helmet());
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

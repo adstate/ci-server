@@ -1,11 +1,12 @@
 import React from 'react';
+import {Router} from 'react-router-dom';
 import './App.scss';
-import {Header, Footer, Main} from 'components';
+import {Footer} from 'components';
+import Main from 'containers/Main';
 
 function App() {
   return (
     <div className="App page page_view_all-screen">
-      <Header title="School CI Server"></Header>
       <Main/>
       <Footer/>
     </div>
