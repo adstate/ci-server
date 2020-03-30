@@ -3,6 +3,9 @@ import {
     FETCH_BUILDS_SUCCESS,
     FETCH_BUILD_SUCCESS,
     FETCH_BUILDS_ERROR,
+    ADD_BUILD_PENDING,
+    ADD_BUILD_SUCCESS,
+    ADD_BUILD_ERROR,
     BUILDS_UPDATE_OFFSET,
     BUILDS_CLEAR_STATE
 } from '../constants/actionTypes';
@@ -28,8 +31,30 @@ export const fetchBuildsError = (error) => ({
     error
 });
 
+export const addBuildPending = () => ({
+    type: ADD_BUILD_PENDING
+});
+
+export const addBuildSuccess = (build) => ({
+    type: ADD_BUILD_SUCCESS,
+    build
+});
+
+export const addBuildError = () => ({
+    type: ADD_BUILD_ERROR
+});
+
+export const buildsUpdateOffset = (offset) => ({
+    type: BUILDS_UPDATE_OFFSET,
+    offset
+});
+
+export const buildsClearState = () => ({
+    type: BUILDS_CLEAR_STATE
+});
+
 export const fetchBuilds = (params) => {
-    return dispatch => {
+    return (dispatch) => {
         dispatch(fetchBuildsPending());
 
         api.getBuilds(params)
@@ -47,7 +72,7 @@ export const fetchBuilds = (params) => {
 }
 
 export const getBuild = (buildId) => {
-    return dispatch => {
+    return (dispatch) => {
         dispatch(fetchBuildsPending());
 
         api.getBuild(buildId)
@@ -55,7 +80,7 @@ export const getBuild = (buildId) => {
                 if(res.error) {
                     throw(res.error);
                 }
-                dispatch(fetchBuildSuccess(res.data));
+                dispatch(fetchBuildsSuccess(res.data));
                 return res.data;
             })
             .catch(error => {
@@ -64,11 +89,20 @@ export const getBuild = (buildId) => {
     }
 }
 
-export const buildsUpdateOffset = (offset) => ({
-    type: BUILDS_UPDATE_OFFSET,
-    offset
-});
+export const addBuild = (commitHash) => {
+    return (dispatch) => {
+        dispatch(addBuildPending());
 
-export const buildsClearState = () => ({
-    type: BUILDS_CLEAR_STATE
-});
+        api.addBuild(commitHash)
+            .then(res => {
+                if(res.error) {
+                    throw(res.error);
+                }
+                dispatch(addBuildSuccess(res.data));
+                return res.data;
+            })
+            .catch(error => {
+                dispatch(addBuildError(error));
+            })
+    }
+}

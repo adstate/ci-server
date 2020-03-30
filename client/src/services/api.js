@@ -18,8 +18,8 @@ async function getSettings() {
     return instance.get('/settings').then(response => response.data);
 }
 
-async function addBuild(buildData) {
-    return instance.post('/build/request', buildData);
+async function addBuild(commitHash) {
+    return instance.post(`/builds/${commitHash}`).then(response => response.data);
 }
 
 async function getBuilds(params) {

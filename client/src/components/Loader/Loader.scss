@@ -28,6 +28,18 @@
             animation-delay: -0.15s;
         }
     }
+
+    &_size_xs {
+        width: 16px;
+        height: 16px;
+
+        div {
+            width: 12px;
+            height: 12px;
+            margin: 2px;
+            border-width: 2px;
+        }
+    }
 }
 
 .loader-container {

@@ -4,14 +4,15 @@ import {useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import {Button, Icon, Layout, Header, Build, BuildLog, Loader} from 'components';
-import {getBuild} from 'actions/builds';
+import {getBuild, addBuild} from 'actions/builds';
 import api from 'services/api';
 
 
-const BuildDetails = ({loadBuild}) => {
+const BuildDetails = ({loadBuild, rebuild}) => {
     const { id } = useParams();
     const build = useSelector(state => state.builds.items.find(build => build.id === id));
-
+    const settings = useSelector(state => state.settings);
+    
     const [log, setLog] = useState('');
 
     useEffect(() => {
@@ -30,7 +31,9 @@ const BuildDetails = ({loadBuild}) => {
         }
     }, []);
 
-    const settings = useSelector(state => state.settings);
+    const rebuildHandler = () => {
+        rebuild(build.commitHash);
+    }
 
     if (!build) {
         return (
@@ -47,7 +50,7 @@ const BuildDetails = ({loadBuild}) => {
         <React.Fragment>
             <Header title={settings.repoName}>
                 <div className="header__button-group">
-                    <Button className="button_type_icon-text" size="s">
+                    <Button className="button_type_icon-text" size="s" onClick={rebuildHandler}>
                         <Icon className="button__icon" type="refresh"/>
                         <span className="button__text">Rebuild</span>
                     </Button>
@@ -75,7 +78,8 @@ const mapStateToProps = state => ({
 });
   
 const mapDispatchToProps = dispatch => ({
-    loadBuild: (id) => dispatch(getBuild(id))
+    loadBuild: (id) => dispatch(getBuild(id)),
+    rebuild: (hash) => dispatch(addBuild(hash))
 });
   
 export default connect(

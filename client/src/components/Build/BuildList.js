@@ -7,7 +7,7 @@ import {Build, Loader, Button} from 'components';
 import {fetchBuilds, buildsUpdateOffset, buildsClearState} from '../../actions/builds';
 
 
-const BuildList = ({builds, getBuilds, pending, offset, updateOffset, clearBuilds}) => {
+const BuildList = ({builds, getBuilds, pending, offset, load_more, updateOffset, clearBuilds}) => {
 
     const [limit, setLimit] = useState(10);
 
@@ -47,7 +47,7 @@ const BuildList = ({builds, getBuilds, pending, offset, updateOffset, clearBuild
 
                 <div className="section__footer section__footer_align_left">
                     {
-                        (builds.length >= limit) ?
+                        (builds.length >= limit && load_more === false) ?
                         <Button className="section__button" size="s" onClick={() => loadMoreBuilds(offset + limit)}>
                             Show more
                         </Button>
@@ -63,7 +63,8 @@ const BuildList = ({builds, getBuilds, pending, offset, updateOffset, clearBuild
 const mapStateToProps = state => ({
     builds: state.builds.items,
     offset: state.builds.offset,
-    pending: state.builds.pending
+    pending: state.builds.pending,
+    load_more: state.builds.load_more
 });
   
 const mapDispatchToProps = dispatch => ({
