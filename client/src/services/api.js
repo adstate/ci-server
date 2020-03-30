@@ -2,7 +2,7 @@ const axios = require('axios');
 
 const instance = axios.create({
     baseURL: 'http://localhost:9000/api',
-    timeout: 3000
+    timeout: 10000
 });
 
 async function saveSettings(settings) {

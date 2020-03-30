@@ -6,6 +6,10 @@
     &_secondary {
         color: var(--color-text-second);
     }
+
+    &_error {
+        color: var(--color-error);
+    }
     
     &_pseudo {
         color: var(--color-text-pseudo);

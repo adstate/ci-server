@@ -28,11 +28,11 @@ const settings = (state = {}, action) => {
         case SAVE_SETTINGS_PENDING:
             return {
                 ...state,
+                repoStatus: 'Empty',
                 save_pending: true
             }
 
         case SAVE_SETTINGS_SUCCESS:
-            console.log(Object.assign({}, state, action.settings, {save_pending: false}));
             return Object.assign({}, state, action.settings, {save_pending: false});
 
         case SAVE_SETTINGS_ERROR:

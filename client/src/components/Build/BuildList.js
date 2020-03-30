@@ -46,9 +46,14 @@ const BuildList = ({builds, getBuilds, pending, offset, updateOffset, clearBuild
                 }
 
                 <div className="section__footer section__footer_align_left">
-                    <Button className="section__button" size="s" onClick={() => loadMoreBuilds(offset + limit)}>
-                        Show more
-                    </Button>
+                    {
+                        (builds.length >= limit) ?
+                        <Button className="section__button" size="s" onClick={() => loadMoreBuilds(offset + limit)}>
+                            Show more
+                        </Button>
+                        : null
+                    }
+
                 </div>    
             </div>
         </div>

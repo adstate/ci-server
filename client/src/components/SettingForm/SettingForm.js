@@ -14,7 +14,7 @@ const SettingForm = ({settings, saveSettings, getSettings}) => {
     };
 
     useEffect(() => {
-        if (!settings.id) {
+        if (settings.repoStatus !== 'Cloned') {
             getSettings();
         }
     }, []);
@@ -25,6 +25,9 @@ const SettingForm = ({settings, saveSettings, getSettings}) => {
         )
     }
 
+    const waitingCloneRepo = settings.repoStatus === 'Cloning' || settings.save_pending;
+    const repoNotCloned = settings.repoStatus === 'NotCloned';
+
     return (
         <div className="section">
             <div className="layout__container">
@@ -32,6 +35,19 @@ const SettingForm = ({settings, saveSettings, getSettings}) => {
                     <div className="form__header">
                         <div className="form__title">Settings</div>
                         <div className="form__subtitle">Configure repository connection and synchronization settings.</div>
+
+                        { 
+                            (waitingCloneRepo) ? 
+                            <div className="setting-form__repo-status text text_secondary">Cloning repository...</div>
+                            : null
+                        }
+
+                        {
+                            (repoNotCloned) ?
+                            <div className="setting-form__repo-status text text_error">Error of cloning repository</div>
+                            : null
+                        }
+
                     </div>
 
                     <FormGroup required>
@@ -63,7 +79,7 @@ const SettingForm = ({settings, saveSettings, getSettings}) => {
 
                     <FormGroup>
                         <FormLabel>Main branch</FormLabel>
-                        <FormField name="mainBranch" formRef={register({})} placeholder="branch for build" icon="clear" defaultValue={settings.mainBranch}></FormField>
+                        <FormField name="mainBranch" formRef={register({})} placeholder="master" icon="clear" defaultValue={settings.mainBranch}></FormField>
                     </FormGroup>
 
                     <FormGroup direction="row">
@@ -78,8 +94,8 @@ const SettingForm = ({settings, saveSettings, getSettings}) => {
                     </FormGroup>
 
                     <FormGroup className="setting-form__footer form__footer" direction="row">
-                        <Button type="submit" className="setting-form__button setting-form__submit" variant="action" size="m" disabled={settings.save_pending}>Save</Button>                    
-                        <Button type="reset" className="setting-form__button" variant="default" size="m" to="/" disabled={settings.save_pending}>Candel</Button>
+                        <Button type="submit" className="setting-form__button setting-form__submit" variant="action" size="m" disabled={waitingCloneRepo}>Save</Button>                    
+                        <Button type="reset" className="setting-form__button" variant="default" size="m" to="/" disabled={waitingCloneRepo}>Candel</Button>
                     </FormGroup>
                 </form>
             </div>

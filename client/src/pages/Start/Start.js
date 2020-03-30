@@ -18,7 +18,7 @@ const Start = () => {
         );
     }
     
-    if (settings.id) {
+    if (settings.id && ['Cloned', 'Empty'].includes(settings.repoStatus)) {
         return <BuildHistory/>
     }
     

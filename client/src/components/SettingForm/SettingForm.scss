@@ -6,6 +6,11 @@
     &__submit {
         margin-right: var(--space-xs)
     }
+
+    &__repo-status {
+        margin-top: var(--space-xs);
+        font-weight: bold;
+    }
 }
 
 @media screen and (max-width: 768px) {
