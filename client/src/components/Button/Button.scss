@@ -38,9 +38,13 @@
         }
     }
 
-    &_state_disabled {
+    &_disabled {
         color: var(--color-text-disabled);
         background-color: var(--color-bg-disabled);
+
+        &:hover {
+            background-color: var(--color-bg-disabled);
+        }
     }
 
     &_size_s {

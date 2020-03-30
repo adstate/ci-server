@@ -5,12 +5,13 @@ import './FormField.scss';
 
 import {Icon} from 'components';
 
-const FormField = ({type, size, cleared, align, placeholder, defaultValue}) => {
+const FormField = ({type,  name, formRef, errors, size, cleared, align, placeholder, defaultValue}) => {
 
     const [value, setValue] = useState(defaultValue);
 
     const fieldClass = Classnames('form-field', {
         'form-field_size_s': size === 's',
+        'form-field_invalid': errors
     });
 
     const inputClass = Classnames('form-field__input', {
@@ -29,7 +30,7 @@ const FormField = ({type, size, cleared, align, placeholder, defaultValue}) => {
 
     return (
         <div className={fieldClass}>
-            <input type={type} className={inputClass} placeholder={placeholder} value={value} onChange={(event) => inputChange(event)}/>
+            <input type={type} ref={formRef} name={name} className={inputClass} placeholder={placeholder} value={value} onChange={(event) => inputChange(event)}/>
             {clearIconElement}
         </div>
     );

@@ -1,34 +1,34 @@
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import {Button, FormField, FormGroup, FormLabel, Loader} from 'components';
+import { useForm } from "react-hook-form";
+import {Button, FormField, FormGroup, FormLabel, FormError, Loader} from 'components';
 import {fetchSettings, postSettings} from 'actions/settings';
 
 import './SettingForm.scss';
 
 
-const SettingForm = ({settings, saveSettings, get}) => {
+const SettingForm = ({settings, saveSettings, getSettings}) => {
+    const { handleSubmit, register, errors } = useForm();
+    const onSubmit = (values) => {
+        saveSettings(values);
+    };
 
     useEffect(() => {
         if (!settings.id) {
-            get();
+            getSettings();
         }
     }, []);
-
+  
     if (settings.pending !== false) {
         return (
             <Loader/>
         )
     }
 
-    const save = () => {
-        console.log(document.forms.settings.elements);
-    }
-
     return (
         <div className="section">
             <div className="layout__container">
-                <form className="setting-form form" name="settings">
+                <form className="setting-form form" name="settings" onSubmit={handleSubmit(onSubmit)}>
                     <div className="form__header">
                         <div className="form__title">Settings</div>
                         <div className="form__subtitle">Configure repository connection and synchronization settings.</div>
@@ -36,28 +36,50 @@ const SettingForm = ({settings, saveSettings, get}) => {
 
                     <FormGroup required>
                         <FormLabel>GitHub repository</FormLabel>
-                        <FormField icon="clear" placeholder="user-name/repo-name" defaultValue={settings.repoName}></FormField>
+                        <FormField name="repoName"
+                            formRef={register({required: 'repoName is required'})}
+                            errors={errors.repoName}
+                            icon="clear" placeholder="user-name/repo-name"
+                            defaultValue={settings.repoName}
+                        >
+                        </FormField>
+                        <FormError>
+                            {errors.repoName && errors.repoName.message}
+                        </FormError>
                     </FormGroup>
 
                     <FormGroup>
                         <FormLabel>Build command</FormLabel>
-                        <FormField placeholder="npm run ..." icon="clear" defaultValue={settings.buildCommand}></FormField>
+                        <FormField name="buildCommand"
+                            formRef={register({required: 'buildCommand is required'})}
+                            errors={errors.buildCommand}
+                            placeholder="npm run ..." icon="clear"
+                            defaultValue={settings.buildCommand}>
+                        </FormField>
+                        <FormError>
+                            {errors.buildCommand && errors.buildCommand.message}
+                        </FormError>
                     </FormGroup>
 
                     <FormGroup>
                         <FormLabel>Main branch</FormLabel>
-                        <FormField placeholder="branch for build" icon="clear" defaultValue={settings.mainBranch}></FormField>
+                        <FormField name="mainBranch" formRef={register({})} placeholder="branch for build" icon="clear" defaultValue={settings.mainBranch}></FormField>
                     </FormGroup>
 
                     <FormGroup direction="row">
                         <FormLabel>Synchronize every</FormLabel>
-                        <FormField size="s" defaultValue={`${settings.period}`} align="right" cleared={false}></FormField>
+                        <FormField name="period"
+                            formRef={register({required: 'Required'})}
+                            errors={errors.period}
+                            size="s" defaultValue={`${settings.period}`}
+                            align="right" cleared={false}>
+                        </FormField>
                         <div className="form__control-postfix">minutes</div>
                     </FormGroup>
 
                     <FormGroup className="setting-form__footer form__footer" direction="row">
-                        <Button className="setting-form__button setting-form__submit" variant="action" size="m" onClick={save}>Save</Button>
-                        <Button type="reset" className="setting-form__button" variant="default" size="m" to="/">Candel</Button>
+                        <Button type="submit" className="setting-form__button setting-form__submit" variant="action" size="m" disabled={settings.save_pending}>Save</Button>                    
+                        <Button type="reset" className="setting-form__button" variant="default" size="m" to="/" disabled={settings.save_pending}>Candel</Button>
                     </FormGroup>
                 </form>
             </div>
@@ -70,8 +92,8 @@ const mapStateToProps = state => ({
 });
   
 const mapDispatchToProps = dispatch => ({
-    saveSettings: () => dispatch(postSettings()),
-    get: () => dispatch(fetchSettings())
+    saveSettings: (data) => dispatch(postSettings(data)),
+    getSettings: () => dispatch(fetchSettings())
 });
   
 export default connect(

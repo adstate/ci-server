@@ -18,6 +18,14 @@
         width: 52px;
     }
 
+    &_invalid {
+        border-color: var(--color-error);
+
+        &:focus-within {
+            border-color: var(--color-error);
+        }
+    }
+
     &__icon {
         width: 18px;
         cursor: pointer;

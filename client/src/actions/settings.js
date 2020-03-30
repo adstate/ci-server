@@ -1,8 +1,10 @@
 import {
+    SAVE_SETTINGS_PENDING,
     SAVE_SETTINGS_SUCCESS,
+    SAVE_SETTINGS_ERROR,
     FETCH_SETTINGS_PENDING,
     FETCH_SETTINGS_SUCCESS,
-    FETCH_SETTINGS_ERROR 
+    FETCH_SETTINGS_ERROR
 } from '../constants/actionTypes';
 
 import api from '../services/api';
@@ -22,9 +24,18 @@ export const fetchSettingsError = (error) => ({
     error
 });
 
+export const saveSettingsPending = () => ({
+    type: SAVE_SETTINGS_PENDING
+});
+
 export const saveSettingsSuccess = (settings) => ({
     type: SAVE_SETTINGS_SUCCESS,
     settings
+});
+
+export const saveSettingsError = (error) => ({
+    type: SAVE_SETTINGS_ERROR,
+    error
 });
 
 export const fetchSettings = () => {
@@ -47,18 +58,22 @@ export const fetchSettings = () => {
 
 export const postSettings = (settings) => {
     return dispatch => {
-        dispatch(fetchSettingsPending());
+        dispatch(saveSettingsPending());
         
-        api.getSettings()
+        api.saveSettings(settings)
             .then(res => {
                 if(res.error) {
                     throw(res.error);
                 }
-                dispatch(saveSettingsSuccess(res.data));
+
+                if (res.data.status === 'success') {
+                    dispatch(saveSettingsSuccess(settings));
+                }
+                
                 return res.data;
             })
             .catch(error => {
-                dispatch(fetchSettingsError(error));
+                dispatch(saveSettingsError(error));
             })
     }
 }

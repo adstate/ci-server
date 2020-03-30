@@ -10,6 +10,7 @@ import SettingForm from './SettingForm/SettingForm';
 import FormLabel from './Form/FormLabel';
 import FormField from './Form/FormField';
 import FormGroup from './Form/FormGroup';
+import FormError from './Form/FormError';
 import BuildList from './Build/BuildList';
 import Build from './Build/Build';
 import BuildLog from './Build/BuildLog';
@@ -28,6 +29,7 @@ export {
     FormField,
     FormGroup,
     FormLabel,
+    FormError,
     BuildList,
     Build,
     BuildLog,

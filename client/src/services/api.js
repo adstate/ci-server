@@ -5,8 +5,13 @@ const instance = axios.create({
     timeout: 3000
 });
 
-async function saveSettings(settingsData) {
-    return instance.post('/settings', settingsData);
+async function saveSettings(settings) {
+    return instance.post('/settings', {
+        repoName: settings.repoName,
+        buildCommand: settings.buildCommand,
+        mainBranch: settings.mainBranch || 'master',
+        period: Number(settings.period)
+    });
 }
 
 async function getSettings() {

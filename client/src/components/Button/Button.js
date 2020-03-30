@@ -6,7 +6,7 @@ import './Button.scss';
 
 import Icon from '../Icon/Icon';
 
-const Button = ({type, size, variant, icon, children, className, to, onClick}) => {
+const Button = ({type, size, variant, icon, children, className, disabled, to, onClick}) => {
 
     const history = useHistory();
 
@@ -16,20 +16,21 @@ const Button = ({type, size, variant, icon, children, className, to, onClick}) =
         `button_size_${size}`,
         className,
         {
+            'button_disabled': disabled,
             'button_type_icon': icon,
         }
     );
 
     if (to) {
         return (
-            <button type={type} className={buttonClass} onClick={() => history.push(to)}>
+            <button type={type} className={buttonClass} onClick={() => history.push(to)} disabled={disabled}>
                 {children}
             </button>
         )
     }
 
     return (
-        <button type={type} className={buttonClass} onClick={onClick}>
+        <button type={type} className={buttonClass} onClick={onClick} disabled={disabled}>
             {children}
         </button>
     )
