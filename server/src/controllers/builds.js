@@ -3,7 +3,8 @@ const RepoStatusError = require('../errors/repo-status-error');
 const ServerError = require('../errors/server-error');
 const logCache = require('../core/log-cache');
 const repoStatus = require('../models/repo-status');
-const buildConfig = require('../models/configuration');
+const buildConfig = require('../core/buildConf');
+const gitService = require('../core/git-service');
 
 async function getBuilds(req, res) {
     const offset = req.query.offset || 0;
@@ -30,19 +31,28 @@ async function addBuild(req, res) {
         throw new RepoStatusError(200);
     }
 
+    const {commitHash} = req.params;
+    const commit = await gitService.getCommitInfo(commitHash);
+    
+    const commitData = {
+        commitMessage: commit.message,
+        commitHash: commitHash,
+        branchName: buildConfig.mainBranch,
+        authorName: commit.author,
+    }
+
     try {
-        apiResponse = await ciApi.addBuild({
-            commitMessage: req.body.commitMessage,
-            commitHash: req.body.commitHash,
-            branchName: req.body.branchName,
-            authorName: req.body.authorName,
-        });
+        apiResponse = await ciApi.addBuild(commitData);
     } catch (e) {
-        throw new ServerError(500);
+        throw new ServerError(apiResponse.status || 500);
     }
 
     return res.json({
         status: 'success',
+        data: {
+            ...apiResponse.data.data,
+            ...commitData
+        }
     });
 }
 

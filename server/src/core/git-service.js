@@ -47,13 +47,17 @@ class GitService {
         return this.gitUtils.getNewCommits(this.buildConfig.lastBuildedCommit.hash, this.repoInternalPath);
     }
 
+    getCommitInfo(hash) {
+        return this.gitUtils.getCommitInfo(hash, this.repoInternalPath);
+    }
+
     clean() {
         return this.gitUtils.clean(this.repoDir);
     }
 
     update() {
         this.repoUrl = `https://github.com/${this.buildConfig.repoName}`;
-        this.shortRepoName = this.buildConfig.repoName.split('/')[1];
+        this.shortRepoName = this.buildConfig.repoName.split('/')[1] || '';
         this.repoInternalPath = path.join(this.repoDir, this.shortRepoName);
     }
 
