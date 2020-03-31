@@ -49,10 +49,6 @@ const builds = (state = {}, action) => {
             }
 
         case ADD_BUILD_SUCCESS:
-            const ttt = [...state.items, action.build];
-
-            console.log('ADD_BUILD_SUCCESS', ttt);
-
             return {
                 ...state,
                 items: [action.build, ...state.items],

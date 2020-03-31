@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns';
-import { es, ru } from 'date-fns/locale'
+import { ru } from 'date-fns/locale'
 
 import './Build.scss';
 import {Icon} from 'components';

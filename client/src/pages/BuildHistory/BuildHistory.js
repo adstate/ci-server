@@ -1,24 +1,24 @@
-import React, {useState} from 'react';
-import ReactDOM from 'react-dom';
-import {Link} from 'react-router-dom';
-import { connect, useSelector } from 'react-redux';
-import { Header, Layout, Button, Icon, BuildList, Modal, NewBuild } from 'components';
+import React, {useState, useEffect} from 'react';
+import {connect, useSelector} from 'react-redux';
+import { Header, Layout, Button, Icon, BuildList, NewBuild } from 'components';
+import {addBuild} from 'actions/builds';
 
 
-const BuildHistory = () => {
+const BuildHistory = ({addBuildPending, runBuild}) => {
     const settings = useSelector(state => state.settings);
-
     const [openModal, setOpenModal] = useState(false);
 
-    const runBuild = () => {
-        setOpenModal(true);
-    }
+    useEffect(() => {
+        if (addBuildPending === false) {
+            setOpenModal(false);
+        }
+    }, [addBuildPending]);
 
     return (
         <React.Fragment>
             <Header title={settings.repoName}>
                 <div className="header__button-group">
-                    <Button className="button_type_icon-text" size="s" onClick={runBuild}>
+                    <Button className="button_type_icon-text" size="s" onClick={() => setOpenModal(true)}>
                         <Icon className="button__icon" type="play"/>
                         <span className="button__text">Run build</span>
                     </Button>
@@ -30,11 +30,20 @@ const BuildHistory = () => {
             <Layout container>
                 <BuildList/>
             </Layout>
-            <NewBuild open={openModal} onClose={() => setOpenModal(false)}/>
+            <NewBuild open={openModal} onClose={() => setOpenModal(false)} onRunBuild={runBuild} pending={addBuildPending}/>
         </React.Fragment>
     );
 }
 
-
-
-export default BuildHistory;
+const mapStateToProps = state => ({
+    addBuildPending: state.builds.add_build_pending
+});
+  
+const mapDispatchToProps = dispatch => ({
+    runBuild: (hash) => dispatch(addBuild(hash))
+});
+  
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BuildHistory);
