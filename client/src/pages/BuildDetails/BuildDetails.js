@@ -22,9 +22,13 @@ const BuildDetails = ({loadBuild, rebuild}) => {
     }, []);
 
     useEffect(() => {
-        let fetch = api.getBuildLog(id).then(res => {
-            setLog(res.replace(/\\n/g, '\n'));
-        });
+        let fetch;
+
+        if (!['Waiting', 'InProgress'].includes(build.status)) {
+            fetch = api.getBuildLog(id).then(res => {
+                setLog(res.replace(/\\n/g, '\n'));
+            });
+        }
 
         return () => {
             fetch = null;

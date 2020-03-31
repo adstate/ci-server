@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
 import './FormGroup.scss';
 
-const FormGroup = ({direction, className, required, children}) => {
+const FormGroup = ({direction, className, required, space, children}) => {
 
     const formGroupClass = ClassNames(
         'form-group',
@@ -11,6 +11,7 @@ const FormGroup = ({direction, className, required, children}) => {
         className,
         {
             'form-group_required': required,
+            'form-group_space_m': space === 'm'
         }
     );
 

@@ -1,0 +1,10 @@
+.new-build {
+    &__title {
+        font-size: var(--font-size-l);
+        line-height: var(--line-height-l);
+    }
+
+    &__subtitle {
+        color: var(--color-text);
+    }
+}

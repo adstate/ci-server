@@ -1,6 +1,10 @@
 .form-group {
     margin-top: var(--space-xl);
 
+    &_space_m {
+        margin-top: var(--space-m);
+    }
+
     &_direction_column {
         display: flex;
         flex-direction: column;

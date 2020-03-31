@@ -14,7 +14,9 @@ import FormError from './Form/FormError';
 import BuildList from './Build/BuildList';
 import Build from './Build/Build';
 import BuildLog from './Build/BuildLog';
+import NewBuild from './Build/NewBuild';
 import Loader from './Loader/Loader';
+import Modal from './Modal/Modal';
 
 export {
     App,
@@ -33,5 +35,7 @@ export {
     BuildList,
     Build,
     BuildLog,
-    Loader
+    Loader,
+    Modal,
+    NewBuild,
 }

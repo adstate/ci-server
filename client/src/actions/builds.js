@@ -80,7 +80,7 @@ export const getBuild = (buildId) => {
                 if(res.error) {
                     throw(res.error);
                 }
-                dispatch(fetchBuildsSuccess(res.data));
+                dispatch(fetchBuildSuccess(res.data));
                 return res.data;
             })
             .catch(error => {
