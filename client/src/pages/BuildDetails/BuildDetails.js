@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector, connect} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Convert from 'ansi-to-html';
 
 import {Button, Icon, Layout, Header, Build, BuildLog, Loader} from 'components';
 import {getBuild, addBuild} from 'actions/builds';
@@ -15,6 +16,8 @@ const BuildDetails = ({loadBuild, rebuild}) => {
     
     const [log, setLog] = useState('');
 
+    const convert = new Convert();
+
     useEffect(() => {
         if (!build) {
             loadBuild(id);
@@ -24,11 +27,9 @@ const BuildDetails = ({loadBuild, rebuild}) => {
     useEffect(() => {
         let fetch;
 
-        if (!['Waiting', 'InProgress'].includes(build.status)) {
-            fetch = api.getBuildLog(id).then(res => {
-                setLog(res.replace(/\\n/g, '\n'));
-            });
-        }
+        fetch = api.getBuildLog(id).then(res => {
+            setLog(res.replace(/\\n/g, '\n'));
+        });
 
         return () => {
             fetch = null;
@@ -68,7 +69,7 @@ const BuildDetails = ({loadBuild, rebuild}) => {
                     <div className="layout__container">
                         <Build detailed data={build}></Build>
                         <BuildLog>
-                            {log}
+                            {convert.toHtml(log)}
                         </BuildLog>
                     </div>
                 </div>

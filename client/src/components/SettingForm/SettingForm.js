@@ -14,7 +14,7 @@ const SettingForm = ({settings, saveSettings, getSettings}) => {
     };
 
     useEffect(() => {
-        if (settings.repoStatus !== 'Cloned') {
+        if (settings.id && settings.repoStatus !== 'Cloned') {
             getSettings();
         }
     }, []);
