@@ -26,12 +26,10 @@ const FormField = ({type,  name, formRef, errors, size, cleared, align, placehol
         setValue(event.target.value);
     }
 
-    const clearIconElement = cleared ? <Icon className="form-field__icon" size="s" type="clear" onClick={clearInput}/> : null;
-
     return (
         <div className={fieldClass}>
             <input type={type} ref={formRef} name={name} className={inputClass} placeholder={placeholder} value={value} onChange={(event) => inputChange(event)}/>
-            {clearIconElement}
+            {cleared && <Icon className="form-field__icon" size="s" type="clear" onClick={clearInput}/>}
         </div>
     );
 }

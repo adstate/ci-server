@@ -1,10 +1,14 @@
 import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
-import { Start, Settings, BuildHistory, BuildDetails } from 'pages';
+import { Start, Settings, BuildDetails } from 'pages';
 import {fetchSettings} from '../actions/settings';
 
-const Main = ({settings, getSettings}) => {
+const Main = () => {
+    const settings = useSelector(state => state.settings);
+
+    const dispatch = useDispatch();
+    const getSettings = () => dispatch(fetchSettings());
 
     useEffect(() => {
         if (!settings.id) {
@@ -23,15 +27,4 @@ const Main = ({settings, getSettings}) => {
     )
 }
 
-const mapStateToProps = state => ({
-    settings: state.settings
-});
-  
-const mapDispatchToProps = dispatch => ({
-    getSettings: () => dispatch(fetchSettings())
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Main);
+export default Main;

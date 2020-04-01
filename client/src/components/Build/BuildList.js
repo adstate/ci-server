@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {connect, useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
 import {Build, Loader, Button} from 'components';
 import {fetchBuilds, buildsUpdateOffset, buildsClearState} from '../../actions/builds';
@@ -57,11 +56,10 @@ const BuildList = () => {
 
                 <div className="section__footer section__footer_align_left">
                     {
-                        (builds.length >= limit && load_more === false) ?
+                        (builds.length >= limit && load_more === false) &&
                         <Button className="section__button" size="s" onClick={() => loadMoreBuilds(offset + limit)}>
                             Show more
                         </Button>
-                        : null
                     }
 
                 </div>    

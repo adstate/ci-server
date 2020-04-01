@@ -5,7 +5,7 @@ import {
     FETCH_SETTINGS_PENDING,
     FETCH_SETTINGS_SUCCESS,
     FETCH_SETTINGS_ERROR
-} from '../constants/actionTypes'
+} from 'actions/actionTypes'
  
 const settings = (state = {}, action) => {
     switch (action.type) {

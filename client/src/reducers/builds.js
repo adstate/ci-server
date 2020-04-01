@@ -10,7 +10,7 @@ import {
     ADD_BUILD_ERROR,
     BUILDS_UPDATE_OFFSET,
     BUILDS_CLEAR_STATE
-} from '../constants/actionTypes'
+} from 'actions/actionTypes'
  
 const builds = (state = {}, action) => {
     switch (action.type) {

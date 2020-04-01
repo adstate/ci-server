@@ -47,15 +47,13 @@ const SettingForm = () => {
                         <div className="form__subtitle">Configure repository connection and synchronization settings.</div>
 
                         { 
-                            (waitingCloneRepo) ? 
+                            (waitingCloneRepo) &&
                             <div className="setting-form__repo-status text text_secondary">Cloning repository...</div>
-                            : null
                         }
 
                         {
-                            (repoNotCloned) ?
+                            (repoNotCloned) &&
                             <div className="setting-form__repo-status text text_error">Error of cloning repository</div>
-                            : null
                         }
 
                     </div>

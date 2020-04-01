@@ -2,7 +2,7 @@ import {
     FETCH_BUILD_PENDING,
     FETCH_BUILD_SUCCESS,
     FETCH_BUILD_ERROR
-} from '../constants/actionTypes'
+} from 'actions/actionTypes'
  
 const buildDetails = (state = {}, action) => {
     switch (action.type) {

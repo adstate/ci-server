@@ -5,7 +5,7 @@ import {
     FETCH_SETTINGS_PENDING,
     FETCH_SETTINGS_SUCCESS,
     FETCH_SETTINGS_ERROR
-} from '../constants/actionTypes';
+} from './actionTypes';
 
 import api from '../services/api';
 
