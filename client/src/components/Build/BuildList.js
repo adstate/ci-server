@@ -14,7 +14,7 @@ const BuildList = ({builds, getBuilds, pending, offset, load_more, updateOffset,
     const history = useHistory();
 
     useEffect(() => {
-        if (builds.length <= 1) {
+        if (builds.length <= 2) {
             clearBuilds();
             getBuilds({offset: offset, limit: limit});
         }

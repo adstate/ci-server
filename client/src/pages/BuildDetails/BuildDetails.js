@@ -1,18 +1,31 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector, connect} from 'react-redux';
-import {useParams} from 'react-router-dom';
-import PropTypes from 'prop-types';
+import {useSelector, useDispatch} from 'react-redux';
+import {useParams, useHistory} from 'react-router-dom';
 import Convert from 'ansi-to-html';
 
-import {Button, Icon, Layout, Header, Build, BuildLog, Loader} from 'components';
-import {getBuild, addBuild} from 'actions/builds';
+import {Button, Icon, Layout, Header, Build, BuildLog, Loader, Error} from 'components';
+import {
+    fetchBuildSuccess,
+    fetchBuildPending,
+    fetchBuildError,
+    addBuildPending,
+    addBuildSuccess,
+    addBuildError
+} from 'actions/builds';
+
 import api from 'services/api';
 
 
-const BuildDetails = ({loadBuild, rebuild}) => {
+const BuildDetails = () => {
     const { id } = useParams();
     const build = useSelector(state => state.builds.items.find(build => build.id === id));
+    const pending = useSelector(state => state.builds.get_build_pending);
+    const fetchError = useSelector(state => state.builds.error);
+
     const settings = useSelector(state => state.settings);
+
+    const history = useHistory();
+    const dispatch = useDispatch();
     
     const [log, setLog] = useState('');
 
@@ -20,27 +33,50 @@ const BuildDetails = ({loadBuild, rebuild}) => {
 
     useEffect(() => {
         if (!build) {
-            loadBuild(id);
-        }
-    }, []);
+            dispatch(fetchBuildPending());
+            api.getBuild(id)
+                .then(res => {
+                    const build = res.data;
+                    dispatch(fetchBuildSuccess(build));
 
-    useEffect(() => {
-        let fetch;
-
-        fetch = api.getBuildLog(id).then(res => {
-            setLog(res.replace(/\\n/g, '\n'));
-        });
-
-        return () => {
-            fetch = null;
+                    if (['Success', 'Fail'].includes(build.status)) {
+                        return api.getBuildLog(id);
+                    }
+                })
+                .then(res => {
+                    if (res) {
+                        setLog(res.replace(/\\n/g, '\n'));
+                    }
+                })
+                .catch(error => {
+                    dispatch(fetchBuildError(error));
+                });
+        } else {
+            if (['Success', 'Fail'].includes(build.status)) {
+                api.getBuildLog(id).then(res => {
+                    setLog(res.replace(/\\n/g, '\n'));
+                });
+            }
         }
     }, []);
 
     const rebuildHandler = () => {
-        rebuild(build.commitHash);
+        dispatch(addBuildPending());
+
+        api.addBuild(build.commitHash)
+            .then(res => {
+                if(res.error) {
+                    throw(res.error);
+                }
+                dispatch(addBuildSuccess(res.data));
+                history.push(`/build/${res.data.id}`);
+            })
+            .catch(error => {
+                dispatch(addBuildError(error));
+            })
     }
 
-    if (!build) {
+    if (pending !== false && !build) {
         return (
             <React.Fragment>
                 <Header title="School CI Server"></Header>
@@ -48,6 +84,17 @@ const BuildDetails = ({loadBuild, rebuild}) => {
                     <Loader/>
                 </Layout>
             </React.Fragment>
+        )
+    }
+
+    if (fetchError) {
+        return (
+            <React.Fragment>
+                <Header title="School CI Server"></Header>
+                <Layout align="center">
+                    <Error>Error of fetching</Error>
+                </Layout>
+            </React.Fragment>           
         )
     }
 
@@ -78,16 +125,4 @@ const BuildDetails = ({loadBuild, rebuild}) => {
     );
 }
 
-const mapStateToProps = state => ({
-    builds: state.builds.items
-});
-  
-const mapDispatchToProps = dispatch => ({
-    loadBuild: (id) => dispatch(getBuild(id)),
-    rebuild: (hash) => dispatch(addBuild(hash))
-});
-  
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(BuildDetails);
+export default BuildDetails;

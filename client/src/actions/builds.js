@@ -1,8 +1,10 @@
 import {
     FETCH_BUILDS_PENDING,
     FETCH_BUILDS_SUCCESS,
-    FETCH_BUILD_SUCCESS,
     FETCH_BUILDS_ERROR,
+    FETCH_BUILD_PENDING,
+    FETCH_BUILD_SUCCESS,
+    FETCH_BUILD_ERROR,
     ADD_BUILD_PENDING,
     ADD_BUILD_SUCCESS,
     ADD_BUILD_ERROR,
@@ -16,11 +18,6 @@ export const fetchBuildsPending = () => ({
     type: FETCH_BUILDS_PENDING
 });
 
-export const fetchBuildSuccess = (build) => ({
-    type: FETCH_BUILD_SUCCESS,
-    build
-});
-
 export const fetchBuildsSuccess = (builds) => ({
     type: FETCH_BUILDS_SUCCESS,
     builds
@@ -28,6 +25,20 @@ export const fetchBuildsSuccess = (builds) => ({
 
 export const fetchBuildsError = (error) => ({
     type: FETCH_BUILDS_ERROR,
+    error
+});
+
+export const fetchBuildPending = () => ({
+    type: FETCH_BUILD_PENDING
+});
+
+export const fetchBuildSuccess = (build) => ({
+    type: FETCH_BUILD_SUCCESS,
+    build
+});
+
+export const fetchBuildError = (error) => ({
+    type: FETCH_BUILD_ERROR,
     error
 });
 
@@ -73,7 +84,7 @@ export const fetchBuilds = (params) => {
 
 export const getBuild = (buildId) => {
     return (dispatch) => {
-        dispatch(fetchBuildsPending());
+        dispatch(fetchBuildPending());
 
         api.getBuild(buildId)
             .then(res => {
@@ -84,7 +95,7 @@ export const getBuild = (buildId) => {
                 return res.data;
             })
             .catch(error => {
-                dispatch(fetchBuildsError(error));
+                dispatch(fetchBuildError(error));
             })
     }
 }

@@ -1,7 +1,9 @@
-import { 
+import {
+    FETCH_BUILD_PENDING,
+    FETCH_BUILD_SUCCESS,
+    FETCH_BUILD_ERROR,
     FETCH_BUILDS_PENDING,
     FETCH_BUILDS_SUCCESS,
-    FETCH_BUILD_SUCCESS,
     FETCH_BUILDS_ERROR,
     ADD_BUILD_PENDING,
     ADD_BUILD_SUCCESS,
@@ -27,18 +29,31 @@ const builds = (state = {}, action) => {
                 pending: false,
                 load_more: totalFetch === 0
             }
-        
-        case FETCH_BUILD_SUCCESS:
-            return {
-                ...state,
-                items: [...state.items, action.build],
-                pending: false
-            }
 
         case FETCH_BUILDS_ERROR:
             return {
                 ...state,
                 pending: false,
+                error: action.error
+            }
+
+        case FETCH_BUILD_PENDING:
+            return {
+                ...state,
+                get_build_pending: true
+            }
+        
+        case FETCH_BUILD_SUCCESS:
+            return {
+                ...state,
+                items: [...state.items, action.build],
+                get_build_pending: false
+            }
+        
+        case FETCH_BUILD_ERROR:
+            return {
+                ...state,
+                get_build_pending: false,
                 error: action.error
             }
 

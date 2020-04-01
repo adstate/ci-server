@@ -25,6 +25,12 @@ const SettingForm = ({settings, saveSettings, getSettings}) => {
         )
     }
 
+    if (settings.error) {
+        return (
+            <div>Error of fetching</div>
+        )
+    }
+
     const waitingCloneRepo = settings.repoStatus === 'Cloning' || settings.save_pending;
     const repoNotCloned = settings.repoStatus === 'NotCloned';
 

@@ -1,9 +1,10 @@
 import React from 'react';
+import './Error.scss';
 
 
-const Error = () => {
+const Error = ({children}) => {
     return (
-        <div>Error</div>
+        <div className="error">{children}</div>
     );
 }
 
