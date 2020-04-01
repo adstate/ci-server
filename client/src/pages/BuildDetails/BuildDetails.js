@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {useParams, useHistory} from 'react-router-dom';
-import Convert from 'ansi-to-html';
 
 import {Button, Icon, Layout, Header, Build, BuildLog, Loader, Error} from 'components';
 import {
@@ -29,8 +28,6 @@ const BuildDetails = () => {
     
     const [log, setLog] = useState('');
 
-    const convert = new Convert();
-
     useEffect(() => {
         if (!build) {
             dispatch(fetchBuildPending());
@@ -45,7 +42,7 @@ const BuildDetails = () => {
                 })
                 .then(res => {
                     if (res) {
-                        setLog(res.replace(/\\n/g, '\n'));
+                        setLog(res);
                     }
                 })
                 .catch(error => {
@@ -54,7 +51,7 @@ const BuildDetails = () => {
         } else {
             if (['Success', 'Fail'].includes(build.status)) {
                 api.getBuildLog(id).then(res => {
-                    setLog(res.replace(/\\n/g, '\n'));
+                    setLog(res);
                 });
             }
         }
@@ -115,9 +112,7 @@ const BuildDetails = () => {
                 <div className="section">
                     <div className="layout__container">
                         <Build detailed data={build}></Build>
-                        <BuildLog>
-                            {convert.toHtml(log)}
-                        </BuildLog>
+                        <BuildLog test={['Success', 'Fail'].includes(build.status)}>{log}</BuildLog>
                     </div>
                 </div>
             </Layout>
