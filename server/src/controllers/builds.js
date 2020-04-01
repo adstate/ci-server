@@ -117,9 +117,45 @@ async function getBuildLog(req, res) {
         }
 }
 
+async function buildFinish(req, res) {
+    const {
+        buildId,
+        duration,
+        success,
+        buildLog
+    } = req.body;
+
+    let apiResponse;
+
+    console.log('DATA', {
+        buildId,
+        duration,
+        success,
+        buildLog
+    });
+
+    try {
+        apiResponse = ciApi.buildFinish({
+            buildId,
+            duration,
+            success,
+            buildLog
+        });
+
+    } catch(e) {
+        throw new ServerError(apiResponse.status || 500, e.message);
+    }
+
+    return res.json({
+        status: 'success',
+        data: apiResponse.data.data,
+    });
+}
+
 module.exports = {
     getBuilds,
     addBuild,
     getBuild,
     getBuildLog,
+    buildFinish
 };

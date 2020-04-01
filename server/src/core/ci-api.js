@@ -47,6 +47,10 @@ async function getBuildLog(buildId) {
     });
 }
 
+async function buildFinish(data) {
+    return instance.post('build/finish', data);
+}
+
 module.exports = {
     instance,
     saveSettings,
@@ -56,4 +60,5 @@ module.exports = {
     getBuilds,
     getBuild,
     getBuildLog,
+    buildFinish,
 };
