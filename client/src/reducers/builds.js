@@ -27,6 +27,7 @@ const builds = (state = {}, action) => {
                 ...state,
                 items: [...state.items, ...action.builds],
                 pending: false,
+                init_loaded: true,
                 load_more: totalFetch === 0
             }
 

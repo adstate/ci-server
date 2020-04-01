@@ -1,11 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {connect, useSelector} from 'react-redux';
+import {connect, useSelector, useDispatch} from 'react-redux';
 import { Header, Layout, Button, Icon, BuildList, NewBuild } from 'components';
 import {addBuild} from 'actions/builds';
 
 
-const BuildHistory = ({addBuildPending, runBuild}) => {
+const BuildHistory = () => {
     const settings = useSelector(state => state.settings);
+    const addBuildPending = useSelector(state => state.builds.add_build_pending);
+
+    const dispatch = useDispatch();
+    const runBuild = (hash) => dispatch(addBuild(hash));
+
     const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
@@ -35,15 +40,5 @@ const BuildHistory = ({addBuildPending, runBuild}) => {
     );
 }
 
-const mapStateToProps = state => ({
-    addBuildPending: state.builds.add_build_pending
-});
-  
-const mapDispatchToProps = dispatch => ({
-    runBuild: (hash) => dispatch(addBuild(hash))
-});
-  
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(BuildHistory);
+
+export default BuildHistory;

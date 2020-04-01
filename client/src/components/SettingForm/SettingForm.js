@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
 import {Button, FormField, FormGroup, FormLabel, FormError, Loader} from 'components';
 import {fetchSettings, postSettings} from 'actions/settings';
@@ -7,11 +7,15 @@ import {fetchSettings, postSettings} from 'actions/settings';
 import './SettingForm.scss';
 
 
-const SettingForm = ({settings, saveSettings, getSettings}) => {
+const SettingForm = () => {
+    const settings = useSelector(state => state.settings);
+
+    const dispatch = useDispatch();
+    const saveSettings = (data) => dispatch(postSettings(data));
+    const getSettings = () => dispatch(fetchSettings());
+
     const { handleSubmit, register, errors } = useForm();
-    const onSubmit = (values) => {
-        saveSettings(values);
-    };
+    const onSubmit = (values) => saveSettings(values);
 
     useEffect(() => {
         if (settings.id && settings.repoStatus !== 'Cloned') {
@@ -108,17 +112,5 @@ const SettingForm = ({settings, saveSettings, getSettings}) => {
         </div>
     );
 }
-
-const mapStateToProps = state => ({
-    settings: state.settings
-});
   
-const mapDispatchToProps = dispatch => ({
-    saveSettings: (data) => dispatch(postSettings(data)),
-    getSettings: () => dispatch(fetchSettings())
-});
-  
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SettingForm);
+export default SettingForm;
