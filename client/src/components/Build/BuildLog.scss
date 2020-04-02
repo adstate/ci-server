@@ -13,6 +13,9 @@
         padding-top: var(--space-xxxs);
         padding-bottom: var(--space-xxxs);
         margin-bottom: var(--space-l);
+        margin-left: calc(-1*var(--gap));
+        margin-right: calc(-1*var(--gap));
+        border-radius: 0px;
     }
 
     &::-webkit-scrollbar {
