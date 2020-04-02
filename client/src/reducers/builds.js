@@ -2,6 +2,8 @@ import {
     FETCH_BUILD_PENDING,
     FETCH_BUILD_SUCCESS,
     FETCH_BUILD_ERROR,
+    FETCH_BUILD_LOG_SUCCESS,
+    FETCH_BUILD_LOG_ERROR,
     FETCH_BUILDS_PENDING,
     FETCH_BUILDS_SUCCESS,
     FETCH_BUILDS_ERROR,
@@ -9,7 +11,9 @@ import {
     ADD_BUILD_SUCCESS,
     ADD_BUILD_ERROR,
     BUILDS_UPDATE_OFFSET,
-    BUILDS_CLEAR_STATE
+    BUILDS_CLEAR_STATE,
+    ADD_BUILD_TO_VIEW,
+    CLEAR_BUILD_TO_VIEW
 } from 'actions/actionTypes'
  
 const builds = (state = {}, action) => {
@@ -48,6 +52,7 @@ const builds = (state = {}, action) => {
             return {
                 ...state,
                 items: [...state.items, action.build],
+                //build_to_view: action.build,
                 get_build_pending: false
             }
         
@@ -87,6 +92,31 @@ const builds = (state = {}, action) => {
             return {
                 ...state,
                 items: []
+            }
+
+        case ADD_BUILD_TO_VIEW:
+            return {
+                ...state,
+                build_to_view: action.build
+            }
+
+        case CLEAR_BUILD_TO_VIEW: 
+            return {
+                ...state,
+                build_to_view: null,
+                build_log_to_view: null
+            }
+
+        case FETCH_BUILD_LOG_SUCCESS:
+            return {
+                ...state,
+                build_log_to_view: action.log
+            }
+        
+        case FETCH_BUILD_LOG_ERROR:
+            return {
+                ...state,
+                get_log_error: action.error
             }
 
         default:

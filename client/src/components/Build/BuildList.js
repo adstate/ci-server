@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import ClassNames from 'classnames';
 import {Build, Loader, Button} from 'components';
-import {fetchBuilds, buildsUpdateOffset, buildsClearState} from '../../actions/builds';
+import {fetchBuilds, buildsUpdateOffset, buildsClearState, addBuildToView} from '../../actions/builds';
 
 
 const BuildList = () => {
@@ -14,18 +14,14 @@ const BuildList = () => {
     const init_loaded = useSelector(state => state.builds.init_loaded);
 
     const dispatch = useDispatch();
-    const getBuilds = (params) => dispatch(fetchBuilds(params));
-    const updateOffset = (offset) => dispatch(buildsUpdateOffset(offset));
-    const clearBuilds = () => dispatch(buildsClearState());
+    const history = useHistory();
     
     const [limit, setLimit] = useState(10);
 
-    const history = useHistory();
-
     useEffect(() => {
         if (!init_loaded) {
-            clearBuilds();
-            getBuilds({offset: offset, limit: limit});
+            dispatch(buildsClearState());
+            dispatch(fetchBuilds({offset: offset, limit: limit}));
         }
     }, []);
 
@@ -33,7 +29,7 @@ const BuildList = () => {
         return <Loader/>;
     }
 
-    const clickHandler = (event) => {  
+    const clickHandler = (event) => {
         if (event.target.closest('.build')) {
             const buildId = event.target.closest('.build').dataset.id;
             history.push(`/build/${buildId}`);
@@ -41,8 +37,8 @@ const BuildList = () => {
     }
 
     const loadMoreBuilds = (offset) => {
-        updateOffset(offset);
-        getBuilds({offset: offset, limit: limit});
+        dispatch(buildsUpdateOffset(offset));
+        dispatch(fetchBuilds({offset: offset, limit: limit}));
     }
 
     return (

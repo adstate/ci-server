@@ -4,12 +4,12 @@ import {useParams, useHistory} from 'react-router-dom';
 
 import {Button, Icon, Layout, Header, Build, BuildLog, Loader, Error} from 'components';
 import {
-    fetchBuildSuccess,
-    fetchBuildPending,
-    fetchBuildError,
     addBuildPending,
     addBuildSuccess,
-    addBuildError
+    addBuildError,
+    getBuild,
+    getBuildLog,
+    clearBuildToView
 } from 'actions/builds';
 
 import api from 'services/api';
@@ -18,6 +18,7 @@ import api from 'services/api';
 const BuildDetails = () => {
     const { id } = useParams();
     const build = useSelector(state => state.builds.items.find(build => build.id === id));
+    const buildLog = useSelector(state => state.builds.build_log_to_view);
     const pending = useSelector(state => state.builds.get_build_pending);
     const fetchError = useSelector(state => state.builds.error);
 
@@ -25,35 +26,18 @@ const BuildDetails = () => {
 
     const history = useHistory();
     const dispatch = useDispatch();
-    
-    const [log, setLog] = useState('');
 
     useEffect(() => {
         if (!build) {
-            dispatch(fetchBuildPending());
-            api.getBuild(id)
-                .then(res => {
-                    const build = res.data;
-                    dispatch(fetchBuildSuccess(build));
-
-                    if (['Success', 'Fail'].includes(build.status)) {
-                        return api.getBuildLog(id);
-                    }
-                })
-                .then(res => {
-                    if (res) {
-                        setLog(res);
-                    }
-                })
-                .catch(error => {
-                    dispatch(fetchBuildError(error));
-                });
+            dispatch(getBuild(id));
         } else {
             if (['Success', 'Fail'].includes(build.status)) {
-                api.getBuildLog(id).then(res => {
-                    setLog(res);
-                });
+                dispatch(getBuildLog(build.id));
             }
+        }
+
+        return () => {
+            dispatch(clearBuildToView());
         }
     }, []);
 
@@ -112,7 +96,7 @@ const BuildDetails = () => {
                 <div className="section">
                     <div className="layout__container">
                         <Build detailed data={build}></Build>
-                        <BuildLog test={['Success', 'Fail'].includes(build.status)}>{log}</BuildLog>
+                        <BuildLog test={['Success', 'Fail'].includes(build.status)}>{buildLog || ''}</BuildLog>
                     </div>
                 </div>
             </Layout>

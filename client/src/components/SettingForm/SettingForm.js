@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { connect, useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
 import {Button, FormField, FormGroup, FormLabel, FormError, Loader} from 'components';
 import {fetchSettings, postSettings} from 'actions/settings';

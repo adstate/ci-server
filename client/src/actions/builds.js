@@ -5,9 +5,13 @@ import {
     FETCH_BUILD_PENDING,
     FETCH_BUILD_SUCCESS,
     FETCH_BUILD_ERROR,
+    FETCH_BUILD_LOG_SUCCESS,
+    FETCH_BUILD_LOG_ERROR,
     ADD_BUILD_PENDING,
     ADD_BUILD_SUCCESS,
     ADD_BUILD_ERROR,
+    ADD_BUILD_TO_VIEW,
+    CLEAR_BUILD_TO_VIEW,
     BUILDS_UPDATE_OFFSET,
     BUILDS_CLEAR_STATE
 } from './actionTypes';
@@ -55,6 +59,25 @@ export const addBuildError = () => ({
     type: ADD_BUILD_ERROR
 });
 
+export const addBuildToView = (build) => ({
+    type: ADD_BUILD_TO_VIEW,
+    build
+});
+
+export const clearBuildToView = () => ({
+    type: CLEAR_BUILD_TO_VIEW
+});
+
+export const fetchBuildLogSuccess = (log) => ({
+    type: FETCH_BUILD_LOG_SUCCESS,
+    log
+});
+
+export const fetchBuildLogError = (error) => ({
+    type: FETCH_BUILD_LOG_ERROR,
+    error
+});
+
 export const buildsUpdateOffset = (offset) => ({
     type: BUILDS_UPDATE_OFFSET,
     offset
@@ -94,9 +117,31 @@ export const getBuild = (buildId) => {
                 dispatch(fetchBuildSuccess(res.data));
                 return res.data;
             })
+            .then(build => {
+                if (['Success', 'Fail'].includes(build.status)) {
+                    return api.getBuildLog(build.id);
+                }
+            })
+            .then(log => {
+                if (log) {
+                    dispatch(fetchBuildLogSuccess(log));
+                }
+            })
             .catch(error => {
                 dispatch(fetchBuildError(error));
             })
+    }
+}
+
+export const getBuildLog = (buildId) => {
+    return (dispatch) => {
+        api.getBuildLog(buildId)
+           .then(res => {
+                dispatch(fetchBuildLogSuccess(res));
+           })
+           .catch(err => {
+                dispatch(fetchBuildLogError(err));
+           })
     }
 }
 
