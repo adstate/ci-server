@@ -55,7 +55,6 @@ const SettingForm = () => {
                             (repoNotCloned) &&
                             <div className="setting-form__repo-status text text_error">Error of cloning repository</div>
                         }
-
                     </div>
 
                     <FormGroup required>
@@ -78,7 +77,8 @@ const SettingForm = () => {
                             formRef={register({required: 'buildCommand is required'})}
                             errors={errors.buildCommand}
                             placeholder="npm run ..." icon="clear"
-                            defaultValue={settings.buildCommand}>
+                            defaultValue={settings.buildCommand}
+                        >
                         </FormField>
                         <FormError>
                             {errors.buildCommand && errors.buildCommand.message}
@@ -93,10 +93,11 @@ const SettingForm = () => {
                     <FormGroup direction="row">
                         <FormLabel>Synchronize every</FormLabel>
                         <FormField name="period"
-                            formRef={register({required: 'Required'})}
+                            formRef={register({required: 'Required', pattern: /^\d+$/i })}
                             errors={errors.period}
                             size="s" defaultValue={`${settings.period}`}
-                            align="right" cleared={false}>
+                            align="right" cleared={false}
+                        >
                         </FormField>
                         <div className="form__control-postfix">minutes</div>
                     </FormGroup>

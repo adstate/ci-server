@@ -6,9 +6,11 @@ import {Icon} from 'components';
 
 const Error = ({children}) => {
     return (
-        <div className="error">
-            <Icon className="error__icon" type="fetch-error" size="l" pseudo/>            
-            {children}
+        <div className="loader-container">
+            <div className="error">
+                <Icon className="error__icon" type="fetch-error" size="l" pseudo/>            
+                {children}
+            </div>
         </div>
     );
 }

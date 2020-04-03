@@ -73,6 +73,7 @@ const builds = (state = {}, action) => {
             return {
                 ...state,
                 items: [action.build, ...state.items],
+                offset: state.offset + 1,
                 add_build_pending: false
             }
 

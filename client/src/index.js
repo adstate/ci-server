@@ -15,7 +15,8 @@ const initialState = {
   settings: {},
   builds: {
     items: [],
-    offset: 0
+    offset: 0,
+    limit: 10
   }
 }
 

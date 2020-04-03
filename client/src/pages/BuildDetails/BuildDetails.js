@@ -46,7 +46,7 @@ const BuildDetails = () => {
 
         api.addBuild(build.commitHash)
             .then(res => {
-                if(res.error) {
+                if (res.error) {
                     throw(res.error);
                 }
                 dispatch(addBuildSuccess(res.data));

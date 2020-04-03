@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import ClassNames from 'classnames';
 import {Build, Loader, Button} from 'components';
 import {fetchBuilds, buildsUpdateOffset, buildsClearState, addBuildToView} from '../../actions/builds';
 
@@ -9,14 +8,13 @@ import {fetchBuilds, buildsUpdateOffset, buildsClearState, addBuildToView} from 
 const BuildList = () => {
     const builds = useSelector(state => state.builds.items);
     const offset = useSelector(state => state.builds.offset);
+    const limit = useSelector(state => state.builds.limit);
     const pending = useSelector(state => state.builds.pending);
     const load_more = useSelector(state => state.builds.load_more);
     const init_loaded = useSelector(state => state.builds.init_loaded);
 
     const dispatch = useDispatch();
     const history = useHistory();
-    
-    const [limit, setLimit] = useState(10);
 
     useEffect(() => {
         if (!init_loaded) {
