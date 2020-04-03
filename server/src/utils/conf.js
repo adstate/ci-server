@@ -2,8 +2,23 @@ const buildConfig = require('../core/buildConf');
 const ciApi = require('../core/ci-api');
 const gitService = require('../core/git-service');
 const repoStatus = require('../models/repo-status');
+const fs = require('fs');
+
+const util = require('util');
+const exists = util.promisify(fs.exists);
+const mkdir = util.promisify(fs.mkdir);
 
 async function load() {
+    const varFolder = './var';
+
+    if (!await exists(varFolder)) {
+        try {
+            mkdir(varFolder);
+        } catch(e) {
+            console.error('Error of creating var folder', err);
+        }
+    }
+
     const config = await ciApi.getSettings();
 
     let lastBuildData;

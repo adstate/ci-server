@@ -76,7 +76,7 @@ async function getBuildLog(req, res) {
     let logCacheWriteStream;
 
     const { buildId } = req.params;
-    const cachedLog = logCache.getValidItem(buildId);
+    const cachedLog = await logCache.getValidItem(buildId);
 
         if (cachedLog) {
             cachedLog.on('data', (chunk) => {
