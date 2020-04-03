@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
-import {Button, FormField, FormGroup, FormLabel, FormError, Loader} from 'components';
+import {Button, FormField, FormGroup, FormLabel, FormError, Loader, Error} from 'components';
 import {fetchSettings, postSettings} from 'actions/settings';
 
 import './SettingForm.scss';
@@ -31,7 +31,7 @@ const SettingForm = () => {
 
     if (settings.error) {
         return (
-            <div>Error of fetching</div>
+            <Error>Error of fetching</Error>
         )
     }
 

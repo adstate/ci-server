@@ -35,8 +35,8 @@ const Build = ({data, detailed, status}) => {
                         <div className="build__branch icon-text">
                             <span className="icon icon_size_s icon_type_commit icon_pseudo icon-text__icon icon-text__icon_indent-r_xs"></span>
                             <div className="icon-text__text icon-text__text_size_m">
-                                <span className="text text_primary">{data.branchName}</span>
-                                <span className="text text_secondary">{data.commitHash}</span>
+                                <span className="build__branch-name text text_primary">{data.branchName}</span>
+                                <span className="build__branch-commit text text_secondary">{data.commitHash}</span>
                             </div>
                         </div>
                         <div className="build__author icon-text">
