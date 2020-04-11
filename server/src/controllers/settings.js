@@ -56,6 +56,8 @@ async function saveSettings(req, res) {
 
                     const lastCommit = await gitService.getLastCommit();
 
+                    console.log('lastCommit', lastCommit);
+
                     apiResponse = await ciApi.addBuild({
                         commitMessage: lastCommit.message,
                         commitHash: lastCommit.hash,
@@ -66,6 +68,7 @@ async function saveSettings(req, res) {
                     buildConfig.lastBuildedCommit = lastCommit;
                 })
                 .catch((err) => {
+                    buildConfig.repoStatus = repoStatus.NotCloned;
                     console.error('ERROR:repository not found', err);
                 });
         } else if (currentBranch !== mainBranch) {
@@ -92,6 +95,7 @@ async function saveSettings(req, res) {
 
     return res.json({
         status: 'success',
+        repoStatus: buildConfig.repoStatus
     });
 }
 
@@ -107,6 +111,7 @@ async function getSettings(req, res) {
                 buildCommand: buildConfig.buildCommand,
                 mainBranch: buildConfig.mainBranch,
                 period: buildConfig.period,
+                repoStatus: buildConfig.repoStatus,
             },
         });
     }
@@ -117,11 +122,16 @@ async function getSettings(req, res) {
         throw new ServerError(500);
     }
 
-    buildConfig.update(apiResponse.data.data || apiResponse.data);
+    const result = apiResponse.data.data || apiResponse.data;
+
+    buildConfig.update(result);
 
     return res.json({
         status: 'success',
-        data: apiResponse.data.data || apiResponse.data,
+        data: {
+            ...result,
+            repoStatus: buildConfig.repoStatus
+        },
     });
 }
 

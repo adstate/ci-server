@@ -1,0 +1,25 @@
+.text {
+    &_primary {
+        color: var(--color-text);
+    }
+    
+    &_secondary {
+        color: var(--color-text-second);
+    }
+
+    &_error {
+        color: var(--color-error);
+    }
+    
+    &_pseudo {
+        color: var(--color-text-pseudo);
+    }
+    
+    &_pseudo-second {
+        color: var(--color-text-pseudo-second);
+    }
+    
+    &_link {
+        color: var(--color-text-link);
+    }
+}

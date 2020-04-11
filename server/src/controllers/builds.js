@@ -3,7 +3,8 @@ const RepoStatusError = require('../errors/repo-status-error');
 const ServerError = require('../errors/server-error');
 const logCache = require('../core/log-cache');
 const repoStatus = require('../models/repo-status');
-const buildConfig = require('../models/configuration');
+const buildConfig = require('../core/buildConf');
+const gitService = require('../core/git-service');
 
 async function getBuilds(req, res) {
     const offset = req.query.offset || 0;
@@ -30,19 +31,28 @@ async function addBuild(req, res) {
         throw new RepoStatusError(200);
     }
 
+    const {commitHash} = req.params;
+    const commit = await gitService.getCommitInfo(commitHash);
+    
+    const commitData = {
+        commitMessage: commit.message,
+        commitHash: commitHash,
+        branchName: buildConfig.mainBranch,
+        authorName: commit.author,
+    }
+
     try {
-        apiResponse = await ciApi.addBuild({
-            commitMessage: req.body.commitMessage,
-            commitHash: req.body.commitHash,
-            branchName: req.body.branchName,
-            authorName: req.body.authorName,
-        });
+        apiResponse = await ciApi.addBuild(commitData);
     } catch (e) {
-        throw new ServerError(500);
+        throw new ServerError(apiResponse.status || 500);
     }
 
     return res.json({
         status: 'success',
+        data: {
+            ...apiResponse.data.data,
+            ...commitData
+        }
     });
 }
 
@@ -66,13 +76,12 @@ async function getBuildLog(req, res) {
     let logCacheWriteStream;
 
     const { buildId } = req.params;
-    const cachedLog = logCache.getValidItem(buildId);
+    const cachedLog = await logCache.getValidItem(buildId);
 
-    try {
         if (cachedLog) {
             cachedLog.on('data', (chunk) => {
-                res.statusCode = 200;
-                res.write(chunk);
+               res.statusCode = 200;
+               res.write(chunk);
             });
 
             cachedLog.on('close', () => {
@@ -82,29 +91,65 @@ async function getBuildLog(req, res) {
         } else {
             logCacheWriteStream = logCache.addItem(buildId);
 
-            apiResponse = await ciApi.getBuildLog('/build/log', buildId);
+            try {
+                apiResponse = await ciApi.getBuildLog(buildId);
 
-            apiResponse.data.on('data', (chunk) => {
-                if (logCacheWriteStream) {
-                    logCacheWriteStream.write(chunk);
-                }
+                apiResponse.data.on('data', (chunk) => {
+                    if (logCacheWriteStream) {
+                        logCacheWriteStream.write(chunk);
+                    }
 
-                res.statusCode = 200;
-                res.write(chunk);
-            });
+                    res.statusCode = 200;
+                    res.write(chunk);
+                });
 
-            apiResponse.data.on('end', () => {
-                if (logCacheWriteStream) {
-                    logCacheWriteStream.end();
-                }
+                apiResponse.data.on('end', () => {
+                    if (logCacheWriteStream) {
+                        logCacheWriteStream.end();
+                    }
 
-                res.statusCode = 200;
-                res.end();
-            });
+                    res.statusCode = 200;
+                    res.end();
+                });
+            } catch (e) {
+                throw new ServerError(500, e.message);
+            }
         }
-    } catch (e) {
-        throw new ServerError(500);
+}
+
+async function buildFinish(req, res) {
+    const {
+        buildId,
+        duration,
+        success,
+        buildLog
+    } = req.body;
+
+    let apiResponse;
+
+    console.log('DATA', {
+        buildId,
+        duration,
+        success,
+        buildLog
+    });
+
+    try {
+        apiResponse = ciApi.buildFinish({
+            buildId,
+            duration,
+            success,
+            buildLog
+        });
+
+    } catch(e) {
+        throw new ServerError(apiResponse.status || 500, e.message);
     }
+
+    return res.json({
+        status: 'success',
+        data: apiResponse.data.data,
+    });
 }
 
 module.exports = {
@@ -112,4 +157,5 @@ module.exports = {
     addBuild,
     getBuild,
     getBuildLog,
+    buildFinish
 };

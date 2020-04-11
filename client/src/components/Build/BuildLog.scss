@@ -1,0 +1,43 @@
+.build-log {
+    background-color: var(--color-bg-disabled);
+    overflow-x: auto;
+    font-size: var(--font-size-xxs);
+    line-height: var(--line-height-m);
+    padding: var(--space-xs) var(--space-m);
+    border-radius: 6px;
+    margin-bottom: calc(var(--space-s) * 2);
+    font-family: monospace, monospace;
+    min-height: 32px;
+
+    @media screen and (max-width: 768px) {
+        padding-top: var(--space-xxxs);
+        padding-bottom: var(--space-xxxs);
+        margin-bottom: var(--space-l);
+        margin-left: calc(-1*var(--gap));
+        margin-right: calc(-1*var(--gap));
+        border-radius: 0px;
+    }
+
+    &::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background-color: var(--color-bg-disabled);
+        border-radius: 10px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: rgba(0, 0 ,0, 0.3);
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        border-radius: 10px;
+        background-color: rgba(0, 0 ,0, 0.4);
+    }
+    
+    &::-webkit-scrollbar-corner {
+        border-radius: 4px;
+    }
+}

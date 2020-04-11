@@ -1,0 +1,20 @@
+.error {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xl);
+    color: var(--color-text-second);
+
+    @media screen and (max-width: 768px) {
+        font-size: var(--font-size-m);
+        line-height: var(--line-height-m);
+    }
+
+    &__icon {
+        @media screen and (max-width: 768px) {
+            width: 24px;
+            height: 24px;
+            
+        }
+    }
+}

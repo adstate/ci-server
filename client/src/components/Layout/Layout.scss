@@ -1,0 +1,20 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    &_space-h_small {
+        padding-left: var(--gap);
+        padding-right: var(--gap);
+    }
+
+    &_align_center {
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__container {
+        margin: 0 auto;
+        max-width: 1280px;
+    }
+}

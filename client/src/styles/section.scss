@@ -1,0 +1,19 @@
+.section {
+    margin-top: var(--space-xs);
+
+    &__footer {
+        margin-bottom: calc(var(--space-xxl) - 4px);
+
+        &_align_left {
+            display: flex;
+        }
+    }
+
+    &__button {
+        @media screen and (max-width: 768px) {
+            width: 100%;
+            padding-top: var(--space-xs);
+            padding-bottom: var(--space-xs);
+        }
+    }
+}
