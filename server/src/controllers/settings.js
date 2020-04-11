@@ -56,6 +56,8 @@ async function saveSettings(req, res) {
 
                     const lastCommit = await gitService.getLastCommit();
 
+                    console.log('lastCommit', lastCommit);
+
                     apiResponse = await ciApi.addBuild({
                         commitMessage: lastCommit.message,
                         commitHash: lastCommit.hash,

@@ -19,11 +19,19 @@ const BuildHistory = () => {
         }
     }, [addBuildPending]);
 
+    const openModalHandler = () => {
+        setOpenModal(true);
+    }
+
+    const closeModalhandler = () => {
+        setOpenModal(false);
+    }
+
     return (
         <React.Fragment>
             <Header title={settings.repoName}>
                 <div className="header__button-group">
-                    <Button className="button_type_icon-text" size="s" onClick={() => setOpenModal(true)}>
+                    <Button className="button_type_icon-text" size="s" onClick={openModalHandler}>
                         <Icon className="button__icon" type="play"/>
                         <span className="button__text">Run build</span>
                     </Button>
@@ -35,7 +43,7 @@ const BuildHistory = () => {
             <Layout container>
                 <BuildList/>
             </Layout>
-            <NewBuild open={openModal} onClose={() => setOpenModal(false)} onRunBuild={runBuild} pending={addBuildPending}/>
+            <NewBuild open={openModal} onClose={closeModalhandler} onRunBuild={runBuild} pending={addBuildPending}/>
         </React.Fragment>
     );
 }

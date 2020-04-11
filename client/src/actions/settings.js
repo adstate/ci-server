@@ -44,11 +44,10 @@ export const fetchSettings = () => {
         
         api.getSettings()
             .then(res => {
-                if(res.error) {
+                if (res.error) {
                     throw(res.error);
                 }
                 dispatch(fetchSettingsSuccess(res.data));
-                return res.data;
             })
             .catch(error => {
                 dispatch(fetchSettingsError(error));
@@ -62,15 +61,11 @@ export const postSettings = (settings) => {
         
         api.saveSettings(settings)
             .then(res => {
-                if(res.error) {
+                if (res.error) {
                     throw(res.error);
                 }
 
-                if (res.data.status === 'success') {
-                    dispatch(saveSettingsSuccess(settings));
-                }
-                
-                return res.data;
+                dispatch(saveSettingsSuccess(settings));
             })
             .catch(error => {
                 dispatch(saveSettingsError(error));

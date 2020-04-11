@@ -88,16 +88,18 @@ export const buildsClearState = () => ({
 });
 
 export const fetchBuilds = (params) => {
+    const {offset, limit} = params;
+
     return (dispatch) => {
+        dispatch(buildsUpdateOffset(offset));
         dispatch(fetchBuildsPending());
 
-        api.getBuilds(params)
+        api.getBuilds({offset, limit})
             .then(res => {
                 if(res.error) {
                     throw(res.error);
                 }
                 dispatch(fetchBuildsSuccess(res.data));
-                return res.data;
             })
             .catch(error => {
                 dispatch(fetchBuildsError(error));
@@ -111,21 +113,10 @@ export const getBuild = (buildId) => {
 
         api.getBuild(buildId)
             .then(res => {
-                if(res.error) {
+                if (res.error) {
                     throw(res.error);
                 }
                 dispatch(fetchBuildSuccess(res.data));
-                return res.data;
-            })
-            .then(build => {
-                if (['Success', 'Fail'].includes(build.status)) {
-                    return api.getBuildLog(build.id);
-                }
-            })
-            .then(log => {
-                if (log) {
-                    dispatch(fetchBuildLogSuccess(log));
-                }
             })
             .catch(error => {
                 dispatch(fetchBuildError(error));
@@ -151,11 +142,10 @@ export const addBuild = (commitHash) => {
 
         api.addBuild(commitHash)
             .then(res => {
-                if(res.error) {
+                if (res.error) {
                     throw(res.error);
                 }
                 dispatch(addBuildSuccess(res.data));
-                return res.data;
             })
             .catch(error => {
                 dispatch(addBuildError(error));

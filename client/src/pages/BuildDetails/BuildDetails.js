@@ -17,10 +17,13 @@ import api from 'services/api';
 
 const BuildDetails = () => {
     const { id } = useParams();
+
     const build = useSelector(state => state.builds.items.find(build => build.id === id));
-    const buildLog = useSelector(state => state.builds.build_log_to_view);
-    const pending = useSelector(state => state.builds.get_build_pending);
-    const fetchError = useSelector(state => state.builds.error);
+    const {
+        get_build_pending: pending,
+        build_log_to_view: buildLog,
+        error: fetchError,
+      } = useSelector(state => state.builds);
 
     const settings = useSelector(state => state.settings);
 
@@ -30,16 +33,9 @@ const BuildDetails = () => {
     useEffect(() => {
         if (!build) {
             dispatch(getBuild(id));
-        } else {
-            if (['Success', 'Fail'].includes(build.status)) {
-                dispatch(getBuildLog(build.id));
-            }
-        }
-
-        return () => {
-            dispatch(clearBuildToView());
-        }
-    }, []);
+        }        
+        dispatch(getBuildLog(id));
+    }, [id, dispatch]);
 
     const rebuildHandler = () => {
         dispatch(addBuildPending());

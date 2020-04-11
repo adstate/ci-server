@@ -29,7 +29,7 @@ const FormField = ({type, name, mask, formRef, errors, size, cleared, align, pla
 
     return (
         <div className={fieldClass}>
-            <input type={type} ref={formRef} name={name} className={inputClass} placeholder={placeholder} value={value} onChange={(event) => inputChange(event)}/>
+            <input type={type} ref={formRef} name={name} className={inputClass} placeholder={placeholder} value={value} onChange={inputChange}/>
             {cleared && <Icon className="form-field__icon" size="s" type="clear" onClick={clearInput}/>}
         </div>
     );

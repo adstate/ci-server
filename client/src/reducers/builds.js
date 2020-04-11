@@ -15,8 +15,14 @@ import {
     ADD_BUILD_TO_VIEW,
     CLEAR_BUILD_TO_VIEW
 } from 'actions/actionTypes'
+
+const initialState = {
+    items: [],
+    offset: 0,
+    limit: 10
+}
  
-const builds = (state = {}, action) => {
+const builds = (state = initialState, action) => {
     switch (action.type) {
         case FETCH_BUILDS_PENDING:
             return {

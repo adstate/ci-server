@@ -5,22 +5,7 @@ import { App } from 'components';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { applyMiddleware, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer from './reducers'
-
-const middlewares = [thunk];
-
-const initialState = {
-  settings: {},
-  builds: {
-    items: [],
-    offset: 0,
-    limit: 10
-  }
-}
-
-const store = createStore(rootReducer, initialState, applyMiddleware(...middlewares));
+import store from './store';
 
 ReactDOM.render(
   <React.StrictMode>

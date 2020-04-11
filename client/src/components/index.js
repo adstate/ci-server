@@ -17,7 +17,7 @@ import BuildLog from './Build/BuildLog';
 import NewBuild from './Build/NewBuild';
 import Loader from './Loader/Loader';
 import Modal from './Modal/Modal';
-import Error from './Error/Error';
+export { default as Error } from './Error/Error'
 
 export {
     App,
@@ -39,5 +39,4 @@ export {
     Loader,
     Modal,
     NewBuild,
-    Error,
 }

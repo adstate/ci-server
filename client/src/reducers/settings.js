@@ -6,8 +6,10 @@ import {
     FETCH_SETTINGS_SUCCESS,
     FETCH_SETTINGS_ERROR
 } from 'actions/actionTypes'
+
+const initialState = {};
  
-const settings = (state = {}, action) => {
+const settings = (state = initialState, action) => {
     switch (action.type) {
         case FETCH_SETTINGS_PENDING:
             return {
@@ -33,7 +35,11 @@ const settings = (state = {}, action) => {
             }
 
         case SAVE_SETTINGS_SUCCESS:
-            return Object.assign({}, state, action.settings, {save_pending: false});
+            return {
+                ...state,
+                ...action.settings,
+                save_pending: false
+            }
 
         case SAVE_SETTINGS_ERROR:
             return {

@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
-import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+import { format } from 'date-fns';
 import { ru } from 'date-fns/locale'
-
 import './Build.scss';
 import {Icon} from 'components';
 
 
-const Build = ({data, detailed, status}) => {
+const Build = ({data, detailed, onClick}) => {
 
     const buildClass = ClassNames(
         'build',
@@ -19,10 +18,16 @@ const Build = ({data, detailed, status}) => {
         }
     );
 
+    const clickHandler = () => {
+        if (onClick) {
+            onClick(data);
+        }
+    }
+
     return (
-        <div className={buildClass} data-id={data.id}>
+        <div className={buildClass} data-id={data.id} onClick={clickHandler}>
             <div className="build__status">
-                <Icon className="build__status-icon" type={data.status.toLowerCase()} size="m" />
+                <Icon className="build__status-icon" type={data.status.toLowerCase()} size="m"/>
             </div>
             
             <div className="build__detail">
@@ -33,14 +38,14 @@ const Build = ({data, detailed, status}) => {
                     </div>
                     <div className="build__commit">
                         <div className="build__branch icon-text">
-                            <span className="icon icon_size_s icon_type_commit icon_pseudo icon-text__icon icon-text__icon_indent-r_xs"></span>
+                            <Icon className="icon-text__icon icon-text__icon_indent-r_xs" type="commit" size="s" pseudo/>
                             <div className="icon-text__text icon-text__text_size_m">
                                 <span className="build__branch-name text text_primary">{data.branchName}</span>
                                 <span className="build__branch-commit text text_secondary">{data.commitHash}</span>
                             </div>
                         </div>
                         <div className="build__author icon-text">
-                            <span className="icon icon_size_s icon_type_person icon_pseudo icon-text__icon icon-text__icon_indent-r_xs"></span>
+                            <Icon className="icon-text__icon icon-text__icon_indent-r_xs" type="person" size="s" pseudo/>
                             <span className="icon-text__text icon-text__text_size_m">{data.authorName}</span>
                         </div>    
                     </div>
@@ -48,7 +53,7 @@ const Build = ({data, detailed, status}) => {
             
                 <div className="build__time">
                         <div className="build__datetime icon-text">
-                            <span className="icon icon_pseudo icon_type_date icon_size_s  icon-text__icon_indent-r_xs"></span>
+                            <Icon className="icon-text__icon icon-text__icon_indent-r_xs" type="date" size="s" pseudo/>
                             <span className="icon-text__text icon-text__text_nowrap text_pseudo">
                                 { data.start ?
                                     format(new Date(data.start), 'dd MMM hh:mm', { locale: ru })
@@ -58,7 +63,7 @@ const Build = ({data, detailed, status}) => {
                         </div>
                 
                     <div className="build__timer icon-text">
-                        <span className="icon icon_pseudo icon_type_timer icon_size_s icon-text__icon icon-text__icon_indent-r_xs"></span>
+                        <Icon className="icon-text__icon icon-text__icon_indent-r_xs" type="timer" size="s" pseudo/>
                         <span className="icon-text__text icon-text__text_nowrap text text_pseudo">{data.duration || '-'}</span>
                     </div>
                 </div>
