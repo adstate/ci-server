@@ -8,7 +8,13 @@
     "fix": "eslint --fix src",
     "start": "node ./src/server.js",
     "dev": "nodemon ./src/server.js",
-    "test": "jest ./__tests__"
+    "test": "jest"
+  },
+  "jest": {
+    "verbose": false,
+    "notify": true,
+    "testEnvironment": "node",
+    "testMatch": ["<rootDir>/__tests__/*/*test.js"]
   },
   "author": "felix.khodakovsky",
   "license": "ISC",

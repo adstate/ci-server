@@ -76,8 +76,6 @@ describe('Test settings api methods', () => {
         const req = mockRequest(settings);
         const res = mockResponse();
 
-        console.log(buildConfig);
-
         await settingController.saveSettings(req, res);
 
         expect(res.json).toHaveBeenCalledWith(result);

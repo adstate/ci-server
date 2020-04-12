@@ -4,6 +4,7 @@ const ciApi = require('../../src/core/ci-api').instance;
 const { PassThrough } = require('stream');
 const mockResponse = require('../mocks/response');
 const mockRequest = require('../mocks/request');
+const builds = require('../mocks/builds');
 
 const gitService = require('../../src/core/git-service');
 const buildConfig = require('../../src/core/buildConf');
@@ -15,12 +16,7 @@ describe('Test builds api methods', () => {
 
       const result = {
         "status": "success",
-        "data": [
-            {
-              "id": "123",
-              "status": "Waiting"
-            }
-        ]
+        "data": builds
       }
 
       ciApiMock.onGet('/build/list').reply(200, result);
@@ -35,18 +31,16 @@ describe('Test builds api methods', () => {
 
     test('getBuild: should return build', async () => {
       const ciApiMock = new MockAdapter(ciApi);
+      const buildId = 'd066a8a8-89a7-413b-bdb4-f568e48355a0';
       const result = {
-        "status": "success",
-        "data": {
-            "id": "123",
-            "status": "Waiting"
-        }
+        status: 'success',
+        data: builds.find(build => build.id === buildId)
       }
 
       ciApiMock.onGet('/build/details')
           .reply(200, result);
 
-      const req = mockRequest({}, {buildId: '123'});
+      const req = mockRequest({}, {buildId});
       const res = mockResponse();
 
       await buildController.getBuild(req, res);
