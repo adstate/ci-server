@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import { connect, useSelector, useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
 import {addBuild} from 'actions/builds';
 import {Button, FormField, FormGroup, FormError, Modal} from 'components';

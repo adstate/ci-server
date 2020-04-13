@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {connect, useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import { Header, Layout, Button, Icon, BuildList, NewBuild } from 'components';
 import {addBuild} from 'actions/builds';
 
@@ -47,6 +47,5 @@ const BuildHistory = () => {
         </React.Fragment>
     );
 }
-
 
 export default BuildHistory;

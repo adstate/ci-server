@@ -5,7 +5,6 @@ import './Layout.scss';
 
 
 const Layout = ({align, container, children}) => {
-
     const layoutClass = classNames('layout', {
         'layout_align_center': align === 'center',
         'layout_space-h_small': container

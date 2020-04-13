@@ -1,9 +1,7 @@
 import React from 'react';
 import { Header, Layout, SettingForm } from 'components';
 
-
 const Settings = () => {
-
     return (
         <React.Fragment>
             <Header title="School CI Server"></Header>
@@ -13,6 +11,5 @@ const Settings = () => {
         </React.Fragment>
     );
 }
-
 
 export default Settings;

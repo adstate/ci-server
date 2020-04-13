@@ -1,7 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
 import './Configure.scss';
-
 import { Button, Icon } from 'components';
 
 const Configure = () => {

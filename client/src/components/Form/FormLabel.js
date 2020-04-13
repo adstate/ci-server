@@ -3,7 +3,6 @@ import ClassNames from 'classnames';
 import './FormLabel.scss';
 
 const FormLabel = ({children}) => {
-
     const labelClass = ClassNames('form-label');
 
     return (
