@@ -3,11 +3,13 @@ const helmet = require('helmet');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const express = require('express');
-require('express-async-errors');
+const history = require('connect-history-api-fallback');
 
+require('express-async-errors');
 require('./config');
 require('./core/buildConf');
 require('./core/git-service');
+require('./core/log-cache');
 
 const conf = require('./utils/conf');
 
@@ -20,10 +22,11 @@ const app = express();
 
 app.use(helmet());
 app.use(cors());
+app.use(history());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(path.resolve(__dirname, 'static')));
+app.use(express.static(path.resolve(__dirname, 'public')));
 
 app.use('/api', settingRouter);
 app.use('/api', buildRouter);
