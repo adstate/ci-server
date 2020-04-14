@@ -23,6 +23,16 @@ class LogCache {
     }
 
     async init() {
+        const varFolder = './var';
+
+        if (!await exists(varFolder)) {
+            try {
+                mkdir(varFolder);
+            } catch(e) {
+                console.error('Error of creating var folder', err);
+            }
+        }
+
         if (!await exists(this.dir)) {
             mkdir(this.dir, {recursive: true}).catch((err) => {
                 console.error('CACHE:Error of creating cache folder', err);

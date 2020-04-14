@@ -8,6 +8,7 @@ require('express-async-errors');
 require('./config');
 require('./core/buildConf');
 require('./core/git-service');
+require('./core/log-cache');
 
 const conf = require('./utils/conf');
 
@@ -23,7 +24,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(path.resolve(__dirname, 'static')));
+app.use(express.static(path.resolve(__dirname, 'public')));
 
 app.use('/api', settingRouter);
 app.use('/api', buildRouter);

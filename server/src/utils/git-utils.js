@@ -16,7 +16,7 @@ module.exports = class GitUtils {
 
             git.stderr.on('data', (err) => {
                 const error = err.toString('UTF-8');
-                console.error('git clone error', error);
+                console.error('git clone', error);
             });
 
             git.on('close', (code) => {
