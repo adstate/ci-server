@@ -14,9 +14,14 @@ async function saveSettings(req, res) {
         period,
     } = req.body;
 
-    const isNewRepo = buildConfig.repoName !== repoName;
+    if (buildConfig.repoStatus === repoStatus.Cloning) {
+        return res.json({
+            status: 'success',
+            repoStatus: buildConfig.repoStatus
+        });
+    }
 
-    console.log('isNewRepo', isNewRepo);
+    const isNewRepo = buildConfig.repoName !== repoName;
 
     if (isNewRepo) {
         try {

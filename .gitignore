@@ -105,3 +105,6 @@ dist
 
 #var
 var
+
+# hermione
+__tests__/hermione/hermione-html-report

@@ -14,9 +14,11 @@ class GitService {
         this.buildConfig = config;
         this.gitUtils = gitUtils;
 
-        this.buildConfig.on('init', () => {
-            setInterval(this.checkNewCommits.bind(this), this.buildConfig.period * 60 * 1000);
-        });
+        // TODO при e2e тестых генерировалось большое количество событий на git pull
+        // временно закоментировал
+        // this.buildConfig.on('init', () => {
+        //     setInterval(this.checkNewCommits.bind(this), this.buildConfig.period * 60 * 1000);
+        // });
 
         this.buildConfig.on('change', () => {
             this.update();
@@ -56,9 +58,11 @@ class GitService {
     }
 
     update() {
-        this.repoUrl = `https://github.com/${this.buildConfig.repoName}`;
-        this.shortRepoName = this.buildConfig.repoName.split('/')[1] || '';
-        this.repoInternalPath = path.join(this.repoDir, this.shortRepoName);
+        if (this.buildConfig.repoName) {
+            this.repoUrl = `https://github.com/${this.buildConfig.repoName}`;
+            this.shortRepoName = this.buildConfig.repoName.split('/')[1] || '';
+            this.repoInternalPath = path.join(this.repoDir, this.shortRepoName);    
+        }
     }
 
     async checkNewCommits() {
@@ -67,6 +71,7 @@ class GitService {
             const { mainBranch } = this.buildConfig;
 
             await this.pull();
+            console.log('check commits');
             const commits = await this.gitUtils.getNewCommits(lastCommitHash, this.repoInternalPath);
 
             commits.reverse().forEach(async (commit) => {
