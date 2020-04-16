@@ -14,7 +14,9 @@
     "verbose": false,
     "notify": true,
     "testEnvironment": "node",
-    "testMatch": ["<rootDir>/__tests__/*/*test.js"]
+    "testMatch": [
+      "<rootDir>/__tests__/*/*test.js"
+    ]
   },
   "author": "felix.khodakovsky",
   "license": "ISC",
