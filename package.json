@@ -6,8 +6,8 @@
   "scripts": {
     "build": "webpack --colors --config webpack.config.js",
     "pack": "mv client/build/* server/src/static",
-    "screens": "./node_modules/.bin/hermione gui ./__tests__/hermione/settings.hermione.js",
-    "test": "./node_modules/.bin/hermione ./__tests__/hermione/settings.hermione.js"
+    "screens": "./node_modules/.bin/hermione gui ./__tests__/hermione/test.hermione.js",
+    "test": "./node_modules/.bin/hermione ./__tests__/hermione/test.hermione.js"
   },
   "repository": {
     "type": "git",

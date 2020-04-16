@@ -7,6 +7,7 @@ import {addBuild} from 'actions/builds';
 const BuildHistory = () => {
     const settings = useSelector(state => state.settings);
     const addBuildPending = useSelector(state => state.builds.add_build_pending);
+    const addBuildError = useSelector(state => state.builds.add_build_error);
 
     const dispatch = useDispatch();
     const runBuild = (hash) => dispatch(addBuild(hash));
@@ -14,7 +15,7 @@ const BuildHistory = () => {
     const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
-        if (addBuildPending === false) {
+        if (addBuildPending == false && !addBuildError) {
             setOpenModal(false);
         }
     }, [addBuildPending]);
