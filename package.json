@@ -5,7 +5,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "build": "webpack --colors --config webpack.config.js",
-    "pack": "mv client/build/* server/src/public",
+    "pack": "mv client/build/* webserver/src/public",
     "screens": "./node_modules/.bin/hermione gui ./__tests__/hermione/test.hermione.js",
     "test": "./node_modules/.bin/hermione ./__tests__/hermione/test.hermione.js"
   },

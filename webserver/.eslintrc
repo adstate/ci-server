@@ -1,0 +1,10 @@
+{
+    "extends": "airbnb-base",
+    "rules": {
+      "linebreak-style": 0,
+      "indent": ["error", 4],
+      "no-console": ["error", { "allow": ["warn", "error"] }],
+      "prefer-promise-reject-errors": ["error", {"allowEmptyReject": true}],
+      "no-underscore-dangle": ["error", {"allow": ["_id"] }]
+    }
+}
