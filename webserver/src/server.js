@@ -33,7 +33,7 @@ app.use('/api', buildRouter);
 
 app.use(errorHandler);
 
-app.listen(9000, async () => {
+app.listen(8080, async () => {
     try {
         await conf.load();
     } catch (e) {

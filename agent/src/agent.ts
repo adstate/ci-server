@@ -3,15 +3,18 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-require('express-async-errors');
+import * as config from './agent-conf.json';
 
+require('express-async-errors');
 dotenv.config();
 
-import * as config from './server-conf.json';
-import notifyRouter from './routes/notify';
+import {loadConfig} from './utils/conf';
+import buildRouter from './routes/build';
+
+
+//loadConfig(); 
 
 //services
-import settingService from './services/settingService';
 
 //utils
 import init from './utils/init';
@@ -26,10 +29,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/', notifyRouter);
+app.use('/', buildRouter);
 
 app.get('/', function (req, res) {
-  res.send('ci build server');
+  res.send('ci agent server');
 });
 
 app.use(errorHandler);
