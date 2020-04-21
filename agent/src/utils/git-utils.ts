@@ -44,9 +44,7 @@ export default class GitUtils {
 
     pull(repoInternalPath: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            const appDir = path.resolve(__dirname);
-            const gitDir = path.join(appDir, '../', repoInternalPath);
-
+            const gitDir = path.join(process.cwd(), repoInternalPath);
             const git = this.spawn('git', ['pull'], { cwd: gitDir });
 
             git.stderr.on('data', (err: string) => {
@@ -65,12 +63,10 @@ export default class GitUtils {
         });
     }
 
-    checkout(branchName: string, repoInternalPath: string): Promise<any> {
+    checkout(point: string, repoInternalPath: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            const appDir = path.resolve(__dirname);
-            const gitDir = path.join(appDir, '../', repoInternalPath);
-
-            const git = this.spawn('git', ['checkout', branchName], { cwd: gitDir });
+            const gitDir = path.join(process.cwd(), repoInternalPath);
+            const git = this.spawn('git', ['checkout', point], { cwd: gitDir });
 
             git.stderr.on('data', (err: string) => {
                 console.log(err);
@@ -116,13 +112,11 @@ export default class GitUtils {
 
     getLastCommit(repoInternalPath: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            const appDir = path.resolve(__dirname);
-            const gitDir = path.join(appDir, '../', repoInternalPath);
+            const gitDir = path.join(process.cwd(), repoInternalPath);
 
             let result = '';
 
-            const spawnOpts = { cwd: gitDir };
-            const git = this.spawn('git', ['log', '-1', '--format=%h;%cn;%s'], spawnOpts);
+            const git = this.spawn('git', ['log', '-1', '--format=%h;%cn;%s'], { cwd: gitDir });
 
             git.stderr.on('data', (err: string) => {
                 console.error(err);
@@ -144,8 +138,7 @@ export default class GitUtils {
 
     getNewCommits(commitHash: string, repoInternalPath: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            const appDir = path.resolve(__dirname);
-            const gitDir = path.join(appDir, '../', repoInternalPath);
+            const gitDir = path.join(process.cwd(), repoInternalPath);
 
             let result = '';
 
@@ -174,8 +167,7 @@ export default class GitUtils {
 
     getCommitInfo(commitHash: string, repoInternalPath: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            const appDir = path.resolve(__dirname);
-            const gitDir = path.join(appDir, '../', repoInternalPath);
+            const gitDir = path.join(process.cwd(), repoInternalPath);
 
             let result = '';
 

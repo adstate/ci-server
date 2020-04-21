@@ -109,5 +109,7 @@ var
 #build
 build
 
+repo
+
 # hermione
 __tests__/hermione/hermione-html-report

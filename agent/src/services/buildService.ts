@@ -25,6 +25,7 @@ class BuildService {
 
         await gitService.clone(this.repoUrl);
         console.log('repo is cloned');
+        await gitService.checkout(this.commitHash);
     }
 
     async runBuildCommand() {
