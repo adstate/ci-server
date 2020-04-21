@@ -8,6 +8,9 @@ class SettingService implements Settings {
     buildCommand: string;
     mainBranch: string;
     period: number;
+    repoUrl: string;
+
+    repoBaseUrl: string = 'https://github.com';
 
     constructor() {
         this.id = '';
@@ -15,6 +18,7 @@ class SettingService implements Settings {
         this.buildCommand = '';
         this.mainBranch = '';
         this.period = 0;
+        this.repoUrl = '';
     }
 
     async init() {
@@ -29,6 +33,7 @@ class SettingService implements Settings {
         this.buildCommand = settings.buildCommand;
         this.mainBranch = settings.mainBranch;
         this.period = settings.period;
+        this.repoUrl = `${this.repoBaseUrl}/${this.repoName}`;
 
         //console.log(settings);
     }

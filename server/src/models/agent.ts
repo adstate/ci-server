@@ -1,5 +1,6 @@
 export default interface Agent {
     host: string;
-    port: string;
+    port: number;
     status: string;
+    processingBuildId: string | null;
 }

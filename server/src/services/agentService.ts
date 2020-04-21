@@ -1,6 +1,9 @@
 import Agent from '../models/agent';
 import AgentStatus from '../models/agentStatus';
 import Build from '../models/build';
+import BuildData from '../models/buildData';
+import {startBuild as startBuildOnAgent} from '../core/agent-api';
+import settingService from '../services/settingService';
 
 class AgentService {
     agents: Agent[] = [];
@@ -11,11 +14,12 @@ class AgentService {
         
     }
 
-    register(host: string, port: string) {
+    register(host: string, port: number) {
         const agent: Agent = {
             host,
             port,
-            status: AgentStatus.Waiting
+            status: AgentStatus.Waiting,
+            processingBuildId: null
         }
 
         this.agents.push(agent);
@@ -30,8 +34,34 @@ class AgentService {
         }
     }
 
-    startBuild(build: Build, agent: Agent) {
-        
+    getAgent(host: string, port: number): Agent | undefined {
+        return this.agents.find((a: Agent) => a.host === host && a.port === port);
+    }
+
+    getAgentByBuild(buildId: string): Agent | undefined {
+        return this.agents.find((a: Agent) => a.processingBuildId === buildId);
+    }
+
+    async startBuild(build: Build, agent: Agent) {
+        const buildData: BuildData = {
+            buildId: build.id,
+            repoUrl: settingService.repoUrl,
+            commitHash: build.commitHash,
+            buildCommand: settingService.buildCommand
+        }
+
+        await startBuildOnAgent(buildData, agent);
+        this.setAgentToBusy(agent, build.id);
+    }
+
+    setAgentToBusy(agent: Agent, buildId: string) {
+        agent.status = AgentStatus.Busy;
+        agent.processingBuildId = buildId;
+    }
+
+    setAgentToWaiting(agent: Agent) {
+        agent.status = AgentStatus.Waiting;
+        agent.processingBuildId = null;
     }
 }
 

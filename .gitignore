@@ -106,5 +106,8 @@ dist
 #var
 var
 
+#build
+build
+
 # hermione
 __tests__/hermione/hermione-html-report

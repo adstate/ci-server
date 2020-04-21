@@ -1,8 +1,10 @@
 import BuildListResponse from '../models/buildListResponse';
 import Build from '../models/build';
+import BuildData from '../models/buildData';
 import BuildStatus from '../models/buildStatus';
 import {getBuilds, buildStart} from '../core/ci-api';
 import agentService from '../services/agentService';
+import settingService from '../services/settingService';
 import Agent from '../models/agent';
 
 class BuildService {
@@ -60,6 +62,10 @@ class BuildService {
     }
 
     async processBuild() {
+        if (this.builds.length === 0) {
+            return;
+        }
+
         const agent: Agent | null = agentService.getFreeAgent();
 
         if (!agent) {
@@ -72,8 +78,18 @@ class BuildService {
             return;
         }
 
-        agentService.startBuild(build, agent);
-        await buildStart(build.id);
+        let agentRes = null;
+        try {
+            agentRes = await agentService.startBuild(build, agent);
+        } catch(e) {
+            console.error('Error of start building');
+            this.builds.push(build);
+        }
+
+        let apiRes = null;
+        if (agentRes) {
+            apiRes = await buildStart(build.id);
+        }
 
         console.log('build', build);
     }

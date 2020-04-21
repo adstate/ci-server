@@ -1,6 +1,8 @@
 import * as config from '../agent-conf.json';
 import os from 'os';
 import {notify} from '../core/server-api';
+import buildService from '../services/buildService';
+import gitService from '../services/gitService';
 
 
 async function init() {
@@ -12,6 +14,8 @@ async function init() {
     } catch(e) {
         console.error('Build server is not available. Agent was not registered');
     }
+
+    await gitService.init();
 }
 
 export default init;
