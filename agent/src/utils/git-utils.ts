@@ -24,8 +24,8 @@ export default class GitUtils {
         return new Promise((resolve, reject) => {
             const git = this.spawn('git', ['clone', url, internalPath]);
 
-            git.stderr.on('data', (err: string) => {                
-                console.log('git clone', err);
+            git.stderr.on('data', (err: Buffer) => {                
+                console.log('git clone', err.toString('UTF-8'));
             });
 
             git.on('close', (code: number) => {
@@ -68,8 +68,8 @@ export default class GitUtils {
             const gitDir = path.join(process.cwd(), repoInternalPath);
             const git = this.spawn('git', ['checkout', point], { cwd: gitDir });
 
-            git.stderr.on('data', (err: string) => {
-                console.log(err);
+            git.stderr.on('data', (err: Buffer) => {
+                console.log(err.toString('UTF-8'));
             });
 
             git.on('close', (code: number) => {

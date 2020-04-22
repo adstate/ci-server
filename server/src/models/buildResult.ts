@@ -1,5 +1,5 @@
 export default interface BuildResult {
     buildId: string;
-    status: string;
-    log: string;   
+    buildStatus: string;
+    buildLog: string;   
 }

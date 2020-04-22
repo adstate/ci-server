@@ -9,8 +9,8 @@ const exists = util.promisify(fs.exists);
 const mkdir = util.promisify(fs.mkdir);
 const rimrafPromisify = util.promisify(rimraf);
 
-class GitService {
-    repoDir: string = './repo';
+export class GitService {
+    repoDir: string = './var/repo';
     gitUtils: GitUtils;
 
     constructor(gitUtils: GitUtils) {
@@ -18,15 +18,7 @@ class GitService {
     }
 
     async init() {
-        await rimrafPromisify(this.repoDir);
-
-        // if (!await exists(this.repoDir)) {
-        //     try {
-        //         mkdir(this.repoDir);
-        //     } catch(e) {
-        //         console.error('Error of creating repo folder', e);
-        //     }
-        // }
+        await this.clean();
     }
 
     clone(repoUrl: string): Promise<any> {
@@ -42,7 +34,7 @@ class GitService {
     }
 
     clean() {
-        return this.gitUtils.clean(this.repoDir);
+        return rimrafPromisify(this.repoDir);;
     }
 
 }

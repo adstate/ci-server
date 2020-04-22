@@ -2,13 +2,15 @@ import BuildListResponse from '../models/buildListResponse';
 import Build from '../models/build';
 import BuildData from '../models/buildData';
 import BuildStatus from '../models/buildStatus';
-import {getBuilds, buildStart} from '../core/ci-api';
+import BuildResult from '../models/buildResult';
+import {getBuilds, buildStart, buildFinish} from '../core/ci-api';
 import agentService from '../services/agentService';
 import settingService from '../services/settingService';
 import Agent from '../models/agent';
 
 class BuildService {
     builds: Build[] = [];
+    processBuilds: Build[] = [];
     lastLoadedBuildNum: number = 0;
 
     initLimit: number = 500;
@@ -38,10 +40,19 @@ class BuildService {
         if (waitingBuilds.length > 0) {
             this.builds = [...waitingBuilds, ...this.builds];
         }
+
+        const processBuilds = builds.filter((build: Build) => {
+            return build.status === BuildStatus.InProgress && build.buildNumber > this.lastLoadedBuildNum;
+        });
+
+        if (processBuilds.length > 0) {
+            this.processBuilds = [...processBuilds, ...this.processBuilds];
+        }
     }
 
     async processLoad() {
         console.log('process load');
+        //console.log('offset', this.processOffset, 'limit', this.processLimit);
         try {
             const buildListRes: BuildListResponse = await getBuilds({offset: this.processOffset, limit: this.processLimit});
             const builds: Build[] = buildListRes.data;
@@ -51,7 +62,7 @@ class BuildService {
 
             if (builds.length > 0) {
                 const curLastLoadedBuildNum: number = builds[0].buildNumber;
-                this.processLimit = (curLastLoadedBuildNum > this.lastLoadedBuildNum) ? this.processOffset + this.processLimit : 0;
+                this.processOffset = (curLastLoadedBuildNum > this.lastLoadedBuildNum) ? this.processOffset + this.processLimit : 0;
                 this.lastLoadedBuildNum = curLastLoadedBuildNum;
             }
     
@@ -78,20 +89,31 @@ class BuildService {
             return;
         }
 
+        let apiRes = null;
+        
+        try {
+            console.log('ci-api: set in progress', build.id)
+            apiRes = await buildStart(build.id);
+        } catch(e) {
+            console.log('Error of change status in CI Api');
+            this.addBuildToWaiting(build);
+        }
+
+        if (!apiRes) {
+            return;
+        }
+
+        this.addBuildToInProgress(build);
+
         let agentRes = null;
         try {
             agentRes = await agentService.startBuild(build, agent);
         } catch(e) {
             console.error('Error of start building');
-            this.builds.push(build);
+            this.addBuildToWaiting(build);
         }
 
-        let apiRes = null;
-        if (agentRes) {
-            apiRes = await buildStart(build.id);
-        }
-
-        console.log('build', build);
+        console.log('send build to start', build.id);
     }
 
     async initLoad() {
@@ -108,6 +130,7 @@ class BuildService {
 
             if (builds.length < this.initLimit) {
                 this.processInterval = setInterval(this.processLoad.bind(this), 30 * 1000);
+                this.lastLoadedBuildNum = builds[0].buildNumber;
             } else {
                 this.initOffset += builds.length;
                 this.initLoad();
@@ -115,6 +138,32 @@ class BuildService {
         } catch(e) {
             console.error('Builds is not loaded', e);
         }
+    }
+
+    async finishBuild(buildResult: BuildResult) {
+        console.log('build is done', buildResult.buildId, buildResult.buildStatus);
+
+        try {
+            await buildFinish({
+                buildId: buildResult.buildId,
+                duration: 10000,
+                success: (buildResult.buildStatus === BuildStatus.Success) ? true : false,
+                buildLog: buildResult.buildLog
+            });
+        } catch(e) {
+            console.log('error of send build finish');
+        }
+    }
+
+    addBuildToWaiting(build: Build) {
+        build.status = BuildStatus.Waiting;
+        this.builds.push(build);
+    }
+
+    addBuildToInProgress(build: Build) {
+        build.status = BuildStatus.InProgress;
+        build.start = new Date().toISOString();
+        this.processBuilds.push(build);
     }
 }
 

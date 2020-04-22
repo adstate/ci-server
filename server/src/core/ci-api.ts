@@ -1,6 +1,7 @@
 import axios, { AxiosAdapter, AxiosInstance } from 'axios';
 import { Agent } from 'https';
 import Settings from '../models/settings';
+import buildFinishInput from '../models/buildFinishInput';
 import SettingReponse from '../models/settingResponse';
 import BuildListResponse from '../models/buildListResponse';
 
@@ -47,7 +48,7 @@ async function buildStart(buildId: string) {
     })
 }
 
-async function buildFinish(data: any) {
+async function buildFinish(data: buildFinishInput) {
     return instance.post('build/finish', data);
 }
 

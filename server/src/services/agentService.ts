@@ -15,6 +15,10 @@ class AgentService {
     }
 
     register(host: string, port: number) {
+        if (this.getAgent(host, port)) {
+            return;
+        }
+
         const agent: Agent = {
             host,
             port,
@@ -23,6 +27,7 @@ class AgentService {
         }
 
         this.agents.push(agent);
+        console.log('register agent', host, port);
     }
 
     getFreeAgent() {
@@ -50,8 +55,10 @@ class AgentService {
             buildCommand: settingService.buildCommand
         }
 
-        await startBuildOnAgent(buildData, agent);
+        const result = await startBuildOnAgent(buildData, agent);
         this.setAgentToBusy(agent, build.id);
+
+        return result.data;
     }
 
     setAgentToBusy(agent: Agent, buildId: string) {

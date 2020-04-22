@@ -44,7 +44,7 @@ async function addBuild(req, res) {
     try {
         apiResponse = await ciApi.addBuild(commitData);
     } catch (e) {
-        throw new ServerError(apiResponse.status || 500);
+        throw new ServerError(500, 'error of add build');
     }
 
     return res.json({

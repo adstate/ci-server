@@ -1,6 +1,6 @@
 import axios, { AxiosAdapter, AxiosInstance } from 'axios';
 import * as config from '../agent-conf.json';
-import BuildResult from '../models/buildResult';
+import BuildResult from '../../../server/src/models/buildResult';
 
 
 async function notify(host: string, port: number) {
@@ -19,7 +19,7 @@ async function notifyBuildResult(buildResult: BuildResult): Promise<any> {
     const serverHost = config.serverHost;
     const serverPort = config.serverPort;
 
-    console.log('buildResult', buildResult);
+    console.log(`http://${serverHost}:${serverPort}/notify-build-result`);
 
     return axios.post(`http://${serverHost}:${serverPort}/notify-build-result`, buildResult);
 }
