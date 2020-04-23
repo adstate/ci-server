@@ -39,7 +39,9 @@ class BuildService {
     addBuilds(builds: Build[]) {
         const waitingBuilds = builds.filter((build: Build) => {
            return (build.status === BuildStatus.Waiting || build.status === BuildStatus.InProgress) 
-                  && build.buildNumber > this.lastLoadedBuildNum;
+                  && build.buildNumber > this.lastLoadedBuildNum
+                  && !this.processBuilds[build.id]
+                  && !this.builds.some((b: Build) => b.id === build.id)
         });
         //waitingBuilds.sort((a: Build, b: Build) => a.buildNumber - b.buildNumber);
         if (waitingBuilds.length > 0) {
@@ -73,6 +75,9 @@ class BuildService {
     }
 
     async processBuild() {
+        // console.log(this.builds);
+        // console.log(this.processBuilds);
+
         if (this.builds.length === 0 || !settingService.repoName) {
             return;
         }
@@ -88,33 +93,26 @@ class BuildService {
         if (!build) {
             return;
         }
-
-        let apiRes: AxiosResponse | null = null;
         
-        if (build.status === BuildStatus.Waiting) {
-            try {
-                console.log('ci-api: set in progress', build.id)
-                apiRes = await buildStart(build.id);
-            } catch(e) {
-                console.log('Error of change status in CI Api');
-                this.addBuildToWaiting(build);
-            }
-
-            if (apiRes?.status !== 200) {
-                console.log('API RES !== 200', apiRes);
-                return;
-            }
-        }
-
         try {
+            if (build.status === BuildStatus.Waiting) {
+                await buildStart(build.id);
+                console.log('ci-api: set in progress', build.id);
+            } else {
+                if (agentService.checkBuildRunning(build.id)) {
+                    console.log('Build is already running on some agent');
+                    this.addBuildToInProgress(build);
+                    return;
+                }
+            }
+
             await agentService.startBuild(build, agent);
             this.addBuildToInProgress(build);
+            console.log('send build to start', build.id);
         } catch(e) {
-            console.error('Error of start building');
+            console.log('Error of start building');
             this.addBuildToWaiting(build);
         }
-
-        console.log('send build to start', build.id);
     }
 
     async initLoad() {
@@ -145,7 +143,7 @@ class BuildService {
         console.log('build is done', buildResult.buildId, buildResult.buildStatus);
 
         const waitBuildIndex = this.builds.findIndex((b: Build) => b.id === buildResult.buildId);
-        if (waitBuildIndex) {
+        if (waitBuildIndex  > -1) {
             this.builds.splice(waitBuildIndex, 1);
         }
 
@@ -160,12 +158,20 @@ class BuildService {
             buildLog: buildResult.buildLog
         }
 
+        this.sendBuildFinish(buildFinishData);
+    }
+
+    async sendBuildFinish(data: buildFinishInput) {
         try {
-            await buildFinish(buildFinishData);
+            await buildFinish(data);
         } catch(e) {
-            console.log('error of send build finish');
-            setTimeout(function () {
-                buildFinish(buildFinishData)
+            console.log('error of send build finish', data.buildId);
+            setTimeout(async () => {
+                try {
+                    await buildFinish(data);
+                } catch(e) {
+                    console.log('result of build was lost', data.buildId);
+                }
             }, 30 * 1000);
         }
     }
@@ -177,6 +183,7 @@ class BuildService {
     addBuildToInProgress(build: Build) {
         build.status = BuildStatus.InProgress;
         build.start = new Date().toISOString();
+
         this.processBuilds[build.id] = build;
     }
 

@@ -33,7 +33,7 @@ export class GitService {
         return this.gitUtils.checkout(commitHash, this.repoDir);
     }
 
-    clean() {
+    clean(): Promise<any> {
         return rimrafPromisify(this.repoDir);;
     }
 

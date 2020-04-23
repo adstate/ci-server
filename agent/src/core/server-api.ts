@@ -17,8 +17,6 @@ async function notifyBuildResult(buildResult: BuildResult): Promise<any> {
     const serverHost = config.serverHost;
     const serverPort = config.serverPort;
 
-    console.log(`http://${serverHost}:${serverPort}/notify-build-result`);
-
     return axios.post(`http://${serverHost}:${serverPort}/notify-build-result`, buildResult);
 }
 

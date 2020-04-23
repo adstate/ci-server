@@ -4,7 +4,7 @@ import Agent from '../models/agent';
 import buildService from '../services/buildService';
 
 async function notifyAgent(req: Request, res: Response): Promise<Response> {
-    console.log('notify agent');
+    //console.log('notify agent');
 
     const {
         host: agentHost,

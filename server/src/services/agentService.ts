@@ -5,13 +5,12 @@ import BuildData from '../models/buildData';
 import {startBuild as startBuildOnAgent} from '../core/agent-api';
 import settingService from '../services/settingService';
 import buildService from '../services/buildService';
+import { buildFinish } from '../core/ci-api';
 
 class AgentService {
     agents: Agent[] = [];
     checkAgentsInterval: any = null;
     agentAliveTimeout: number = 1 * 60 * 1000;
-
-    //status: waiting, busy
 
     constructor() {
         this.checkAgentsInterval = setInterval(this.checkAgents.bind(this), 30 * 1000);   
@@ -66,6 +65,12 @@ class AgentService {
         }
 
         const result = await startBuildOnAgent(buildData, agent);
+        console.log('result.data', result.data);
+
+        if (result.data.status === AgentStatus.Busy) {
+            return Promise.reject();
+        }
+
         this.setAgentToBusy(agent, build.id);
 
         return result.data;
@@ -96,6 +101,10 @@ class AgentService {
                 console.log(`agent ${a.host}:${a.port} was forbidden by timeout`);
             }
         });
+    }
+
+    checkBuildRunning(buildId: string) {
+         return this.agents.some((a: Agent) => a.processingBuildId === buildId);
     }
 }
 

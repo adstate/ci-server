@@ -69,17 +69,17 @@ export default class GitUtils {
             const git = this.spawn('git', ['checkout', point], { cwd: gitDir });
 
             git.stderr.on('data', (err: Buffer) => {
-                console.log(err.toString('UTF-8'));
+               // console.log(err.toString('UTF-8'));
             });
 
             git.on('close', (code: number) => {
                 if (code === this.codes.SUCCESS) {
                     resolve({message: 'success'});
                 } else {
-                    reject({ message: 'Branch does not exists' });
+                    reject({message: 'Branch/commit does not exists' });
                 }
 
-                console.log('git checkout close', code);
+                //console.log('git checkout close', code);
             });
         });
     }

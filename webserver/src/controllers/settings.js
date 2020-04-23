@@ -23,13 +23,13 @@ async function saveSettings(req, res) {
 
     const isNewRepo = buildConfig.repoName !== repoName;
 
-    if (isNewRepo) {
-        try {
-            apiResponse = await ciApi.deleteSettings();
-        } catch (e) {
-            throw new ServerError(500, e);
-        }
-    }
+    // if (isNewRepo) {
+    //     try {
+    //         apiResponse = await ciApi.deleteSettings();
+    //     } catch (e) {
+    //         throw new ServerError(500, e);
+    //     }
+    // }
 
     try {
         const currentBranch = buildConfig.mainBranch;

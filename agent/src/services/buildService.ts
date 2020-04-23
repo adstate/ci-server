@@ -4,7 +4,7 @@ import {notifyBuildResult} from '../core/server-api';
 import BuildData from '../../../server/src/models/buildData';
 import BuildStatus from '../../../server/src/models/buildStatus';
 import BuildResult from '../../../server/src/models/buildResult';
-import gitService, {GitService} from './gitService';
+import gitService, {GitService} from '../services/gitService';
 
 var escapeJSON = require('escape-json-node');
 
@@ -57,24 +57,34 @@ class BuildService {
         this.buildLog = '';
         this.buildStatus = BuildStatus.InProgress;
 
-        await this.gitService.clone(this.repoUrl);
-        await this.gitService.checkout(this.commitHash);
-        await this.runBuildCommand(this.buildCommand);
+        let repoCloned = false;
+        try {
+            await this.gitService.clone(this.repoUrl);
+            await this.gitService.checkout(this.commitHash);
+            repoCloned = true;
+        } catch(e) {
+            this.sendBuildResult({
+                buildId: this.processingBuildId,
+                buildStatus: BuildStatus.Fail,
+                buildLog: this.buildLog,
+                duration: 0
+            });
+            this.clearState();
+        }
+        if (repoCloned) {
+            await this.runBuildCommand(this.buildCommand);
+        }        
     }
 
     async runBuildCommand(command: string) {
         const commandList: Command[] = this.parseBuildCommand(command);
 
-        //console.log('commandList', commandList);
-
         try {
             for (let i = 0; i < commandList.length; i++) {
                 this.buildLog += await this.runCommand(commandList[i]);
             }
-            console.log('BUILD SUCCESS');
             this.buildStatus = BuildStatus.Success;
         } catch(e) {
-            console.log('BUILD FAIL');
             this.buildStatus = BuildStatus.Fail;
             this.buildLog += e;
         }
@@ -145,7 +155,7 @@ class BuildService {
 
     async sendBuildResult(buildResult: BuildResult) {
         try {
-            console.log('send result', buildResult.buildId);
+            console.log('send result', buildResult.buildId, buildResult.buildStatus);
             await notifyBuildResult(buildResult);
             this.clearState();
         } catch(e) {
@@ -170,7 +180,9 @@ class BuildService {
         }
     }
 
-    clearState() {
+    async clearState() {
+        await this.gitService.clean();
+
         this.processingBuildId = '';
         this.repoUrl = '';
         this.buildCommand = '';
@@ -180,7 +192,6 @@ class BuildService {
         this.buildStartTime = null;
 
         this.notifyRetries = 0;
-        this.gitService.clean();
     }
 
 }
