@@ -3,4 +3,5 @@ export default interface Agent {
     port: number;
     status: string;
     processingBuildId: string | null;
+    lastNotify: Date;
 }

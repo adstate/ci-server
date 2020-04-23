@@ -20,17 +20,19 @@ class BuildService {
     commitHash: string = '';
     buildStatus: BuildStatus | null = null;
     buildLog: string = '';
+    buildStartTime: Date | null = null;
+
     repoDir: string = './var/repo';
 
     spawn: any;
     gitService: GitService;
 
-    supportCommands: string[] = ['npm', 'mvn', 'npx', 'jest', 'mocha', 'hermione'];
+    supportCommands: string[] = ['npm', 'mvn', 'npx', 'jest', 'mocha', 'hermione', 'yarn'];
 
     addCommandOptions: {
         [key: string]: string[]
     } = {
-        npm: ['-d', '--color', 'always']
+        npm: ['--color', 'always']
     }
 
     notifyResultInterval: any = null;
@@ -44,7 +46,8 @@ class BuildService {
     }
 
     async runBuild(buildData: BuildData) {
-        console.log('runnig build', buildData.commitHash);
+        console.log('runnig build', buildData.buildId, buildData.commitHash);
+        this.buildStartTime = new Date();
         this.buildStatus = BuildStatus.InProgress;
 
         this.processingBuildId = buildData.buildId;
@@ -62,7 +65,7 @@ class BuildService {
     async runBuildCommand(command: string) {
         const commandList: Command[] = this.parseBuildCommand(command);
 
-        console.log('commandList', commandList);
+        //console.log('commandList', commandList);
 
         try {
             for (let i = 0; i < commandList.length; i++) {
@@ -75,11 +78,14 @@ class BuildService {
             this.buildStatus = BuildStatus.Fail;
             this.buildLog += e;
         }
+        const buildEndTime = new Date();
+        const buildStartTime = this.buildStartTime || new Date();
 
         const buildResult = {
             buildId: this.processingBuildId,
             buildStatus: this.buildStatus,
-            buildLog: this.buildLog
+            buildLog: this.buildLog,
+            duration: buildEndTime.getTime() - buildStartTime.getTime()
         }
 
         this.sendBuildResult(buildResult);
@@ -109,34 +115,24 @@ class BuildService {
         console.log(normalizeCommand, normalizeArgs);
 
         return new Promise((resolve, reject) => {
-            let result: string = '';
+            let result: string = `\n> ${command.cmd} ${command.args.join(' ')}\n`;
 
             const workDir = path.join(process.cwd(), this.repoDir);    
-            console.log('workDir', workDir);
+            //console.log('workDir', workDir);
             const cmd = this.spawn(normalizeCommand, normalizeArgs, {cwd: workDir});
 
             cmd.stderr.on('data', (err: Buffer) => {
                 //console.error(err.toString('UTF-8'));
-                result += err.toString('UTF-8').trim();
+                result += err.toString('UTF-8');
             });
 
             cmd.stdout.on('data', (data: Buffer) => {
                 //console.error(data.toString('UTF-8'));
-                result += data.toString('UTF-8').trim();
+                result += data.toString('UTF-8');
             });
 
             cmd.on('close', (code: number) => {
-                //console.log('result', result);
                 result = escapeJSON(result);
-                //result = result.replace(/[\n\r]/g, '');
-                // result = result.replace(/\\n/g, "\\n")
-                //                       .replace(/\\'/g, "\\'")
-                //                       .replace(/\\"/g, '\\"')
-                //                       .replace(/\\&/g, "\\&")
-                //                       .replace(/\\r/g, "\\r")
-                //                       .replace(/\\t/g, "\\t")
-                //                       .replace(/\\b/g, "\\b")
-                //                       .replace(/\\f/g, "\\f");
 
                 if (code === 0) {
                     resolve(result);
@@ -148,14 +144,14 @@ class BuildService {
     }
 
     async sendBuildResult(buildResult: BuildResult) {
-        console.log('send result');
         try {
+            console.log('send result', buildResult.buildId);
             await notifyBuildResult(buildResult);
             this.clearState();
         } catch(e) {
             this.notifyResultInterval = setInterval(async () => {
                 try {
-                    console.log('send result');
+                    console.log('send result', buildResult.buildId);
                     await notifyBuildResult(buildResult);
 
                     clearInterval(this.notifyResultInterval);
@@ -165,7 +161,7 @@ class BuildService {
                 }
 
                 if (this.notifyRetries >= this.notifyRetryCount) {
-                    console.log('fail sending');
+                    console.log('fail sending', buildResult.buildId);
                     clearInterval(this.notifyResultInterval);
                     this.clearState();
                 }
@@ -181,6 +177,7 @@ class BuildService {
         this.commitHash = '';
         this.buildStatus = null;
         this.buildLog = '';
+        this.buildStartTime = null;
 
         this.notifyRetries = 0;
         this.gitService.clean();

@@ -4,29 +4,39 @@ import Build from '../models/build';
 import BuildData from '../models/buildData';
 import {startBuild as startBuildOnAgent} from '../core/agent-api';
 import settingService from '../services/settingService';
+import buildService from '../services/buildService';
 
 class AgentService {
     agents: Agent[] = [];
+    checkAgentsInterval: any = null;
+    agentAliveTimeout: number = 1 * 60 * 1000;
 
     //status: waiting, busy
 
     constructor() {
-        
+        this.checkAgentsInterval = setInterval(this.checkAgents.bind(this), 30 * 1000);   
+    }
+
+    processNotify(host: string, port: number) {
+        const agent: Agent | undefined = this.getAgent(host, port);
+
+        if (agent) {
+            agent.lastNotify = new Date();
+        } else {
+            this.register(host, port);
+        }
     }
 
     register(host: string, port: number) {
-        if (this.getAgent(host, port)) {
-            return;
-        }
-
-        const agent: Agent = {
+        const newAgent: Agent = {
             host,
             port,
             status: AgentStatus.Waiting,
-            processingBuildId: null
+            processingBuildId: null,
+            lastNotify: new Date()
         }
 
-        this.agents.push(agent);
+        this.agents.push(newAgent);
         console.log('register agent', host, port);
     }
 
@@ -69,6 +79,23 @@ class AgentService {
     setAgentToWaiting(agent: Agent) {
         agent.status = AgentStatus.Waiting;
         agent.processingBuildId = null;
+    }
+
+    checkAgents() {
+        const forbiddenAgents = this.agents.filter((a: Agent) => {
+            return new Date().getTime() - a.lastNotify.getTime() > this.agentAliveTimeout;
+        });
+
+        forbiddenAgents.forEach((a: Agent) => {
+            const index: number = this.agents.indexOf(a);
+            if (index > -1) {
+                this.agents.splice(index, 1);
+                if (a.processingBuildId) {
+                    buildService.returnBuildToWaiting(a.processingBuildId);
+                }
+                console.log(`agent ${a.host}:${a.port} was forbidden by timeout`);
+            }
+        });
     }
 }
 

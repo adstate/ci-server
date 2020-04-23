@@ -24,7 +24,7 @@ const app: express.Application = express();
 app.use(helmet());
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({limit: '15mb', extended: true }));
 
 app.use('/', notifyRouter);
 

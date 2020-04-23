@@ -1,6 +1,7 @@
 import Settings from '../models/settings';
 import SettingResponse from '../models/settingResponse';
 import { getSettings } from '../core/ci-api';
+import buildService from '../services/buildService';
 
 class SettingService implements Settings {
     id: string;
@@ -28,14 +29,16 @@ class SettingService implements Settings {
     }
 
     update(settings: Settings) {
+        if (this.id !== settings.id) {
+            buildService.resetProcessOffset();
+        }
+
         this.id = settings.id;
         this.repoName = settings.repoName;
         this.buildCommand = settings.buildCommand;
         this.mainBranch = settings.mainBranch;
         this.period = settings.period;
         this.repoUrl = `${this.repoBaseUrl}/${this.repoName}`;
-
-        //console.log(settings);
     }
 
     async load() {

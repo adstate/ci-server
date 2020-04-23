@@ -11,7 +11,7 @@ async function notifyAgent(req: Request, res: Response): Promise<Response> {
         port: agentPort
     } = req.body;
 
-    agentService.register(agentHost, agentPort);
+    agentService.processNotify(agentHost, agentPort);
 
     return res.json({
         status: 'success'
@@ -19,17 +19,14 @@ async function notifyAgent(req: Request, res: Response): Promise<Response> {
 }
 
 async function notifyBuildResult(req: Request, res: Response): Promise<any> {
-    console.log('notify build result');
-
     const {
         buildId,
         buildStatus,
-        buildLog
+        buildLog,
+        duration
     } = req.body;
 
     const agent: Agent | undefined = agentService.getAgentByBuild(buildId);
-
-    console.log(agent);
 
     if (agent) {
         agentService.setAgentToWaiting(agent);
@@ -38,7 +35,8 @@ async function notifyBuildResult(req: Request, res: Response): Promise<any> {
     buildService.finishBuild({
         buildId,
         buildStatus,
-        buildLog
+        buildLog,
+        duration
     });
 
     return res.json({
