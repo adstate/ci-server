@@ -8,13 +8,7 @@ import * as config from './agent-conf.json';
 require('express-async-errors');
 dotenv.config();
 
-import {loadConfig} from './utils/conf';
 import buildRouter from './routes/build';
-
-
-//loadConfig(); 
-
-//services
 
 //utils
 import init from './utils/init';

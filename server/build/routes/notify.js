@@ -11,4 +11,5 @@ const controller = __importStar(require("../controllers/notify"));
 const express_1 = require("express");
 const notifyRouter = express_1.Router();
 notifyRouter.post('/notify-agent', controller.notifyAgent);
+notifyRouter.post('/notify-build-result', controller.notifyBuildResult);
 exports.default = notifyRouter;

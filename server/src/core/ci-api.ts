@@ -1,9 +1,9 @@
-import axios, { AxiosAdapter, AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { Agent } from 'https';
-import Settings from '../models/settings';
 import buildFinishInput from '../models/buildFinishInput';
 import SettingReponse from '../models/settingResponse';
 import BuildListResponse from '../models/buildListResponse';
+import * as config from '../server-conf.json';
 
 
 const httpsAgent: Agent = new Agent({
@@ -11,9 +11,9 @@ const httpsAgent: Agent = new Agent({
 });
 
 const instance: AxiosInstance = axios.create({
-    baseURL: 'https://hw.shri.yandex/api',
+    baseURL: config.apiBaseUrl,
     timeout: 10000,
-    headers: { Authorization: `Bearer ${process.env.JWT_TOKEN}` },
+    headers: { Authorization: `Bearer ${config.apiToken || process.env.JWT_TOKEN}` },
     httpsAgent,
 });
 
@@ -44,7 +44,7 @@ async function getBuildLog(buildId: string) {
 async function buildStart(buildId: string) {
     return instance.post('build/start', {
         buildId,
-        dateTime: new Date().toISOString
+        dateTime: new Date().toISOString()
     })
 }
 

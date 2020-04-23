@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-function startBuild(agent, build) {
+function startBuild(buildData, agent) {
     return __awaiter(this, void 0, void 0, function* () {
-        return axios_1.default.post(`http://${agent.host}:${agent.port}/build`, build);
+        return axios_1.default.post(`http://${agent.host}:${agent.port}/build`, buildData);
     });
 }
 exports.startBuild = startBuild;

@@ -8,15 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const ci_api_1 = require("../core/ci-api");
+const buildService_1 = __importDefault(require("../services/buildService"));
 class SettingService {
     constructor() {
+        this.repoBaseUrl = 'https://github.com';
         this.id = '';
         this.repoName = '';
         this.buildCommand = '';
         this.mainBranch = '';
         this.period = 0;
+        this.repoUrl = '';
     }
     init() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -25,12 +31,15 @@ class SettingService {
         });
     }
     update(settings) {
+        if (this.id !== settings.id) {
+            buildService_1.default.resetProcessOffset();
+        }
         this.id = settings.id;
         this.repoName = settings.repoName;
         this.buildCommand = settings.buildCommand;
         this.mainBranch = settings.mainBranch;
         this.period = settings.period;
-        //console.log(settings);
+        this.repoUrl = `${this.repoBaseUrl}/${this.repoName}`;
     }
     load() {
         return __awaiter(this, void 0, void 0, function* () {

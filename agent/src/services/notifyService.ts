@@ -1,8 +1,6 @@
 import * as config from '../agent-conf.json';
 import os from 'os';
 import {notify} from '../core/server-api';
-import AgentStatus from '../../../server/src/models/agentStatus';
-import buildService from '../services/buildService';
 
 export class NotifyService {
     agentHost: string = '';

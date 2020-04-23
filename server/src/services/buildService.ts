@@ -8,7 +8,6 @@ import {getBuilds, buildStart, buildFinish} from '../core/ci-api';
 import agentService from '../services/agentService';
 import settingService from '../services/settingService';
 import Agent from '../models/agent';
-import { AxiosResponse } from 'axios';
 
 class BuildService {
     builds: Build[] = [];
@@ -25,6 +24,9 @@ class BuildService {
     processInterval: any;
     buildInterval: any;
 
+    buildIntervalTime: number = 60 * 1000;
+    retryTimeout: number = 30 * 1000;
+
     constructor() {
         
     }
@@ -33,7 +35,7 @@ class BuildService {
         // load all builds on init service
         await this.initLoad();
         
-        this.buildInterval = setInterval(this.processBuild.bind(this), 30 * 1000);
+        this.buildInterval = setInterval(this.processBuild.bind(this), this.buildIntervalTime);
     }
 
     addBuilds(builds: Build[]) {
@@ -43,14 +45,13 @@ class BuildService {
                   && !this.processBuilds[build.id]
                   && !this.builds.some((b: Build) => b.id === build.id)
         });
-        //waitingBuilds.sort((a: Build, b: Build) => a.buildNumber - b.buildNumber);
+        
         if (waitingBuilds.length > 0) {
             this.builds = [...waitingBuilds, ...this.builds];
         }
     }
 
     async processLoad() {
-        console.log('process load');
         try {
             const buildListRes: BuildListResponse = await getBuilds({
                 offset: this.processOffset,
@@ -58,7 +59,6 @@ class BuildService {
             });
             
             const builds: Build[] = buildListRes.data;
-            //console.log(builds);
 
             this.addBuilds(builds);
 
@@ -67,17 +67,12 @@ class BuildService {
                 this.processOffset = (curLastLoadedBuildNum > this.lastLoadedBuildNum) ? this.processOffset + this.processLimit : 0;
                 this.lastLoadedBuildNum = curLastLoadedBuildNum;
             }
-    
-            //console.log(this.lastLoadedBuildNum);
         } catch(e) {
             console.error('Builds is not loaded');
         }
     }
 
     async processBuild() {
-        // console.log(this.builds);
-        // console.log(this.processBuilds);
-
         if (this.builds.length === 0 || !settingService.repoName) {
             return;
         }
@@ -127,7 +122,7 @@ class BuildService {
             this.addBuilds(builds);
 
             if (builds.length < this.initLimit) {
-                this.processInterval = setInterval(this.processLoad.bind(this), 30 * 1000);
+                this.processInterval = setInterval(this.processLoad.bind(this), this.buildIntervalTime);
                 this.lastLoadedBuildNum = builds[0].buildNumber;
             } else {
                 this.initOffset += builds.length;
@@ -135,7 +130,7 @@ class BuildService {
             }
         } catch(e) {
             console.error('Builds is not loaded');
-            setTimeout(this.initLoad.bind(this), 30 * 100);
+            setTimeout(this.initLoad.bind(this), this.retryTimeout);
         }
     }
 
@@ -172,7 +167,7 @@ class BuildService {
                 } catch(e) {
                     console.log('result of build was lost', data.buildId);
                 }
-            }, 30 * 1000);
+            }, this.retryTimeout);
         }
     }
 

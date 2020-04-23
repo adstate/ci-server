@@ -4,7 +4,7 @@
   "description": "ci build agent",
   "main": "agent.js",
   "scripts": {
-    "dev": "nodemon",
+    "start": "nodemon",
     "prod": "tsc && node ./build/agent.js",
     "build": "tsc",
     "lint": "eslint src --ext ts",

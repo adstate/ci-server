@@ -5,15 +5,15 @@ import BuildData from '../models/buildData';
 import {startBuild as startBuildOnAgent} from '../core/agent-api';
 import settingService from '../services/settingService';
 import buildService from '../services/buildService';
-import { buildFinish } from '../core/ci-api';
 
 class AgentService {
     agents: Agent[] = [];
     checkAgentsInterval: any = null;
-    agentAliveTimeout: number = 1 * 60 * 1000;
+    checkAgentsIntervalTime: number = 60 * 1000;
+    agentAliveTimeout: number = 2 * 60 * 1000;
 
     constructor() {
-        this.checkAgentsInterval = setInterval(this.checkAgents.bind(this), 30 * 1000);   
+        this.checkAgentsInterval = setInterval(this.checkAgents.bind(this), this.checkAgentsIntervalTime);   
     }
 
     processNotify(host: string, port: number) {
@@ -65,9 +65,10 @@ class AgentService {
         }
 
         const result = await startBuildOnAgent(buildData, agent);
-        console.log('result.data', result.data);
 
         if (result.data.status === AgentStatus.Busy) {
+            console.log('selected agent is busy');
+            this.setAgentToBusy(agent, '');
             return Promise.reject();
         }
 
