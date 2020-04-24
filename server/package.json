@@ -4,7 +4,8 @@
   "description": "ci build server",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon",
+    "start": "ts-node ./src/server.ts",
+    "dev": "nodemon",
     "prod": "tsc && node ./build/server.js",
     "build": "tsc",
     "lint": "eslint src --ext ts",
