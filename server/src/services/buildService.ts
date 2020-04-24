@@ -52,6 +52,7 @@ class BuildService {
     }
 
     async processLoad() {
+        console.log('process load');
         try {
             const buildListRes: BuildListResponse = await getBuilds({
                 offset: this.processOffset,
@@ -107,6 +108,10 @@ class BuildService {
         } catch(e) {
             console.log('Error of start building');
             this.addBuildToWaiting(build);
+        }
+
+        if (agentService.getFreeAgent() && this.builds.length > 0) {
+            setTimeout(this.processBuild.bind(this), 10 * 1000);
         }
     }
 

@@ -111,5 +111,7 @@ build
 
 repo
 
+images
+
 # hermione
 __tests__/hermione/hermione-html-report

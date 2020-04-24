@@ -1,6 +1,6 @@
 import axios, { AxiosAdapter, AxiosInstance } from 'axios';
 import * as config from '../agent-conf.json';
-import BuildResult from '../../../server/src/models/buildResult';
+import BuildResult from '../models/buildResult';
 
 
 async function notify(host: string, port: number) {

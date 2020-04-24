@@ -1,9 +1,9 @@
 import {spawn} from 'child_process';
 import path from 'path';
 import {notifyBuildResult} from '../core/server-api';
-import BuildData from '../../../server/src/models/buildData';
-import BuildStatus from '../../../server/src/models/buildStatus';
-import BuildResult from '../../../server/src/models/buildResult';
+import BuildData from '../models/buildData';
+import BuildStatus from '../models/buildStatus';
+import BuildResult from '../models/buildResult';
 import gitService, {GitService} from '../services/gitService';
 
 var escapeJSON = require('escape-json-node');

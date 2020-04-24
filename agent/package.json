@@ -4,9 +4,11 @@
   "description": "ci build agent",
   "main": "agent.js",
   "scripts": {
-    "start": "nodemon",
+    "start": "ts-node ./src/agent.ts",
+    "dev": "nodemon",
     "prod": "tsc && node ./build/agent.js",
     "build": "tsc",
+    "build-docker-image": "docker build -t agent-server .",
     "lint": "eslint src --ext ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

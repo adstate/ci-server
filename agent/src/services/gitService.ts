@@ -1,12 +1,7 @@
-import path from 'path';
-import fs from 'fs';
 import util from 'util';
 import rimraf from 'rimraf';
 import GitUtils from '../utils/git-utils';
-import buildService from '../services/buildService';
 
-const exists = util.promisify(fs.exists);
-const mkdir = util.promisify(fs.mkdir);
 const rimrafPromisify = util.promisify(rimraf);
 
 export class GitService {
