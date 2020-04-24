@@ -10,7 +10,7 @@ class AgentService {
     agents: Agent[] = [];
     checkAgentsInterval: any = null;
     checkAgentsIntervalTime: number = 60 * 1000;
-    agentAliveTimeout: number = 2 * 60 * 1000;
+    agentAliveTimeout: number = 90 * 1000;
 
     constructor() {
         this.checkAgentsInterval = setInterval(this.checkAgents.bind(this), this.checkAgentsIntervalTime);   
