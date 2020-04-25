@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {connect, useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import { Header, Layout, Button, Icon, BuildList, NewBuild } from 'components';
 import {addBuild} from 'actions/builds';
 
@@ -7,6 +7,7 @@ import {addBuild} from 'actions/builds';
 const BuildHistory = () => {
     const settings = useSelector(state => state.settings);
     const addBuildPending = useSelector(state => state.builds.add_build_pending);
+    const addBuildError = useSelector(state => state.builds.add_build_error);
 
     const dispatch = useDispatch();
     const runBuild = (hash) => dispatch(addBuild(hash));
@@ -14,7 +15,7 @@ const BuildHistory = () => {
     const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
-        if (addBuildPending === false) {
+        if (addBuildPending == false && !addBuildError) {
             setOpenModal(false);
         }
     }, [addBuildPending]);
@@ -47,6 +48,5 @@ const BuildHistory = () => {
         </React.Fragment>
     );
 }
-
 
 export default BuildHistory;

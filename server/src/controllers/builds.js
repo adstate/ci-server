@@ -28,7 +28,7 @@ async function addBuild(req, res) {
     let apiResponse;
 
     if (buildConfig.repoStatus === repoStatus.Cloning) {
-        throw new RepoStatusError(200);
+        throw new RepoStatusError(500);
     }
 
     const {commitHash} = req.params;
@@ -78,43 +78,43 @@ async function getBuildLog(req, res) {
     const { buildId } = req.params;
     const cachedLog = await logCache.getValidItem(buildId);
 
-        if (cachedLog) {
-            cachedLog.on('data', (chunk) => {
-               res.statusCode = 200;
-               res.write(chunk);
+    if (cachedLog) {
+        cachedLog.on('data', (chunk) => {
+            res.statusCode = 200;
+            res.write(chunk);
+        });
+
+        cachedLog.on('close', () => {
+            res.statusCode = 200;
+            res.end();
+        });
+    } else {
+        logCacheWriteStream = logCache.addItem(buildId);
+
+        try {
+            apiResponse = await ciApi.getBuildLog(buildId);
+
+            apiResponse.data.on('data', (chunk) => {
+                if (logCacheWriteStream) {
+                    logCacheWriteStream.write(chunk);
+                }
+
+                res.statusCode = 200;
+                res.write(chunk);
             });
 
-            cachedLog.on('close', () => {
+            apiResponse.data.on('end', () => {
+                if (logCacheWriteStream) {
+                    logCacheWriteStream.end();
+                }
+
                 res.statusCode = 200;
                 res.end();
             });
-        } else {
-            logCacheWriteStream = logCache.addItem(buildId);
-
-            try {
-                apiResponse = await ciApi.getBuildLog(buildId);
-
-                apiResponse.data.on('data', (chunk) => {
-                    if (logCacheWriteStream) {
-                        logCacheWriteStream.write(chunk);
-                    }
-
-                    res.statusCode = 200;
-                    res.write(chunk);
-                });
-
-                apiResponse.data.on('end', () => {
-                    if (logCacheWriteStream) {
-                        logCacheWriteStream.end();
-                    }
-
-                    res.statusCode = 200;
-                    res.end();
-                });
-            } catch (e) {
-                throw new ServerError(500, e.message);
-            }
+        } catch (e) {
+            throw new ServerError(500, e.message);
         }
+    }
 }
 
 async function buildFinish(req, res) {
@@ -126,13 +126,6 @@ async function buildFinish(req, res) {
     } = req.body;
 
     let apiResponse;
-
-    console.log('DATA', {
-        buildId,
-        duration,
-        success,
-        buildLog
-    });
 
     try {
         apiResponse = ciApi.buildFinish({

@@ -14,6 +14,13 @@ async function saveSettings(req, res) {
         period,
     } = req.body;
 
+    if (buildConfig.repoStatus === repoStatus.Cloning) {
+        return res.json({
+            status: 'success',
+            repoStatus: buildConfig.repoStatus
+        });
+    }
+
     const isNewRepo = buildConfig.repoName !== repoName;
 
     if (isNewRepo) {
@@ -55,8 +62,6 @@ async function saveSettings(req, res) {
                     buildConfig.repoStatus = repoStatus.Cloned;
 
                     const lastCommit = await gitService.getLastCommit();
-
-                    console.log('lastCommit', lastCommit);
 
                     apiResponse = await ciApi.addBuild({
                         commitMessage: lastCommit.message,
@@ -101,20 +106,6 @@ async function saveSettings(req, res) {
 
 async function getSettings(req, res) {
     let apiResponse;
-
-    if (buildConfig.id && !buildConfig.actual) {
-        return res.json({
-            status: 'success',
-            data: {
-                id: buildConfig.id,
-                repoName: buildConfig.repoName,
-                buildCommand: buildConfig.buildCommand,
-                mainBranch: buildConfig.mainBranch,
-                period: buildConfig.period,
-                repoStatus: buildConfig.repoStatus,
-            },
-        });
-    }
 
     try {
         apiResponse = await ciApi.getSettings();

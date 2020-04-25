@@ -96,7 +96,7 @@ export const fetchBuilds = (params) => {
 
         api.getBuilds({offset, limit})
             .then(res => {
-                if(res.error) {
+                if (res.error) {
                     throw(res.error);
                 }
                 dispatch(fetchBuildsSuccess(res.data));

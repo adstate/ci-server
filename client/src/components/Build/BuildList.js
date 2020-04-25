@@ -53,7 +53,6 @@ const BuildList = () => {
                             Show more
                         </Button>
                     }
-
                 </div>    
             </div>
         </div>

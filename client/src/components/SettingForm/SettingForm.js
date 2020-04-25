@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
 import {Button, FormField, FormGroup, FormLabel, FormError, Loader, Error} from 'components';
 import {fetchSettings, postSettings} from 'actions/settings';
-
 import './SettingForm.scss';
 
 

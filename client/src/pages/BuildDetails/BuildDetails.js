@@ -1,17 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {useParams, useHistory} from 'react-router-dom';
-
 import {Button, Icon, Layout, Header, Build, BuildLog, Loader, Error} from 'components';
 import {
     addBuildPending,
     addBuildSuccess,
     addBuildError,
     getBuild,
-    getBuildLog,
-    clearBuildToView
+    getBuildLog
 } from 'actions/builds';
-
 import api from 'services/api';
 
 
@@ -23,10 +20,9 @@ const BuildDetails = () => {
         get_build_pending: pending,
         build_log_to_view: buildLog,
         error: fetchError,
-      } = useSelector(state => state.builds);
+    } = useSelector(state => state.builds);
 
     const settings = useSelector(state => state.settings);
-
     const history = useHistory();
     const dispatch = useDispatch();
 

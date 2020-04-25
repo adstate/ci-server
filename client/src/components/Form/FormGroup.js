@@ -4,7 +4,6 @@ import ClassNames from 'classnames';
 import './FormGroup.scss';
 
 const FormGroup = ({direction, className, required, space, children}) => {
-
     const formGroupClass = ClassNames(
         'form-group',
         'form-group_direction_' + direction,

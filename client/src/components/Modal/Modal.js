@@ -1,6 +1,5 @@
 import React from 'react';
 import ClassNames from 'classnames';
-import ReactDOM from 'react-dom';
 import './Modal.scss';
 
 

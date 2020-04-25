@@ -5,7 +5,6 @@ import './Icon.scss';
 
 
 const Icon = ({type, size, pseudo, className, onClick}) => {
-
     const iconClass = classNames(
         'icon',
         'icon_size_' + size,

@@ -2,12 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './IconText.scss';
-
 import Icon from '../Icon/Icon';
 
-
 const IconText = ({icon, className, children}) => {
-
     const iconTextClass = classNames(
         'icon-text',
         className

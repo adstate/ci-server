@@ -4,10 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './Button.scss';
 
-import Icon from '../Icon/Icon';
-
 const Button = ({type, size, variant, icon, children, className, disabled, to, onClick}) => {
-
     const history = useHistory();
 
     const buttonClass = classNames(

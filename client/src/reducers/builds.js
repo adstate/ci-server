@@ -72,7 +72,8 @@ const builds = (state = initialState, action) => {
         case ADD_BUILD_PENDING:
             return {
                 ...state,
-                add_build_pending: true
+                add_build_pending: true,
+                add_build_error: false
             }
 
         case ADD_BUILD_SUCCESS:
@@ -80,13 +81,15 @@ const builds = (state = initialState, action) => {
                 ...state,
                 items: [action.build, ...state.items],
                 offset: state.offset + 1,
-                add_build_pending: false
+                add_build_pending: false,
+                add_build_error: false
             }
 
         case ADD_BUILD_ERROR:
             return {
                 ...state,
-                add_build_pending: false
+                add_build_pending: false,
+                add_build_error: true
             }
 
         case BUILDS_UPDATE_OFFSET: 

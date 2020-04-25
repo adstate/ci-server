@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
-import MaskedInput from 'react-text-mask'
+import MaskedInput from 'react-text-mask';
 import PropTypes from 'prop-types';
 import Classnames from 'classnames';
 import './FormField.scss';
-
 import {Icon} from 'components';
 
 const FormField = ({type, name, mask, formRef, errors, size, cleared, align, placeholder, defaultValue}) => {
-
     const [value, setValue] = useState(defaultValue);
 
     const fieldClass = Classnames('form-field', {
