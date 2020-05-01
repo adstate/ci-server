@@ -104,10 +104,10 @@ dist
 .tern-port
 
 #var
-var
+/var
 
 #build
-build
+/build
 
 repo
 

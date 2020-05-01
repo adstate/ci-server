@@ -47,7 +47,10 @@ export const fetchSettings = () => {
                 if (res.error) {
                     throw(res.error);
                 }
-                dispatch(fetchSettingsSuccess(res.data));
+                dispatch(fetchSettingsSuccess({
+                    ...res.data,
+                    ...{repoStatus: res.repoStatus}
+                }));
             })
             .catch(error => {
                 dispatch(fetchSettingsError(error));
