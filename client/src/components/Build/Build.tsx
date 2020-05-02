@@ -4,10 +4,10 @@ import {format} from 'date-fns';
 import {ru} from 'date-fns/locale'
 import './Build.scss';
 import {Icon} from 'components';
-
+import {BuildModel} from '../../../../webserver/src/models';
 
 interface BuildProps {
-    data: any; //TODO
+    data: BuildModel;
     detailed?: boolean;
     onClick?: (data: any) => void;
 }

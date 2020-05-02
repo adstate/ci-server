@@ -3,27 +3,21 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useParams, useHistory} from 'react-router-dom';
 import {History} from 'history';
 import {Button, Icon, Layout, Header, Build, BuildLog, Loader, Error} from 'components';
-import {
-    addBuildPending,
-    addBuildSuccess,
-    addBuildError,
-    getBuild,
-    getBuildLog
-} from 'actions/builds';
-import api from 'services/api';
+import {getBuild, getBuildLog, rebuild} from 'actions/builds';
+import {RootState} from 'reducers';
 
 
 const BuildDetails: React.FC = () => {
     const { id } = useParams();
 
-    const build = useSelector((state: any) => state.builds.items.find((build: any) => build.id === id)); // TODO
+    const build = useSelector((state: RootState) => state.builds.items.find((build) => build.id === id));
     const {
         get_build_pending: pending,
         build_log_to_view: buildLog,
         error: fetchError,
-    } = useSelector((state: any) => state.builds); // TODO
+    } = useSelector((state: RootState) => state.builds);
 
-    const settings = useSelector((state: any) => state.settings); // TODO
+    const settings = useSelector((state: RootState) => state.settings);
     const history: History = useHistory();
     const dispatch = useDispatch();
 
@@ -35,19 +29,9 @@ const BuildDetails: React.FC = () => {
     }, [id, dispatch]);
 
     const rebuildHandler = () => {
-        dispatch(addBuildPending());
-
-        api.addBuild(build.commitHash)
-            .then(res => {
-                if (res.error) {
-                    throw(res.error);
-                }
-                dispatch(addBuildSuccess(res.data));
-                history.push(`/build/${res.data.id}`);
-            })
-            .catch(error => {
-                dispatch(addBuildError());
-            })
+        if (build) {
+            dispatch(rebuild(build, history));
+        }
     }
 
     if (pending !== false && !build) {
@@ -88,7 +72,7 @@ const BuildDetails: React.FC = () => {
             <Layout container>
                 <div className="section">
                     <div className="layout__container">
-                        <Build detailed data={build}></Build>
+                        {build && <Build detailed data={build}></Build>}
                         <BuildLog>{buildLog || ''}</BuildLog>
                     </div>
                 </div>

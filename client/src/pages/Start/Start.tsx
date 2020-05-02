@@ -2,10 +2,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Layout, Header, Loader, Error } from 'components';
 import { BuildHistory, Configuration } from 'pages';
+import {RootState} from 'reducers';
 
 
 const Start: React.FC = () => {
-    const settings = useSelector((state: any) => state.settings); // TODO
+    const settings = useSelector((state: RootState) => state.settings);
 
     if (settings.pending !== false) {
         return (

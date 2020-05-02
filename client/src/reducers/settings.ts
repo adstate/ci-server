@@ -4,12 +4,34 @@ import {
     SAVE_SETTINGS_ERROR,
     FETCH_SETTINGS_PENDING,
     FETCH_SETTINGS_SUCCESS,
-    FETCH_SETTINGS_ERROR
-} from 'actions/actionTypes'
+    FETCH_SETTINGS_ERROR,
+    SettingsActionTypes
+} from 'actions/actionTypes';
+import RepoStatus from 'models/repoStatus';
 
-const initialState = {};
+export interface SettingsState {
+    id: string;
+    repoName: string;
+    mainBranch: string;
+    buildCommand: string;
+    period: number;
+    pending?: boolean;
+    error?: Error;
+    save_pending?: boolean;
+    save_error?: Error;
+    repoStatus: RepoStatus
+}
+
+const initialState: SettingsState = {
+    id: '',
+    repoName: '',
+    mainBranch: '',
+    buildCommand: '',
+    period: 0,
+    repoStatus: RepoStatus.Empty
+}
  
-const settings = (state = initialState, action) => {
+const settings = (state: SettingsState = initialState, action: SettingsActionTypes): SettingsState => {
     switch (action.type) {
         case FETCH_SETTINGS_PENDING:
             return {
@@ -18,7 +40,11 @@ const settings = (state = initialState, action) => {
             }
 
         case FETCH_SETTINGS_SUCCESS:
-            return Object.assign({}, state, action.settings, {pending: false});
+            return {
+                ...state,
+                ...action.settings,
+                pending: false
+            }
 
         case FETCH_SETTINGS_ERROR:
             return {
@@ -30,7 +56,7 @@ const settings = (state = initialState, action) => {
         case SAVE_SETTINGS_PENDING:
             return {
                 ...state,
-                repoStatus: 'Empty',
+                repoStatus: RepoStatus.Empty,
                 save_pending: true
             }
 

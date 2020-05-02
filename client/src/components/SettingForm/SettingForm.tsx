@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import {Button, FormField, FormGroup, FormLabel, FormError, Loader, Error} from 'components';
 import {fetchSettings, postSettings} from 'actions/settings';
 import './SettingForm.scss';
+import {RootState} from 'reducers';
+import RepoStatus from 'models/repoStatus';
 
 
 interface ConfigurationInput {
@@ -14,7 +16,7 @@ interface ConfigurationInput {
 }
 
 const SettingForm: React.FC = () => {
-    const settings = useSelector((state: any) => state.settings); // TODO
+    const settings = useSelector((state: RootState) => state.settings);
 
     const dispatch = useDispatch();
     const saveSettings = (data: ConfigurationInput) => dispatch(postSettings(data));
@@ -26,7 +28,7 @@ const SettingForm: React.FC = () => {
     }
 
     useEffect(() => {
-        if (settings.id && settings.repoStatus !== 'Cloned') {
+        if (settings.id && settings.repoStatus !== RepoStatus.Cloned) {
             getSettings();
         }
     }, []);
@@ -43,8 +45,8 @@ const SettingForm: React.FC = () => {
         )
     }
 
-    const waitingCloneRepo = settings.repoStatus === 'Cloning' || settings.save_pending;
-    const repoNotCloned = settings.repoStatus === 'NotCloned';
+    const waitingCloneRepo = settings.repoStatus === RepoStatus.Cloning || settings.save_pending;
+    const repoNotCloned = settings.repoStatus === RepoStatus.NotCloned;
 
     return (
         <div className="section">

@@ -11,3 +11,8 @@ export * from './configurationModelApiResponse';
 export * from './finishBuildInput';
 export * from './queueBuildInput';
 export * from './startBuildInput';
+export {default as SettingsResponse} from './settingsResponse';
+export {default as GetBuildReponse} from './getBuildResponse';
+export {default as BuildRequestReponse} from './buildRequestResponse';
+export {default as BuildListResponse} from './buildListResponse';
+export {default as RepoStatus} from './repoStatus';

@@ -2,12 +2,13 @@ import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { Header, Layout, Button, Icon, BuildList, NewBuild } from 'components';
 import {addBuild} from 'actions/builds';
+import {RootState} from 'reducers';
 
 
 const BuildHistory: React.FC = () => {
-    const settings = useSelector((state: any) => state.settings); // TODO
-    const addBuildPending = useSelector((state: any) => state.builds.add_build_pending); // TODO
-    const addBuildError = useSelector((state: any) => state.builds.add_build_error); // TODO
+    const settings = useSelector((state: RootState) => state.settings);
+    const addBuildPending = useSelector((state: RootState) => state.builds.add_build_pending);
+    const addBuildError = useSelector((state: RootState) => state.builds.add_build_error);
 
     const dispatch = useDispatch();
     const runBuild = (hash: string) => {
@@ -46,7 +47,7 @@ const BuildHistory: React.FC = () => {
             <Layout container>
                 <BuildList/>
             </Layout>
-            <NewBuild open={openModal} onClose={closeModalhandler} onRunBuild={runBuild} pending={addBuildPending}/>
+            <NewBuild open={openModal} onClose={closeModalhandler} onRunBuild={runBuild} pending={!!addBuildPending}/>
         </React.Fragment>
     );
 }

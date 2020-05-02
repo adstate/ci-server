@@ -7,7 +7,7 @@ export interface BuildRequestResult extends BuildRequestResultModel {
     authorName: string;
 }
 
-export default interface BuildRequestReponse {
+export default interface BuildRequestResponse {
     status: string;
     data?: BuildRequestResult
 }

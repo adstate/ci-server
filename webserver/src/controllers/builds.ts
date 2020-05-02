@@ -16,7 +16,7 @@ import {
     QueueBuildInput
 } from '../models';
 import BuildListResponse from '../models/buildListResponse';
-import BuildRequestReponse from '../models/buildRequestReponse';
+import BuildRequestReponse from '../models/buildRequestResponse';
 import GetBuildResponse from '../models/getBuildResponse';
 import { CommitInfo } from '../utils/git-utils';
 

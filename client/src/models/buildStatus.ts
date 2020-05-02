@@ -9,17 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { BuildStatus } from './buildStatus';
 
-export interface BuildModel { 
-    id: string;
-    configurationId?: string;
-    buildNumber: number;
-    commitMessage: string;
-    commitHash: string;
-    branchName: string;
-    authorName: string;
-    status: BuildStatus;
-    start?: Date;
-    duration?: number;
-}
+export type BuildStatus = 'Waiting' | 'InProgress' | 'Success' | 'Fail' | 'Canceled';
+
+export const BuildStatus = {
+    Waiting: 'Waiting' as BuildStatus,
+    InProgress: 'InProgress' as BuildStatus,
+    Success: 'Success' as BuildStatus,
+    Fail: 'Fail' as BuildStatus,
+    Canceled: 'Canceled' as BuildStatus
+};

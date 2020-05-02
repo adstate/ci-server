@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Classnames from 'classnames';
+import { Ref } from "react-hook-form";
 import './FormField.scss';
 import {Icon} from 'components';
 
@@ -7,8 +8,8 @@ interface FormFieldProps {
     type?: string;
     name: string;
     size?: string;
-    formRef?: any; //TODO
-    errors?: any; //TODO
+    formRef?: any;
+    errors?: any;
     placeholder?: string;
     defaultValue?: string;
     cleared?: boolean;

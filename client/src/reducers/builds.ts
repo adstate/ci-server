@@ -13,16 +13,35 @@ import {
     BUILDS_UPDATE_OFFSET,
     BUILDS_CLEAR_STATE,
     ADD_BUILD_TO_VIEW,
-    CLEAR_BUILD_TO_VIEW
+    CLEAR_BUILD_TO_VIEW,
+    BuildsActionTypes
 } from 'actions/actionTypes'
 
-const initialState = {
+import {BuildModel} from '../../../webserver/src/models/buildModel';
+
+export interface BuildsState {
+    items: BuildModel[];
+    offset: number;
+    limit: number;
+    pending?: boolean;
+    init_loaded?: boolean;
+    load_more?: boolean;
+    error?: Error;
+    get_build_pending?: boolean;
+    add_build_pending?: boolean;
+    add_build_error?: boolean;
+    build_to_view?: BuildModel | null;
+    build_log_to_view?: string | null;
+    get_log_error?: Error;
+}
+
+const initialState: BuildsState = {
     items: [],
     offset: 0,
     limit: 10
 }
  
-const builds = (state = initialState, action) => {
+const builds = (state: BuildsState = initialState, action: BuildsActionTypes): BuildsState => {
     switch (action.type) {
         case FETCH_BUILDS_PENDING:
             return {
@@ -58,7 +77,6 @@ const builds = (state = initialState, action) => {
             return {
                 ...state,
                 items: [...state.items, action.build],
-                //build_to_view: action.build,
                 get_build_pending: false
             }
         
