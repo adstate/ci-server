@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint src",
     "fix": "eslint --fix src",
-    "start": "node ./src/server.js",
+    "start": "ts-node ./src/server.ts",
+    "build": "tsc",
     "dev": "nodemon ./src/server.ts -r ts-node/register",
     "test": "jest"
   },

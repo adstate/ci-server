@@ -4,12 +4,12 @@ import helmet from 'helmet';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import history from 'connect-history-api-fallback';
-
 require('express-async-errors');
 require('./config');
-require('./core/buildConf');
-require('./core/git-service');
-require('./core/log-cache');
+
+import buildConf from './core/buildConf';
+import gitService from './core/git-service';
+import logCache from './core/log-cache';
 
 import conf from './utils/conf';
 
