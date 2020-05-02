@@ -1,15 +1,15 @@
 {
-  "name": "server",
+  "name": "agent",
   "version": "1.0.0",
-  "description": "ci build server",
-  "main": "server.js",
+  "description": "ci build agent",
+  "main": "agent.js",
   "scripts": {
-    "start": "ts-node ./src/server.ts",
+    "start": "ts-node ./src/agent.ts",
     "dev": "nodemon",
-    "prod": "tsc && node ./build/server.js",
+    "prod": "tsc && node ./build/agent.js",
     "build": "tsc",
+    "build-docker-image": "docker build -t agent-server .",
     "lint": "eslint src --ext ts",
-    "build-docker-image": "docker build -t build-server .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "felix.khodakovsky",
@@ -17,16 +17,21 @@
   "dependencies": {
     "@types/cors": "^2.8.6",
     "@types/helmet": "0.0.45",
+    "@types/yargs": "^15.0.4",
     "axios": "^0.19.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "escape-json-node": "^2.0.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
-    "helmet": "^3.22.0"
+    "helmet": "^3.22.0",
+    "rimraf": "^3.0.2",
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.6",
-    "@types/node": "^13.13.2",
+    "@types/node": "^13.13.0",
+    "@types/rimraf": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
     "eslint": "^6.8.0",
@@ -40,8 +45,10 @@
     ],
     "ext": "ts",
     "ignore": [
-      "src/**/*.spec.ts"
+      "src/**/*.spec.ts",
+      "repo/**/*",
+      "var/**/*"
     ],
-    "exec": "ts-node ./src/server.ts"
+    "exec": "ts-node ./src/agent.ts"
   }
 }

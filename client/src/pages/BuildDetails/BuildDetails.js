@@ -87,7 +87,7 @@ const BuildDetails = () => {
             <Layout container>
                 <div className="section">
                     <Build detailed data={build}></Build>
-                    <BuildLog test={['Success', 'Fail'].includes(build.status)}>{buildLog || ''}</BuildLog>
+                    <BuildLog>{buildLog || ''}</BuildLog>
                 </div>
             </Layout>
         </React.Fragment>
