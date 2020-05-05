@@ -8,7 +8,7 @@ import {
 } from '../../../webserver/src/models';
 
 const instance = axios.create({
-    baseURL: '/api',
+    baseURL: 'http://localhost:9000/api',
     timeout: 10000
 });
 
