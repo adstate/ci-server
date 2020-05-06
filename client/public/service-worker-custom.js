@@ -1,4 +1,5 @@
-const CACHE_NAME = 'ci-cache';
+const CACHE_NAME = 'ci-cache-v1';
+const CACHE_PREFIX = 'ci-cache';
 const urlsToCache = [
   '/',
   '/favicon.ico',
@@ -19,7 +20,7 @@ self.addEventListener('install', function(event) {
   );
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', function(event) {
   if (event.request.method != 'GET' || !staticRegex.test(event.request.url)) {
     return;
   }
@@ -35,4 +36,17 @@ self.addEventListener('fetch', event => {
 
     return fetch(event.request);
   }());
+});
+
+self.addEventListener('activate', function(event) {
+  event.waitUntil(
+      caches.keys()
+        .then(keyList => {
+          return Promise.all(keyList.map(key => {
+              if (key.indexOf(CACHE_PREFIX) === 0 && key !== CACHE_NAME) {
+                  return caches.delete(key);
+              }
+          }));
+        })
+  );
 });
