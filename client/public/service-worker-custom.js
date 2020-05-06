@@ -20,22 +20,25 @@ self.addEventListener('install', function(event) {
   );
 });
 
+function fromCache(request) {
+  return caches.open(CACHE_NAME).then((cache) => {
+      return cache.match(request).then((matching) => 
+          matching || Promise.reject('no-match')
+      )
+  });
+}
+
+function update(request) {
+  return caches.open(CACHE_NAME).then((cache) => cache.add(request));
+}
+
 self.addEventListener('fetch', function(event) {
   if (event.request.method != 'GET' || !staticRegex.test(event.request.url)) {
-    return;
+     return;
   }
 
-  event.respondWith(async function() {
-    const cache = await caches.open(CACHE_NAME);
-    const cachedResponse = await cache.match(event.request);
-
-    if (cachedResponse) {
-      event.waitUntil(cache.add(event.request));
-      return cachedResponse;
-    }
-
-    return fetch(event.request);
-  }());
+  event.respondWith(fromCache(event.request));
+  event.waitUntil(update(event.request));
 });
 
 self.addEventListener('activate', function(event) {
