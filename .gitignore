@@ -104,10 +104,10 @@ dist
 .tern-port
 
 #var
-var
+/var
 
 #build
-build
+/build
 
 repo
 
@@ -115,3 +115,5 @@ images
 
 # hermione
 __tests__/hermione/hermione-html-report
+
+.idea
