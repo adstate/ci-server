@@ -2,7 +2,6 @@
   "name": "ci-client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:9000",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -35,7 +34,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test-sw": "jest ./__tests__/sw.test.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "@types/react-redux": "^7.1.7",
-    "@types/react-router-dom": "^5.1.5"
+    "@types/react-router-dom": "^5.1.5",
+    "service-worker-mock": "^2.0.5"
   }
 }
