@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import { useForm } from "react-hook-form";
 import {Button, FormField, FormGroup, FormError, Modal} from 'components';
+import {useTranslation} from 'react-i18next';
 import './NewBuild.scss';
 
 
@@ -17,6 +18,7 @@ interface newBuildForm {
 
 const NewBuild: React.FC<NewBuildProps> = ({open, onClose, onRunBuild, pending}) => {
     const { handleSubmit, register, errors, reset } = useForm<newBuildForm>();
+    const { t } = useTranslation();
     
     const onSubmit = (values: newBuildForm) => {
         onRunBuild(values.commitHash);
@@ -32,16 +34,16 @@ const NewBuild: React.FC<NewBuildProps> = ({open, onClose, onRunBuild, pending})
         <Modal open={open}>
             <form className="new-build form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="new-build__title form__title">
-                    New build
+                    {t('newBuild')}
                 </div>
                 <div className="new-build__subtitle form__subtitle">
-                    Enter the commit hash which you want to build.
+                    {t('newBuildModal.description')}
                 </div>
                 <FormGroup space="m">
                     <FormField name="commitHash"
                         formRef={register({required: true})}
                         errors={errors.commitHash}
-                        placeholder="Commit hash"
+                        placeholder={t('newBuildModal.commitHash')}
                     >
                     </FormField>
                     <FormError>
@@ -50,8 +52,12 @@ const NewBuild: React.FC<NewBuildProps> = ({open, onClose, onRunBuild, pending})
                 </FormGroup>
 
                 <FormGroup space="m" className="setting-form__footer form__footer" direction="row">
-                    <Button type="submit" className="setting-form__button setting-form__submit" variant="action" size="m" disabled={pending === true}>Run build</Button>                    
-                    <Button type="reset" className="setting-form__button" variant="default" size="m" onClick={onClose} disabled={pending === true}>Candel</Button>
+                    <Button type="submit" className="setting-form__button setting-form__submit" variant="action" size="m" disabled={pending === true}>
+                        {t('runBuild')}
+                    </Button>
+                    <Button type="reset" className="setting-form__button" variant="default" size="m" onClick={onClose} disabled={pending === true}>
+                        {t('cancel')}
+                    </Button>
                 </FormGroup>
             </form>
         </Modal>

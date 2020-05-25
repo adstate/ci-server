@@ -3,12 +3,14 @@ import {useSelector, useDispatch} from 'react-redux';
 import { Header, Layout, Button, Icon, BuildList, NewBuild } from 'components';
 import {addBuild} from 'actions/builds';
 import {RootState} from 'reducers';
+import { useTranslation } from 'react-i18next';
 
 
 const BuildHistory: React.FC = () => {
     const settings = useSelector((state: RootState) => state.settings);
     const addBuildPending = useSelector((state: RootState) => state.builds.add_build_pending);
     const addBuildError = useSelector((state: RootState) => state.builds.add_build_error);
+    const {t} = useTranslation();
 
     const dispatch = useDispatch();
     const runBuild = (hash: string) => {
@@ -37,7 +39,7 @@ const BuildHistory: React.FC = () => {
                 <div className="header__button-group">
                     <Button className="button_type_icon-text" size="s" onClick={openModalHandler}>
                         <Icon className="button__icon" type="play" size="xs"/>
-                        <span className="button__text">Run build</span>
+                        <span className="button__text">{t('runBuild')}</span>
                     </Button>
                     <Button icon size="s" to="/settings">
                         <Icon className="button__icon" type="settings" size="xs"/>

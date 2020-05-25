@@ -6,7 +6,7 @@ import {fetchSettings, postSettings} from 'actions/settings';
 import './SettingForm.scss';
 import {RootState} from 'reducers';
 import RepoStatus from 'models/repoStatus';
-
+import {useTranslation} from 'react-i18next';
 
 interface ConfigurationInput {
     repoName: string;
@@ -17,6 +17,7 @@ interface ConfigurationInput {
 
 const SettingForm: React.FC = () => {
     const settings = useSelector((state: RootState) => state.settings);
+    const { t } = useTranslation();
 
     const dispatch = useDispatch();
     const saveSettings = (data: ConfigurationInput) => dispatch(postSettings(data));
@@ -41,7 +42,7 @@ const SettingForm: React.FC = () => {
 
     if (settings.error) {
         return (
-            <Error>Error of fetching</Error>
+            <Error>{t('fetchError')}</Error>
         )
     }
 
@@ -53,22 +54,22 @@ const SettingForm: React.FC = () => {
             <div className="layout__container">
                 <form className="setting-form form" name="settings" onSubmit={handleSubmit(onSubmit)}>
                     <div className="form__header">
-                        <div className="form__title">Settings</div>
-                        <div className="form__subtitle">Configure repository connection and synchronization settings.</div>
+                        <div className="form__title">{t('settingsForm.title')}</div>
+                        <div className="form__subtitle">{t('configure.description')}</div>
 
                         { 
                             (waitingCloneRepo) &&
-                            <div className="setting-form__repo-status text text_secondary">Cloning repository...</div>
+                            <div className="setting-form__repo-status text text_secondary">{t('settingsForm.cloningRepo')}</div>
                         }
 
                         {
                             (repoNotCloned) &&
-                            <div className="setting-form__repo-status text text_error">Error of cloning repository</div>
+                            <div className="setting-form__repo-status text text_error">{t('settingsForm.clonigError')}</div>
                         }
                     </div>
 
                     <FormGroup required>
-                        <FormLabel>GitHub repository</FormLabel>
+                        <FormLabel>{t('settingsForm.repo')}</FormLabel>
                         <FormField name="repoName"
                             formRef={register({required: 'repoName is required'})}
                             errors={errors.repoName}
@@ -82,7 +83,7 @@ const SettingForm: React.FC = () => {
                     </FormGroup>
 
                     <FormGroup>
-                        <FormLabel>Build command</FormLabel>
+                    <FormLabel>{t('settingsForm.buildCommand')}</FormLabel>
                         <FormField name="buildCommand"
                             formRef={register({required: 'buildCommand is required'})}
                             errors={errors.buildCommand}
@@ -96,12 +97,12 @@ const SettingForm: React.FC = () => {
                     </FormGroup>
 
                     <FormGroup>
-                        <FormLabel>Main branch</FormLabel>
+                        <FormLabel>{t('settingsForm.mainBranch')}</FormLabel>
                         <FormField name="mainBranch" formRef={register({})} placeholder="master" defaultValue={settings.mainBranch}></FormField>
                     </FormGroup>
 
                     <FormGroup direction="row">
-                        <FormLabel>Synchronize every</FormLabel>
+                        <FormLabel>{t('settingsForm.syncEvery')}</FormLabel>
                         <FormField name="period"
                             formRef={register({required: 'Required', pattern: /^\d+$/i })}
                             errors={errors.period}
@@ -109,12 +110,16 @@ const SettingForm: React.FC = () => {
                             align="right" cleared={false}
                         >
                         </FormField>
-                        <div className="form__control-postfix">minutes</div>
+                        <div className="form__control-postfix">{t('settingsForm.minutes')}</div>
                     </FormGroup>
 
                     <FormGroup className="setting-form__footer form__footer" direction="row">
-                        <Button type="submit" className="setting-form__button setting-form__submit" variant="action" size="m" disabled={waitingCloneRepo}>Save</Button>                    
-                        <Button type="reset" className="setting-form__button" variant="default" size="m" to="/" disabled={waitingCloneRepo}>Candel</Button>
+                        <Button type="submit" className="setting-form__button setting-form__submit" variant="action" size="m" disabled={waitingCloneRepo}>
+                            {t('settingsForm.save')}
+                        </Button>
+                        <Button type="reset" className="setting-form__button" variant="default" size="m" to="/" disabled={waitingCloneRepo}>
+                            {t('cancel')}
+                        </Button>
                     </FormGroup>
                 </form>
             </div>

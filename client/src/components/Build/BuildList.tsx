@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import {History} from 'history';
 import {Build, Loader, Button} from 'components';
 import {fetchBuilds, buildsClearState} from '../../actions/builds';
+import {useTranslation} from 'react-i18next';
 
 
 const BuildList: React.FC = () => {
@@ -18,6 +19,7 @@ const BuildList: React.FC = () => {
 
     const dispatch = useDispatch();
     const history: History = useHistory();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!init_loaded) {
@@ -51,7 +53,7 @@ const BuildList: React.FC = () => {
                     {
                         (builds.length >= limit && load_more === false) &&
                         <Button className="section__button" size="s" onClick={loadMoreBuilds}>
-                            Show more
+                            {t('list.showMore')}
                         </Button>
                     }
                 </div>    

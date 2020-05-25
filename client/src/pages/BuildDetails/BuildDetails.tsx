@@ -5,10 +5,12 @@ import {History} from 'history';
 import {Button, Icon, Layout, Header, Build, BuildLog, Loader, Error} from 'components';
 import {getBuild, getBuildLog, rebuild} from 'actions/builds';
 import {RootState} from 'reducers';
+import { useTranslation } from 'react-i18next';
 
 
 const BuildDetails: React.FC = () => {
     const { id } = useParams();
+    const { t } = useTranslation();
 
     const build = useSelector((state: RootState) => state.builds.items.find((build) => build.id === id));
     const {
@@ -37,7 +39,7 @@ const BuildDetails: React.FC = () => {
     if (pending !== false && !build) {
         return (
             <React.Fragment>
-                <Header title="School CI Server"></Header>
+                <Header title={t('header.ciServer')}></Header>
                 <Layout align="center">
                     <Loader/>
                 </Layout>
@@ -48,9 +50,9 @@ const BuildDetails: React.FC = () => {
     if (fetchError) {
         return (
             <React.Fragment>
-                <Header title="School CI Server"></Header>
+                <Header title={t('header.ciServer')}></Header>
                 <Layout align="center">
-                    <Error>Error of fetching</Error>
+                    <Error>{t('fetchError')}</Error>
                 </Layout>
             </React.Fragment>           
         )
@@ -62,7 +64,7 @@ const BuildDetails: React.FC = () => {
                 <div className="header__button-group">
                     <Button className="button_type_icon-text" size="s" onClick={rebuildHandler}>
                         <Icon className="button__icon" type="refresh" size="xs"/>
-                        <span className="button__text">Rebuild</span>
+                        <span className="button__text">{t('rebuild')}</span>
                     </Button>
                     <Button icon size="s" to="/settings">
                         <Icon className="button__icon" type="settings" size="xs"/>

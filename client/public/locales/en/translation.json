@@ -1,0 +1,39 @@
+{
+    "runBuild": "Run build",
+    "rebuild": "Rebuild",
+    "newBuild": "New build",
+    "cancel": "Cancel",
+    "settings": "Settings",
+    "header": {
+      "ciServer": "School CI server"
+    },
+    "footer": {
+      "support": "Support",
+      "learning": "Learning",
+      "language": "Russian version",
+      "copyright": "2020 Your Name"
+    },
+    "newBuildModal": {
+      "description": "Enter the commit hash which you want to build.",
+      "commitHash": "Commit hash"
+    },
+    "list": {
+      "showMore": "Show more"
+    },
+    "configure": {
+      "description": "Configure repository connection and synchronization settings",
+      "openSettings": "Open settings"
+    },
+    "settingsForm": {
+      "title": "settings",
+      "repo": "GitHub repository",
+      "cloningRepo": "Cloning repository...",
+      "cloningError": "Error of cloning repository",
+      "buildCommand": "Build command",
+      "mainBranch": "Main branch",
+      "syncEvery": "Synchronize every",
+      "minutes": "minutes",
+      "save": "Save"
+    },
+    "fetchError": "Error of fetching"
+  }
