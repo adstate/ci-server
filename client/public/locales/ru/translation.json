@@ -1,0 +1,39 @@
+{
+  "runBuild": "Запустить сборку",
+  "rebuild": "Пересобрать",
+  "newBuild": "Новая сборка",
+  "cancel": "Отмена",
+  "settings": "Настройки",
+  "header": {
+    "ciServer": "School CI server"
+  },
+  "footer": {
+    "support": "Поддержка",
+    "learning": "Обучение",
+    "language": "Русская версия",
+    "copyright": "2020 Ваше имя"
+  },
+  "newBuildModal": {
+    "description": "Введите хеш коммита, который вы хотите создать.",
+    "commitHash": "Хеш коммита"
+  },
+  "list": {
+    "showMore": "Показать больше"
+  },
+  "configure": {
+    "description": "Настроить соединение с репозиторием и параметры синхронизации",
+    "openSettings": "Открыть настройки"
+  },
+  "settingsForm": {
+    "title": "настройки",
+    "repo": "GitHub репозиторий",
+    "cloningRepo": "Клонирование репозитория ...",
+    "cloningError": "Ошибка клонирования репозитория",
+    "buildCommand": "Команда сборки",
+    "mainBranch": "Основная ветка",
+    "syncEvery": "Синхронизировать каждые",
+    "minutes": "минут",
+    "save": "Сохранить"
+  },
+  "fetchError": "Ошибка загрузки"
+}
