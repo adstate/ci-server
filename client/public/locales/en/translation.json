@@ -24,7 +24,7 @@
       "openSettings": "Open settings"
     },
     "settingsForm": {
-      "title": "settings",
+      "title": "Settings",
       "repo": "GitHub repository",
       "cloningRepo": "Cloning repository...",
       "cloningError": "Error of cloning repository",

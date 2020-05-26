@@ -49,6 +49,11 @@ const SettingForm: React.FC = () => {
     const waitingCloneRepo = settings.repoStatus === RepoStatus.Cloning || settings.save_pending;
     const repoNotCloned = settings.repoStatus === RepoStatus.NotCloned;
 
+    const getLastDigit = (period: number) => {
+        const lastDigit = period.toString().split('').pop();
+        return (lastDigit) ? +lastDigit : 0;
+    }
+
     return (
         <div className="section">
             <div className="layout__container">
@@ -110,7 +115,7 @@ const SettingForm: React.FC = () => {
                             align="right" cleared={false}
                         >
                         </FormField>
-                        <div className="form__control-postfix">{t('settingsForm.minutes', {count: settings.period})}</div>
+                        <div className="form__control-postfix">{t('settingsForm.minutes_interval', {postProcess: 'interval', count: getLastDigit(settings.period)})}</div>
                     </FormGroup>
 
                     <FormGroup className="setting-form__footer form__footer" direction="row">

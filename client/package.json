@@ -21,6 +21,7 @@
     "i18next": "^19.4.4",
     "i18next-browser-languagedetector": "^4.2.0",
     "i18next-http-backend": "^1.0.12",
+    "i18next-intervalplural-postprocessor": "^2.0.0",
     "node-sass": "^4.13.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
