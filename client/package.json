@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "git pull && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "test-sw": "jest ./__tests__/sw.test.js"
