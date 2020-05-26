@@ -31,7 +31,8 @@
       "buildCommand": "Build command",
       "mainBranch": "Main branch",
       "syncEvery": "Synchronize every",
-      "minutes": "minutes",
+      "minutes": "minute",
+      "minutes_plural": "minutes",
       "save": "Save"
     },
     "fetchError": "Error of fetching"

@@ -1,10 +1,12 @@
 import React from 'react';
 import ClassNames from 'classnames';
-import {format} from 'date-fns';
-import {ru} from 'date-fns/locale'
+import {format, Locale} from 'date-fns';
+import {ru, enUS} from 'date-fns/locale';
 import './Build.scss';
 import {Icon} from 'components';
 import {BuildModel} from '../../../../webserver/src/models';
+import {useTranslation} from 'react-i18next';
+import durationFormat from '../../services/durationFormat';
 
 interface BuildProps {
     data: BuildModel;
@@ -27,6 +29,11 @@ const Build: React.FC<BuildProps> = ({data, detailed, onClick}) => {
             onClick(data);
         }
     }
+
+    const { i18n } = useTranslation();
+    const locale: Locale = (i18n.language === 'ru') ? ru : enUS;
+
+    const buildDuration: string = durationFormat(data.duration, i18n.language);
 
     return (
         <div className={buildClass} data-id={data.id} onClick={clickHandler}>
@@ -60,7 +67,7 @@ const Build: React.FC<BuildProps> = ({data, detailed, onClick}) => {
                             <Icon className="icon-text__icon icon-text__icon_indent-r_xs" type="date" size="s" pseudo/>
                             <span className="icon-text__text icon-text__text_nowrap text_pseudo">
                                 { data.start ?
-                                    format(new Date(data.start), 'dd MMM hh:mm', { locale: ru })
+                                    format(new Date(data.start), 'dd MMM hh:mm', { locale: locale })
                                     : '-'
                                 }
                             </span>
@@ -68,7 +75,7 @@ const Build: React.FC<BuildProps> = ({data, detailed, onClick}) => {
                 
                     <div className="build__timer icon-text">
                         <Icon className="icon-text__icon icon-text__icon_indent-r_xs" type="timer" size="s" pseudo/>
-                        <span className="icon-text__text icon-text__text_nowrap text text_pseudo">{data.duration || '-'}</span>
+                        <span className="icon-text__text icon-text__text_nowrap text text_pseudo">{buildDuration}</span>
                     </div>
                 </div>
             </div>

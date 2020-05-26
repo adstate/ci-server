@@ -110,7 +110,7 @@ const SettingForm: React.FC = () => {
                             align="right" cleared={false}
                         >
                         </FormField>
-                        <div className="form__control-postfix">{t('settingsForm.minutes')}</div>
+                        <div className="form__control-postfix">{t('settingsForm.minutes', {count: settings.period})}</div>
                     </FormGroup>
 
                     <FormGroup className="setting-form__footer form__footer" direction="row">
