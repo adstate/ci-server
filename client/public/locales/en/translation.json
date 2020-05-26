@@ -33,6 +33,7 @@
       "syncEvery": "Synchronize every",
       "minutes": "minute",
       "minutes_plural": "minutes",
+      "minutes_interval": "(1){minute};(2-4){minutes};(5-9){minutes};",
       "save": "Save"
     },
     "fetchError": "Error of fetching"
