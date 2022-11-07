@@ -38,7 +38,7 @@
     "chai": "^4.2.0",
     "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
-    "hermione": "^3.1.0",
+    "hermione": "^5.3.1",
     "html-reporter": "^5.15.2"
   }
 }
